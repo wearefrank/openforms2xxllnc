@@ -1,8 +1,8 @@
 {
     "mappings": {
-        "{{ cookiecutter.instance_name }}": "",
-        "{{ cookiecutter.instance_name_lc }}": "",
-        "{{ cookiecutter.configuration_name }}": ""
+        "{{ cookiecutter.instance_name }}": "Openforms2xxllnc",
+        "{{ cookiecutter.instance_name_lc }}": "openforms2xxllnc",
+        "{{ cookiecutter.configuration_name }}": "xxllnc"
     },
     "ignoredFiles": [
         "skeletonrc.json",
