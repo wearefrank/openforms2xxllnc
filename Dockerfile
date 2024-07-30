@@ -39,6 +39,11 @@ COPY --chown=tomcat src/main/secrets/ /opt/frank/secrets/
 
 # COPY --chown=tomcat entrypoint.sh /scripts/entrypoint.sh
 
+ENV application.server.type.custom=NARAYANA
+ENV credentialFactory.class=nl.nn.credentialprovider.PropertyFileCredentialFactory
+ENV credentialFactory.map.properties=/opt/frank/secrets/credentials.properties
+ENV TZ=Europe/Amsterdam
+
 HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=60 \
 	CMD curl --fail --silent http://localhost:8080/iaf/api/server/health || (curl --silent http://localhost:8080/iaf/api/server/health && exit 1)
 
