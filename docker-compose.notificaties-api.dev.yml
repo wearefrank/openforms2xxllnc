@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  notifications-redis:
+    image: redis
+    networks:
+      - notifications-backend
+
+  notifications-db:
+    image: postgres:11-alpine
+    environment:
+      - POSTGRES_PASSWORD=
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    networks:
+      - notifications-backend
+
+  notifications-rabbitmq:
+    image: rabbitmq:3.7-alpine
+    # environment:
+    #   - RABBITMQ_DEFAULT_USER=guest
+    #   - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - notifications-backend
+
+  notifications:
+    image: openzaak/open-notificaties
+    environment: &notifications-env
+      - DJANGO_SETTINGS_MODULE=nrc.conf.docker
+      - SECRET_KEY=${SECRET_KEY:-y8=ynp!*&3z6!0ujpg$$0nry%j#1z2@%hq9+1doh1bl+86w)730}
+      - DB_HOST=notifications-db
+      - IS_HTTPS=no
+      - ALLOWED_HOSTS=*
+      - CACHE_DEFAULT=redis:6379/1
+      - CACHE_AXES=redis:6379/1
+      - RABBITMQ_HOST=notifications-rabbitmq
+      - PUBLISH_BROKER_URL=amqp://guest:guest@notifications-rabbitmq:5672/%2F
+      - CELERY_BROKER_URL=amqp://guest:guest@notifications-rabbitmq:5672//
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      - CELERY_LOGLEVEL=DEBUG
+      - CELERY_WORKER_CONCURRENCY=${CELERY_WORKER_CONCURRENCY:-2}
+      - DEBUG=yes
+    volumes:
+      - ./docker/notifications/fixtures:/app/fixtures
+    ports:
+      - 9005:8000
+    networks:
+      - notifications-backend
+      - zaakbrug-stack
+    depends_on:
+      - notifications-db
+      - notifications-rabbitmq
+      - notifications-redis
+
+  notifications-celery:
+    image: openzaak/open-notificaties
+    environment: *notifications-env
+    command: /celery_worker.sh
+    depends_on:
+      - notifications-db
+      - notifications-rabbitmq
+      - notifications-redis
+    networks:
+      - notifications-backend
+
+volumes:
+  notifications-db:
+
+networks:
+  zaakbrug-stack:
+  notifications-backend:

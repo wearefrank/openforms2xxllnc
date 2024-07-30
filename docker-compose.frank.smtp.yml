@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  frank-mailslurper:
+    image: oryd/mailslurper:smtps-latest
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./docker/mailslurper/config.json
+          target: /go/src/github.com/mailslurper/mailslurper/cmd/mailslurper/config.json
+    ports:
+      - "8025:8025"
+      - "8026:8080"
+    networks:
+      - frank-stack
+      - frank-backend
+
+  frank:
+    environment:
+      openforms2xxllnc.noreply-smtp.host: frank-mailslurper
+      openforms2xxllnc.noreply-smtp.port: 2500
+      openforms2xxllnc.noreply-smtp.use-ssl: false
+      openforms2xxllnc.noreply-smtp.timeout: 60000
+      openforms2xxllnc.noreply-smtp.auth-alias: noreply-smtp
+    depends_on:
+      - frank-mailslurper

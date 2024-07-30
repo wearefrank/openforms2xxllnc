@@ -1,0 +1,244 @@
+<Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../FrankConfig.xsd">
+    <Adapter
+        name="Workflow_TwoWayCommunication"
+        active="${Workflow_TwoWayCommunication.Active}"
+        description=""
+        >
+
+        <Receiver
+            name="Workflow_TwoWayCommunication"
+            transactionAttribute="NotSupported"
+            >
+            <JavaListener
+                name="Workflow_TwoWayCommunication"
+                />
+        </Receiver>
+        <!-- <Receiver
+            name="Workflow_TwoWayCommunicationHandler"
+            transactionAttribute="RequiresNew"
+            pollInterval="5"
+            maxRetries="0"
+            >
+            <MessageStoreListener
+                name="Workflow_TwoWayCommunicationHandler"
+				slotId="${instance.name}/Workflow_TwoWayCommunication"
+                peekUntransacted="true"
+                statusValueInProcess="I"
+				/>
+        </Receiver> -->
+
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+
+            <PutInSessionPipe
+                name="StoreCaseReferenceNumberFromTwoWayCommunication"
+                >
+                <Param name="CaseReferenceNumber" xpathExpression="//gegevenstweewegcommunicatie/zaaknummer" />
+                <Forward name="success" path="UwGegevensMissing_Condition" />
+            </PutInSessionPipe>
+
+            <XmlIfPipe
+                name="UwGegevensMissing_Condition"
+                xpathExpression="string-length(//*[starts-with(name(), 'uw-gegevens')]) = 0"
+                >
+                <Forward name="then" path="UwGegevensMissing_Exception" />
+                <Forward name="else" path="FilterUwGegevensSection" />
+            </XmlIfPipe>
+            
+            <ExceptionPipe name="UwGegevensMissing_Exception" />
+
+            <XsltPipe
+                name="FilterUwGegevensSection"
+                styleSheetName="Common/xsl/FilterUwGegevensSection.xslt"
+                storeResultInSessionKey="UwGegevens"
+                >
+                <Forward name="success" path="UwGegevensSubjectUnauthenticated_Condition" />
+            </XsltPipe>
+
+            <XmlIfPipe
+                name="UwGegevensSubjectUnauthenticated_Condition"
+                xpathExpression="not(//*[starts-with(name(), 'uw-gegevens')]/*/*[ends-with(name(), 'MD')] or //*[starts-with(name(), 'uw-gegevens')]/*/*[ends-with(name(), 'MEH')])"
+                >
+                <Forward name="then" path="UwGegevensSubjectUnauthenticated_Exception" />
+                <Forward name="else" path="EXIT" />
+            </XmlIfPipe>
+
+            <ExceptionPipe name="UwGegevensSubjectUnauthenticated_Exception" />
+
+            <!-- Create geefZaakDetails request message and wrap with soapWrapperPipe -->
+
+            <!-- WebserviceSender with above -->
+
+            <!-- Unwrap soap response envelope -->
+
+            <XmlIfPipe
+                name="CaseNotFound_Condition"
+                xpathExpression="string-length(//*:lookUpCaseIdsResponse/*:caseIdMessage/*:cases/*:case) gt 0"
+                >
+                <Forward name="then" path="CheckForUwGegevensIsPerson" />
+                <Forward name="else" path="CaseNotFound_MailCondition" />
+            </XmlIfPipe>
+
+            <XmlIfPipe
+                name="CaseNotFound_MailCondition"
+                xpathExpression="string-length('${openforms2xxllnc.workflows.tweewegcommunicatie.on-case-not-found.mail-template}') gt 0"
+                >
+                <Forward name="then" path="CaseNotFound_StoreMailTemplateName" />
+                <Forward name="else" path="CaseNotFound_Exception" />
+            </XmlIfPipe>
+
+            <PutInSessionPipe
+                name="CaseNotFound_StoreMailTemplateName"
+                >
+                <Param name="TemplateName" value="${openforms2xxllnc.workflows.tweewegcommunicatie.on-case-not-found.mail-template}" />
+                <Forward name="success" path="CaseNotFound_SendNoReplyUserEmailCommand" />
+            </PutInSessionPipe>
+
+            <SenderPipe
+				name="CaseNotFound_SendNoReplyUserEmailCommand"
+                getInputFromSessionKey="UwGegevens"
+                transactionAttribute="Required"
+				>
+				<MessageStoreSender
+					name="CaseNotFound_SendNoReplyUserEmailCommandMessageStoreSender"
+					slotId="${instance.name}/SendNoReplyUserEmailCommand"
+                    sessionKeys="TemplateName"
+                    onlyStoreWhenMessageIdUnique="true"
+                    transacted="true"
+					>
+                    <Param name="messageId" xpathExpression="concat($CaseReferenceNumber, '-', $TargetCaseReferenceNumber)">
+                        <Param name="TargetCaseReferenceNumber" sessionKey="CaseReferenceNumber" />
+                        <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/ZgwObject/public_reference" />
+                    </Param>
+				</MessageStoreSender>
+                <Forward name="success" path="EXIT" />
+			</SenderPipe>
+
+            <ExceptionPipe name="CaseNotFound_Exception" />
+
+            <XmlIfPipe
+                name="CheckForUwGegevensIsPerson"
+                getInputFromSessionKey="UwGegevens"
+                xpathExpression="//*[starts-with(name(), 'uw-gegevens')]/*[ends-with(name(), 'DigiD')]"
+                >
+                <Forward name="then" path="StorePersonIdentifiers" />
+                <Forward name="else" path="CheckForUwGegevensIsOrganization" />
+            </XmlIfPipe>
+
+            <PutInSessionPipe
+                name="StorePersonIdentifiers"
+                >
+                <Param name="UwGegevensSubject" hidden="true" sessionKey="UwGegevens" xpathExpression="//*[starts-with(name(), 'uw-gegevens')]//*[starts-with(name(), 'persoonsgegevens')]/*[starts-with(name(), 'bsn')]" />
+                <Param name="CaseInitiatingSubject" hidden="true" sessionKey="ReadCasesResponseMessage" xpathExpression="//*:readCasesResponse/*:caseDetailsMessage/*:cases/*:case/*:initiatingSubject/*:person/*:citizenNumber" />
+                <Forward name="success" path="CheckForUwGegevensSubjectMatchingCaseInitiatingSubject" />
+            </PutInSessionPipe>
+
+            <XmlIfPipe
+                name="CheckForUwGegevensIsOrganization"
+                getInputFromSessionKey="UwGegevens"
+                xpathExpression="//*[starts-with(name(), 'uw-gegevens')]/*[starts-with(name(), 'fieldSetBedrijf')]"
+                >
+                <Forward name="then" path="StoreOrganizationIdentifiers" />
+                <Forward name="else" path="UwGegevensSubjectFallthrough_Exception" />
+            </XmlIfPipe>
+
+            <ExceptionPipe name="UwGegevensSubjectFallthrough_Exception" />
+
+            <PutInSessionPipe
+                name="StoreOrganizationIdentifiers"
+                >
+                <Param name="UwGegevensSubject" sessionKey="UwGegevens" xpathExpression="//*[starts-with(name(), 'uw-gegevens')]//*[starts-with(name(), 'gegevensBedrijfOrganisatie')]/*[starts-with(name(), 'kvKNummer')]" />
+                <Param name="CaseInitiatingSubject" sessionKey="ReadCasesResponseMessage" xpathExpression="//*:readCasesResponse/*:caseDetailsMessage/*:cases/*:case/*:initiatingSubject/*:organization/*:nnpId" />
+                <Forward name="success" path="CheckForUwGegevensSubjectMatchingCaseInitiatingSubject" />
+            </PutInSessionPipe>
+
+            <XmlIfPipe
+                name="CheckForUwGegevensSubjectMatchingCaseInitiatingSubject"
+                xpathExpression="$UwGegevensSubject = $CaseInitiatingSubject and string-length($UwGegevensSubject) gt 0 and string-length($CaseInitiatingSubject) gt 0"
+                >
+                <Param name="UwGegevensSubject" sessionKey="UwGegevensSubject" />
+                <Param name="CaseInitiatingSubject" sessionKey="CaseInitiatingSubject" />
+                <Forward name="then" path="CreateAddDocumentsToCaseCommand" />
+                <Forward name="else" path="SubjectNotEqualsCaseSubject_MailCondition" />
+            </XmlIfPipe>
+
+            <XmlIfPipe
+                name="SubjectNotEqualsCaseSubject_MailCondition"
+                xpathExpression="string-length('${openforms2xxllnc.workflows.tweewegcommunicatie.on-subject-not-equals-case-subject.mail-template}') gt 0"
+                >
+                <Forward name="then" path="SubjectNotEqualsCaseSubject_StoreMailTemplateName" />
+                <Forward name="else" path="SubjectNotEqualsCaseSubject_Exception" />
+            </XmlIfPipe>
+
+            <PutInSessionPipe
+                name="SubjectNotEqualsCaseSubject_StoreMailTemplateName"
+                >
+                <Param name="TemplateName" value="${openforms2xxllnc.workflows.tweewegcommunicatie.on-subject-not-equals-case-subject.mail-template}" />
+                <Forward name="success" path="SubjectNotEqualsCaseSubject_SendNoReplyUserEmailCommand" />
+            </PutInSessionPipe>
+
+            <SenderPipe
+				name="SubjectNotEqualsCaseSubject_SendNoReplyUserEmailCommand"
+                getInputFromSessionKey="UwGegevens"
+                transactionAttribute="Required"
+				>
+				<MessageStoreSender
+					name="SubjectNotEqualsCaseSubject_SendNoReplyUserEmailCommandMessageStoreSender"
+					slotId="${instance.name}/SendNoReplyUserEmailCommand"
+                    sessionKeys="TemplateName"
+                    onlyStoreWhenMessageIdUnique="true"
+                    transacted="true"
+					>
+                    <Param name="messageId" xpathExpression="concat($CaseReferenceNumber, '-', $TargetCaseReferenceNumber)">
+                        <Param name="TargetCaseReferenceNumber" sessionKey="CaseReferenceNumber" />
+                        <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/ZgwObject/public_reference" />
+                    </Param>
+				</MessageStoreSender>
+                <Forward name="success" path="EXIT" />
+			</SenderPipe>
+
+            <ExceptionPipe name="SubjectNotEqualsCaseSubject_Exception" />
+
+            <XsltPipe
+                name="CreateAddDocumentsToCaseCommand"
+                getInputFromSessionKey="originalMessage"
+                styleSheetName="Common/xsl/CreateAddDocumentsToCaseCommand.xslt"
+                storeResultInSessionKey="CreateAddDocumentsToCaseCommand"
+                >
+                <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />
+                <Param name="CommaSeperatedUrls" xpathExpression="string-join((//attachments/text(), //pdf_url/text()), ',')" />
+                <Forward name="success" path="CheckForDocumentsToAddToCase" />
+            </XsltPipe>
+
+            <XmlIfPipe
+                name="CheckForDocumentsToAddToCase"
+                xpathExpression="count(/*/url) gt 0"
+                >
+                <Forward name="then" path="AddDocumentsToCaseCommandSender" />
+                <Forward name="else" path="EXIT" />
+            </XmlIfPipe>
+            
+            <SenderPipe
+            name="AddDocumentsToCaseCommandSender"
+            transactionAttribute="Required"
+            >
+            <MessageStoreSender
+					name="AddDocumentsToCaseCommandMessageStoreSender"
+					slotId="${instance.name}/AddDocumentsToCaseCommand"
+                    onlyStoreWhenMessageIdUnique="true"
+                    transacted="true"
+					>
+                    <Param name="messageId" xpathExpression="concat($CaseReferenceNumber, '-', $TargetCaseReferenceNumber)">
+                        <Param name="TargetCaseReferenceNumber" xpathExpression="/*/CaseReferenceNumber" />
+                        <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/ZgwObject/public_reference" />
+                    </Param>
+				</MessageStoreSender>
+                <Forward name="success" path="EXIT" />
+            </SenderPipe>
+
+        </Pipeline>
+    </Adapter>
+</Module>

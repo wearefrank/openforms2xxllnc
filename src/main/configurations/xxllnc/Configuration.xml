@@ -1,7 +1,29 @@
-<!DOCTYPE Configuration [
+<!DOCTYPE configuration [
+    <!ENTITY ConvertISO639Taal SYSTEM "./Configuration_ConvertISO639Taal.xml">
+    <!ENTITY GenerateAuthorizationHeaderForDocumentenApi SYSTEM "./Configuration_GenerateAuthorizationHeaderForDocumentenApi.xml">
+    <!ENTITY GenerateAuthorizationHeaderForNotificatiesApi SYSTEM "./Configuration_GenerateAuthorizationHeaderForNotificatiesApi.xml">
+    <!ENTITY Handler_AddDocumentsToCaseCommand SYSTEM "./Configuration_Handler_AddDocumentsToCaseCommand.xml">
+    <!ENTITY Handler_AddDocumentToCaseCommand SYSTEM "./Configuration_Handler_AddDocumentToCaseCommand.xml">
+    <!ENTITY Handler_SendNoReplyUserEmailCommand SYSTEM "./Configuration_Handler_SendNoReplyUserEmailCommand.xml">
+    <!ENTITY ImportFromLocalFS SYSTEM "./Configuration_ImportFromLocalFS.xml">
+    <!ENTITY Notificaties_Subscribe SYSTEM "./Configuration_Notificaties_Subscribe.xml">
+    <!ENTITY RetryScheduler SYSTEM "./Configuration_RetryScheduler.xml">
+    <!ENTITY StartStopReceiverScheduler SYSTEM "./Configuration_StartStopReceiverScheduler.xml">
+    <!ENTITY Workflow_TwoWayCommunication SYSTEM "./Configuration_Workflow_TwoWayCommunication.xml">
+    <!ENTITY WorkflowSelector SYSTEM "./Configuration_WorkflowSelector.xml">
+    ]>
 
-	]>
-
-<Configuration name="xxllnc">
-
-</Configuration>
+<configuration name="xxllnc">
+    &ConvertISO639Taal;
+    &GenerateAuthorizationHeaderForDocumentenApi;
+    &GenerateAuthorizationHeaderForNotificatiesApi;
+    &Handler_AddDocumentsToCaseCommand;
+    &Handler_AddDocumentToCaseCommand;
+    &Handler_SendNoReplyUserEmailCommand;
+    &ImportFromLocalFS;
+    &RetryScheduler;
+    &StartStopReceiverScheduler;
+    &Notificaties_Subscribe;
+    &Workflow_TwoWayCommunication;
+    &WorkflowSelector;
+</configuration>

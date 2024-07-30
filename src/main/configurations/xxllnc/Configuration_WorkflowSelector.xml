@@ -1,0 +1,103 @@
+<Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../FrankConfig.xsd">
+    <Adapter
+        name="WorkflowSelector"
+        active="${WorkflowSelector.Active}"
+        description=""
+        >
+
+        <!-- <Receiver
+            name="WorkflowSelector"
+            transactionAttribute="Required"
+            >
+            <JavaListener
+                name="WorkflowSelector"
+                />
+            <JdbcErrorStorage
+                name="WorkflowSelector"
+                slotId="${instance.name}/WorkflowSelector"
+                onlyStoreWhenMessageIdUnique="true"
+                />
+        </Receiver> -->
+        <Receiver
+            name="WorkflowSelector"
+            transactionAttribute="Required"
+            pollInterval="5"
+            maxRetries="0"
+            >
+            <MessageStoreListener
+                name="WorkflowSelector"
+				slotId="${instance.name}/WorkflowSelector"
+                peekUntransacted="true"
+                statusValueInProcess="I"
+				/>
+        </Receiver>
+
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+
+            <SenderPipe
+                name="ReplaceXmlIllegalElementNamesSender"
+                >
+				<JavascriptSender
+                    name="ReplaceXmlIllegalElementNamesJavascriptSender"
+                    jsFileName="Common/ReplaceXmlIllegalElementNames.js"
+                    jsFunctionName="replaceXmlIllegalElementNames"
+                    >
+					<Param name="obj" />
+				</JavascriptSender>
+			</SenderPipe>
+
+			<JsonPipe 
+				name="JsonToXml"
+                storeResultInSessionKey="FormObject"
+				>
+                <Forward name="success" path="UnwrapObjectsApiDataToSingle"/>
+            </JsonPipe>
+
+            <XsltPipe
+                name="UnwrapObjectsApiDataToSingle"
+                styleSheetName="Zgw/UnwrapObjectsApiDataToSingle.xslt"
+                storeResultInSessionKey="UnwrappedMessage"
+                >
+                <Param name="Type" value="ZgwObject" />
+                <Forward name="success" path="CheckForWorkflow_TwoWayCommunication" />
+            </XsltPipe>
+
+            <XmlIfPipe
+                name="CheckForWorkflow_TwoWayCommunication"
+                getInputFromSessionKey="UnwrappedMessage"
+                xpathExpression="string-length(//gegevenstweewegcommunicatie) gt 0"
+                >
+                <Forward name="then" path="Workflow_TwoWayCommunicationSender" />
+                <Forward name="else" path="NotImplemented_Exception" />
+            </XmlIfPipe>
+
+            <SenderPipe
+                name="Workflow_TwoWayCommunicationSender"
+                getInputFromSessionKey="UnwrappedMessage"
+                transactionAttribute="Required"
+                >
+                <IbisLocalSender
+                    name="Workflow_TwoWayCommunicationLocalSender"
+                    javaListener="Workflow_TwoWayCommunication"
+                    >
+                    <Param name="Formdata" sessionKey="Formdata" type="DOMDOC" />
+                </IbisLocalSender>
+                <!-- <MessageStoreSender
+					name="Workflow_TwoWayCommunicationMessageStoreSender"
+					slotId="${instance.name}/Workflow_TwoWayCommunication"
+                    onlyStoreWhenMessageIdUnique="true"
+                    transacted="true"
+					>
+                    <Param name="messageId" xpathExpression="//gegevenstweewegcommunicatie/zaaknummer" />
+				</MessageStoreSender> -->
+                <Forward name="success" path="EXIT" />
+            </SenderPipe>
+
+            <ExceptionPipe name="NotImplemented_Exception" />
+        </Pipeline>
+    </Adapter>
+</Module>

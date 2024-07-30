@@ -1,0 +1,28 @@
+<uw-gegevenscompleet>
+	<fieldSetBedrijfMEH>
+		<bezoekadresMEH>
+			<plaatsMEH>Lollum</plaatsMEH>
+			<postcodeMEH>8823SJ</postcodeMEH>
+			<huisletterMEH/>
+			<huisnummerMEH>3</huisnummerMEH>
+			<straatnaamMEH>Hizzaarderlaan</straatnaamMEH>
+			<huisnummertoevoegingMEH>A</huisnummertoevoegingMEH>
+		</bezoekadresMEH>
+		<communicatieMEH>
+			<eMailadresMEH>p.dorhout@utrecht.nl</eMailadresMEH>
+			<telefoonnummerMEH>0612345678</telefoonnummerMEH>
+		</communicatieMEH>
+		<contactpersoonMEH>
+			<aanhefMEH>deHeer</aanhefMEH>
+			<achternaamMEH>Dorhout</achternaamMEH>
+			<voorletterSMEH>P</voorletterSMEH>
+			<tussenvoegselSMEH/>
+		</contactpersoonMEH>
+		<gegevensBedrijfOrganisatieMEH>
+			<kvKNummerMEH>68750110</kvKNummerMEH>
+			<vestigingsnummerMEH>000037178598</vestigingsnummerMEH>
+			<naamBedrijfOrganisatieMEH>Test BV Donald</naamBedrijfOrganisatieMEH>
+		</gegevensBedrijfOrganisatieMEH>
+	</fieldSetBedrijfMEH>
+ </uw-gegevenscompleet>
+ 

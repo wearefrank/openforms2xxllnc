@@ -1,0 +1,9 @@
+<!DOCTYPE Configuration [
+	<!ENTITY GenerateAuthorizationHeaderForObjectsApi SYSTEM "./Configuration_GenerateAuthorizationHeaderForObjectsApi.xml">
+	<!ENTITY objects_object_create SYSTEM "./configuration_notificaties_notificaties_create.xml">
+	]>
+
+<Configuration name="notificaties-api-server">
+	&GenerateAuthorizationHeaderForObjectsApi;
+	&objects_object_create;
+</Configuration>

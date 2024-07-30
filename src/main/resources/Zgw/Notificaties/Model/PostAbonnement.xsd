@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:zgw="http://google.com/zgw">
+    <xs:import namespace="http://google.com/zgw" schemaLocation="../ZgwNotificatiesApi.xsd" />
+    <xs:element name="ZgwAbonnement">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="url" type="zgw:Uri1_1000" minOccurs="0" />
+                <xs:element name="uuid" type="xs:string" minOccurs="0" />
+                <xs:element name="callbackUrl" type="zgw:Uri1_200" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="auth" type="zgw:AN1_1000" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="kanalen" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="filters" minOccurs="0" maxOccurs="1">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded" />
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="naam" type="zgw:AN_NonEmpty" minOccurs="0" maxOccurs="1" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema> 

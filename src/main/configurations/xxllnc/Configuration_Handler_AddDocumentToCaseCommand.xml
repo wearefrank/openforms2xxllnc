@@ -1,0 +1,132 @@
+<Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../FrankConfig.xsd">
+    <Adapter
+        name="Handler_AddDocumentToCaseCommand"
+        active="${Handler_AddDocumentToCaseCommand.Active}"
+        description=""
+        >
+        <Receiver name="Handler_AddDocumentToCaseCommand">
+            <JavaListener name="Handler_AddDocumentToCaseCommand" />
+        </Receiver>
+        <!-- <Receiver
+            name="Handler_AddDocumentToCaseCommand"
+            transactionAttribute="RequiresNew"
+            pollInterval="5"
+            maxRetries="0"
+            >
+            <MessageStoreListener
+                name="Handler_AddDocumentToCaseCommand"
+				slotId="${instance.name}/AddDocumentToCaseCommand"
+                peekUntransacted="true"
+                statusValueInProcess="I"
+				/>
+        </Receiver> -->
+
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+
+            <SenderPipe
+                name="GetAuthorizationHeaderForDocumentenApi"
+                getInputFromFixedValue="&lt;dummy/&gt;"
+                preserveInput="true"
+                >
+                <IbisLocalSender
+                    name="GetAuthorizationHeaderForDocumentenApiSender"
+                    javaListener="GenerateAuthorizationHeaderForDocumentenApi"
+                    returnedSessionKeys="Error,Authorization"
+                    >
+                </IbisLocalSender>
+                <Forward name="success" path="GetEnkelvoudigInformatieObjectSender" />
+            </SenderPipe>
+
+            <SenderPipe
+				name="GetEnkelvoudigInformatieObjectSender"
+				>
+				<HttpSender
+					name="GetEnkelvoudigInformatieObjectHttpSender"
+					headersParams="Accept-Crs,Authorization"
+					>
+					<Param name="Authorization" sessionKey="Authorization" />
+					<Param name="url" xpathExpression="/url" />
+					<Param name="Accept-Crs" value="EPSG:4326" />
+				</HttpSender>
+				<Forward name="success" path="GetEnkelvoudigInformatieObjectSender_JsonToXml" />
+			</SenderPipe>
+
+            <JsonPipe 
+				name="GetEnkelvoudigInformatieObjectSender_JsonToXml"
+				>
+                <Forward name="success" path="GetEnkelvoudigInformatieObjectSender_UnwrapOpenZaakEnvelopeToSingle"/>
+            </JsonPipe>
+
+			<XsltPipe
+                name="GetEnkelvoudigInformatieObjectSender_UnwrapOpenZaakEnvelopeToSingle"
+                styleSheetName="Zgw/UnwrapOpenZaakApiEnvelopeToSingle.xslt"
+                storeResultInSessionKey="ZgwEnkelvoudigInformatieObject"
+                >
+                <Param name="Type" value="ZgwEnkelvoudigInformatieObject"/>
+                <Forward name="success" path="GetEnkelvoudigInformatieObjectInhoudSender"/>
+            </XsltPipe>
+
+            <SenderPipe
+				name="GetEnkelvoudigInformatieObjectInhoudSender"
+				>
+				<HttpSender
+					name="GetEnkelvoudigInformatieObjectInhoudHttpSender"
+					headersParams="Accept-Crs,Authorization"
+					>
+					<Param name="Authorization" sessionKey="Authorization" />
+					<Param name="url" xpathExpression="//inhoud" />
+					<Param name="Accept-Crs" value="EPSG:4326" />
+				</HttpSender>
+				<Forward name="success" path="GetEnkelvoudigInformatieObjectInhoudSender_EncodeBase64" />
+			</SenderPipe>
+
+            <Base64Pipe 
+                name="GetEnkelvoudigInformatieObjectInhoudSender_EncodeBase64"
+                direction="ENCODE"
+                lineLength="0"
+                storeResultInSessionKey="ZgwEnkelvoudigInformatieObjectInhoud"
+                >
+                <Forward name="success" path="ConvertISO639TaalSender" />
+            </Base64Pipe>
+
+            <SenderPipe
+                name="ConvertISO639TaalSender"
+                getInputFromFixedValue="&lt;dummy/&gt;"
+                storeResultInSessionKey="Alpha2"
+                >
+                <IbisLocalSender
+                    name="ConvertISO639TaalLocalSender"
+                    javaListener="ConvertISO639Taal"
+                    >
+                </IbisLocalSender>
+                <Param name="Alpha3" sessionKey="ZgwEnkelvoudigInformatieObject" xpathExpression="//taal" />
+                <Forward name="success" path="EnrichZgwEnkelvoudigInformatieObject" />
+            </SenderPipe>
+
+            <XsltPipe
+                name="EnrichZgwEnkelvoudigInformatieObject"
+                getInputFromSessionKey="ZgwEnkelvoudigInformatieObject"
+                styleSheetName="Zgw/Documenten/Model/ZgwEnkelvoudigInformatieObject.xslt"
+                storeResultInSessionKey="ZgwEnkelvoudigInformatieObject"
+                >
+                <Param name="Taal" xpathExpression="concat(concat($Alpha2, '_'), upper-case($Alpha2))">
+                    <Param name="Alpha2" sessionKey="Alpha2" />
+                </Param>
+                <Forward name="success" path="EXIT"/>
+            </XsltPipe>
+
+            <!-- ZgwEnkelvoudigInformatieObject + ZgwZaak to object entiteitType="EDC" Translate(from ZaakBrug) -->
+
+            <!-- Wrap above in VoegZaakdocumentToe message with soapWrapperPipe -->
+
+            <!-- WebserviceSender with above -->
+
+            <!-- Unwrap soap envelope -->
+
+        </Pipeline>
+    </Adapter>
+</Module>

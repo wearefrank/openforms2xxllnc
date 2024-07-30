@@ -1,0 +1,58 @@
+<Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../FrankConfig.xsd">
+    <Adapter
+        name="Handler_AddDocumentsToCaseCommand"
+        active="${Handler_AddDocumentsToCaseCommand.Active}"
+        description=""
+        >
+
+        <Receiver
+            name="Handler_AddDocumentsToCaseCommand"
+            transactionAttribute="RequiresNew"
+            pollInterval="5"
+            maxRetries="0"
+            >
+            <MessageStoreListener
+                name="Handler_AddDocumentsToCaseCommand"
+				slotId="${instance.name}/AddDocumentsToCaseCommand"
+                peekUntransacted="true"
+                statusValueInProcess="I"
+				/>
+        </Receiver>
+
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+
+            <ForEachChildElementPipe
+                name="AddDocumentToCaseCommandForEachChildElement"
+                elementXPathExpression="/*/url"
+                getInputFromSessionKey="originalMessage"
+                parallel="true"
+                collectResults="true"
+                >
+                <IbisLocalSender
+                    javaListener="Handler_AddDocumentToCaseCommand"
+                    >
+                    <Param name="url" xpathExpression="/url" />
+                    <Param name="messageId" xpathExpression="concat($CaseReferenceNumber, '-', tokenize(/url, '/')[last()])">
+                        <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/*/CaseReferenceNumber" />
+                    </Param>
+                    <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/*/CaseReferenceNumber" />
+                </IbisLocalSender>
+                <!-- <MessageStoreSender
+					name="AddDocumentToCaseCommandMessageStoreSender"
+					slotId="${instance.name}/AddDocumentToCaseCommand"
+                    onlyStoreWhenMessageIdUnique="true"
+					>
+                    <Param name="messageId" xpathExpression="concat($CaseReferenceNumber, '-', tokenize(/url, '/')[last()])">
+                        <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/*/CaseReferenceNumber" />
+                    </Param>
+                    <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/*/CaseReferenceNumber" />
+				</MessageStoreSender> -->
+                <Forward name="success" path="EXIT" />
+            </ForEachChildElementPipe>
+        </Pipeline>
+    </Adapter>
+</Module>

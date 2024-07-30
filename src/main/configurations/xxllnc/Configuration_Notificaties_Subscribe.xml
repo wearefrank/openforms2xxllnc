@@ -1,0 +1,72 @@
+<Module
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../FrankConfig.xsd"
+>
+	<Adapter
+		name="Notificaties_Subscribe"
+		active="${Notificaties_Subscribe.Active}"
+		>
+
+		<Receiver name="Notificaties_Subscribe">
+			<JavaListener name="Notificaties_Subscribe" />
+		</Receiver>
+
+		<Pipeline>
+			<Exits>
+				<Exit name="EXIT" state="SUCCESS" />
+				<Exit name="EXCEPTION" state="ERROR" />
+			</Exits>
+
+			<XsltPipe
+				name="CreateSubscriptionCreateRequest"
+				styleSheetName="Zgw/Notificaties/Model/CreateSubscription.xsl"
+				>
+				<Param name="callbackURL" value="${openforms2xxllnc.notificaties-api.subscription.callback}" />
+				<Param name="authorization" pattern="{password}" authAlias="${openforms2xxllnc.notificaties-api.subscription.auth-alias}" hidden="true" />
+				<Param name="producttype" value="${openforms2xxllnc.notificaties-api.subscription.filters.object-type}" />
+				<Forward name="success" path="GetAuthorizationHeaderForNotificatiesApi" />
+			</XsltPipe>
+
+			<SenderPipe
+                name="GetAuthorizationHeaderForNotificatiesApi"
+                getInputFromFixedValue="&lt;dummy/&gt;"
+                >
+                <IbisLocalSender
+                    name="GetAuthorizationHeaderForNotificatiesApiSender"
+                    javaListener="GenerateAuthorizationHeaderForNotificatiesApi"
+                    returnedSessionKeys="Error,Authorization"
+                    >
+                </IbisLocalSender>
+                <Forward name="success" path="SubscriptionCreateSender" />
+            </SenderPipe>
+
+			<SenderPipe
+				name="SubscriptionCreateSender"
+				>
+				<Json2XmlInputValidator
+					name="ValidatePostBody"
+					schema="Zgw/Notificaties/Model/PostAbonnement.xsd"
+					root="ZgwAbonnement"
+					outputFormat="JSON"
+					deepSearch="true"
+					throwException="true"
+					>
+				</Json2XmlInputValidator>
+
+				<HttpSender
+					name="SubscriptionCreateSenderHttpSender"
+					methodType="POST"
+					headersParams="Authorization,Accept"
+                    timeout="${openforms2xxllnc.notificaties-api.timeout}"
+                    maxExecuteRetries="5"
+                    contentType="application/json"
+					>
+					<Param name="url" value="${openforms2xxllnc.notificaties-api.root-url}abonnement" />
+					<Param name="Accept" value="application/json" />
+                    <Param name="Authorization" sessionKey="Authorization" />
+				</HttpSender>
+				<Forward name="success" path="EXIT" />
+			</SenderPipe>
+		</Pipeline>
+	</Adapter>
+</Module>

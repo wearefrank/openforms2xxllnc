@@ -1,0 +1,35 @@
+<uw-gegevenscompleet>
+	<fieldSetBedrijfZEH>
+		<bezoekadresZEH>
+			<plaatsZEH>Leusden</plaatsZEH>
+			<postcodeZEH>3832 BC</postcodeZEH>
+			<huisletterZEH/>
+			<huisnummerZEH>87</huisnummerZEH>
+			<straatnaamZEH>Koningin Julianalaan</straatnaamZEH>
+			<huisnummertoevoegingZEH/>
+		</bezoekadresZEH>
+		<communicatieZEH>
+			<eMailadresZEH>p.dorhout@utrecht.nl</eMailadresZEH>
+			<telefoonnummerZEH>0612345678</telefoonnummerZEH>
+			<postbusGebruikenZEH/>
+			<postbusOndernemingZEH>
+				<postbusnummerZEH nil="true"/>
+				<postbus_plaatsZEH/>
+				<postbus_postcodeZEH/>
+			</postbusOndernemingZEH>
+		</communicatieZEH>
+		<contactpersoonZEH>
+			<aanhefZEH>deHeer</aanhefZEH>
+			<achternaamZEH>Dorhout</achternaamZEH>
+			<voorletterSZEH>P</voorletterSZEH>
+			<tussenvoegselSZEH/>
+		</contactpersoonZEH>
+		<gegevensBedrijfOrganisatieZEH>
+			<kvKNummerZEH>12345678</kvKNummerZEH>
+			<vestigingsnummerZEH>000012345678</vestigingsnummerZEH>
+			<postbusGebruikenZEH1>nee</postbusGebruikenZEH1>
+			<naamBedrijfOrganisatieZEH>DMAA</naamBedrijfOrganisatieZEH>
+		</gegevensBedrijfOrganisatieZEH>
+	</fieldSetBedrijfZEH>
+ </uw-gegevenscompleet>
+ 

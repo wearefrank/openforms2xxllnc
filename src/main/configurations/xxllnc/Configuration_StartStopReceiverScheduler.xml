@@ -1,0 +1,24 @@
+<Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../FrankConfig.xsd">
+    <Scheduler>
+		<IbisActionJob
+            name="StopReceiver_WorkflowSelector_Job"
+			active="${openforms2xxllnc.workflows.workflow-selector.stop-receiver.enabled}"
+            action="STOPADAPTER"
+			adapterName="WorkflowSelector"
+            configurationName="bpel"
+			cronExpression="${openforms2xxllnc.workflows.workflow-selector.stop-receiver.cron-expression}"
+            >
+			<Locker objectId="StopWorkflowSelectorReceiverScheduler-Lock" retention="1" />
+		</IbisActionJob>
+		<IbisActionJob
+            name="StartReceiver_WorkflowSelector_Job"
+			active="${openforms2xxllnc.workflows.workflow-selector.start-receiver.enabled}"
+            action="STARTADAPTER"
+			adapterName="WorkflowSelector"
+            configurationName="bpel"
+			cronExpression="${openforms2xxllnc.workflows.workflow-selector.start-receiver.cron-expression}"
+            >
+			<Locker objectId="StartWorkflowSelectorReceiverScheduler-Lock" retention="1" />
+		</IbisActionJob>
+	</Scheduler>
+</Module>

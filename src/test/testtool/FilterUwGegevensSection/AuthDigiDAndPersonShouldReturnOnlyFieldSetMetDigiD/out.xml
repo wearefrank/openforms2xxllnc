@@ -1,0 +1,29 @@
+<uw-gegevenscompleet>
+	<fieldSetMetDigiD>
+	   <adresgegevensMD>
+		  <postcodePMD>3524 VD</postcodePMD>
+		  <huisletterPMD/>
+		  <huisnummerPMD>26</huisnummerPMD>
+		  <straatnaamPMD>Ardennen</straatnaamPMD>
+		  <woonplaatsPMD>Utrecht</woonplaatsPMD>
+		  <huisnummertoevoegingPMD/>
+	   </adresgegevensMD>
+	   <contactgegevensMD>
+		  <eMailadresPMD>f.bekker@utrecht.nl</eMailadresPMD>
+		  <telefoonnummerPMD>0302865464</telefoonnummerPMD>
+		  <telefoonnummerWerkPMD/>
+		  <telefoonnummerMobielPMD/>
+	   </contactgegevensMD>
+	   <persoonsgegevensMD>
+		  <bsnPMD>176513280</bsnPMD>
+		  <aanhefPMD>M</aanhefPMD>
+		  <voornamenPMD>Bob</voornamenPMD>
+		  <achternaamPMD>Hoekstra</achternaamPMD>
+		  <voorletterSPMD>B.</voorletterSPMD>
+		  <geboortedatumPMD>1970-06-20</geboortedatumPMD>
+		  <geboorteplaatsPMD>Wijk bij Duurstede</geboorteplaatsPMD>
+		  <tussenvoegselSPMD/>
+	   </persoonsgegevensMD>
+	</fieldSetMetDigiD>
+ </uw-gegevenscompleet>
+ 

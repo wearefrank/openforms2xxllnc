@@ -1,0 +1,60 @@
+<Module 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../FrankConfig.xsd"
+	>
+	<Adapter 
+		name="objects_object_create"
+		active="${objects_object_create.active}"
+		>
+			
+		<Receiver name="objects_object_create">
+			<ApiListener 
+				name="objects_object_create" 
+				method="POST"
+				uriPattern="/objects/api/v2/objects"
+				headerParams="Host,X-Forwarded-Proto"
+				produces="JSON"
+				consumes="JSON"
+				/>
+		</Receiver>
+		<Receiver name="objects_object_create">
+            <JavaListener name="objects_object_create" />
+        </Receiver>
+
+		<Pipeline>
+			<Exits>
+				<Exit name="Created" state="SUCCESS" code="201" />
+				<Exit name="BadRequest" state="ERROR" code="400" />
+				<Exit name="Unauthorized" state="ERROR" code="401" />
+				<Exit name="Forbidden" state="ERROR" code="403" />
+				<Exit name="NotAcceptable" state="ERROR" code="406" />
+				<Exit name="Conflict" state="ERROR" code="409" />
+				<Exit name="Gone" state="ERROR" code="410" />
+				<Exit name="PreconditionFailed" state="ERROR" code="412" />
+				<Exit name="UnsupportedMediaType" state="ERROR" code="415" />
+				<Exit name="TooManyRequests" state="ERROR" code="429" />
+				<Exit name="InternalServerError" state="ERROR" code="500" />
+			</Exits>
+
+			<SenderPipe
+                name="WorkflowSelectorSender"
+                >
+                <!-- <IbisLocalSender
+                    name="WorkflowSelectorLocalSender"
+                    javaListener="WorkflowSelector"
+                    >
+                </IbisLocalSender> -->
+				<MessageStoreSender
+					name="WorkflowSelectorMessageStoreSender"
+					slotId="${instance.name}/WorkflowSelector"
+                    onlyStoreWhenMessageIdUnique="true"
+					transacted="true"
+					>
+				</MessageStoreSender>
+                <Forward name="success" path="Created" />
+                <Forward name="exception" path="InternalServerError" />
+            </SenderPipe>
+
+		</Pipeline>
+	</Adapter>
+</Module>

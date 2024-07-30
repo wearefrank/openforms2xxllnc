@@ -1,0 +1,28 @@
+<uw-gegevenscompleet>
+	<fieldSetZonderDigiD>
+		<adresgegevensZD>
+			<postcodePZD>1156 cc</postcodePZD>
+			<huisletterPZD/>
+			<huisnummerPZD>20</huisnummerPZD>
+			<straatnaamPZD>Gouwzeestraat</straatnaamPZD>
+			<woonplaatsPZD>Marken</woonplaatsPZD>
+			<huisnummertoevoegingPZD/>
+		</adresgegevensZD>
+		<contactgegevensZD>
+			<eMailadresPZD>m.van.altena@utrecht.nl</eMailadresPZD>
+			<telefoonnummerPZD>0612345678</telefoonnummerPZD>
+			<telefoonnummerWerkPZD/>
+			<telefoonnummerMobielPZD/>
+		</contactgegevensZD>
+		<persoonsgegevensZD>
+			<bsnPZD/>
+			<aanhefPZD>deHeer</aanhefPZD>
+			<voornamenPZD/>
+			<achternaamPZD>Altena</achternaamPZD>
+			<voorletterSPZD>M</voorletterSPZD>
+			<geboortedatumPZD/>
+			<tussenvoegselSPZD>van</tussenvoegselSPZD>
+		</persoonsgegevensZD>
+	</fieldSetZonderDigiD>
+ </uw-gegevenscompleet>
+ 

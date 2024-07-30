@@ -1,0 +1,82 @@
+<Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../FrankConfig.xsd">
+    <Adapter
+        name="Handler_SendNoReplyUserEmailCommand"
+        active="${Handler_SendNoReplyUserEmailCommand.Active}"
+        description=""
+        >
+
+        <Receiver
+            name="Handler_SendNoReplyUserEmailCommand"
+            transactionAttribute="RequiresNew"
+            pollInterval="5"
+            maxRetries="0"
+            >
+            <MessageStoreListener
+                name="Handler_SendNoReplyUserEmailCommand"
+				slotId="${instance.name}/SendNoReplyUserEmailCommand"
+                peekUntransacted="true"
+                statusValueInProcess="I"
+                sessionKeys="TemplateName"
+				/>
+        </Receiver>
+
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+
+            <FixedResultPipe
+                name="SubstituteMailTemplateVariables"
+                filename="${openforms2xxllnc.noreply-smtp.mail-templates-file}"
+                substituteVars="true"
+                >
+                <Param name="vars.signature-from-name" value="${openforms2xxllnc.noreply-smtp.signature-from-name}" />
+            </FixedResultPipe>
+
+            <XsltPipe
+                name="SelectMailTemplateByTemplateName"
+                xpathExpression="//mailTemplates[ name = $TemplateName ]"
+                outputType="XML"
+                >
+                <Param name="TemplateName" sessionKey="TemplateName" />
+            </XsltPipe>
+
+            <XmlWellFormedCheckerPipe
+                name="TemplateNotFound_Condition" 
+                >
+                <Forward name="success" path="CreateMailMessage" />
+                <Forward name="exception" path="TemplateNotFound_Exception" />
+            </XmlWellFormedCheckerPipe>
+
+            <ExceptionPipe name="TemplateNotFound_Exception" />
+
+            <XsltPipe
+                name="CreateMailMessage"
+                styleSheetName="Common/xsl/CreateMail.xslt"
+                storeResultInSessionKey="MailMessage"
+                >
+                <Param name="subject" xpathExpression="/mailTemplates/subject" />
+                <Param name="fromName" value="${openforms2xxllnc.noreply-smtp.default-from-name}" />
+                <Param name="fromAddress" value="${openforms2xxllnc.noreply-smtp.default-from-address}" />
+                <Param name="mailaddresses" sessionKey="originalMessage" xpathExpression="//*[starts-with(name(), 'contactgegevens') or starts-with(name(), 'communicatie')]/*[starts-with(name(), 'eMailadres')]" />
+                <Param name="messageType" xpathExpression="/mailTemplates/messageType" />
+                <Param name="message" xpathExpression="/mailTemplates/message" />
+            </XsltPipe>
+
+            <SenderPipe
+                name="NoReplySender"
+                >
+                <MailSender
+                    name="NoReplyMailSender"
+                    authAlias="${openforms2xxllnc.noreply-smtp.auth-alias}"
+                    smtpHost="${openforms2xxllnc.noreply-smtp.host}"
+                    smtpPort="${openforms2xxllnc.noreply-smtp.port}"
+                    useSsl="${openforms2xxllnc.noreply-smtp.use-ssl}"
+                    timeout="${openforms2xxllnc.noreply-smtp.timeout}"
+                    > 
+                </MailSender>
+            </SenderPipe>
+        </Pipeline>
+    </Adapter>
+</Module>

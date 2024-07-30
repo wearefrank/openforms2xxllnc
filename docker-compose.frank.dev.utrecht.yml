@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  frank:
+    environment:
+      openforms2xxllnc.workflows.tweewegcommunicatie.on-case-not-found.mail-template: unable-to-add-document-to-case-default
+      openforms2xxllnc.workflows.tweewegcommunicatie.on-subject-not-equals-case-subject.mail-template: unable-to-add-document-to-case-default

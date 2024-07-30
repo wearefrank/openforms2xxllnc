@@ -1,0 +1,45 @@
+[
+    {
+        "model": "authorizations.authorizationsconfig",
+        "pk": 1,
+        "fields": {
+            "api_root": "http://host.docker.internal:9001/autorisaties/api/v1/",
+            "component": "nrc"
+        }
+    },
+    {
+        "model": "notifications.notificationsconfig",
+        "pk": 1,
+        "fields": {
+            "api_root": "http://localhost:8000/api/v1/"
+        }
+    },
+    {
+        "model": "vng_api_common.apicredential",
+        "pk": 1,
+        "fields": {
+            "api_root": "http://host.docker.internal:9001/autorisaties/api/v1/",
+            "label": "Open Zaak Autorisaties",
+            "client_id": "nrc",
+            "secret": "nrc",
+            "user_id": "nrc",
+            "user_representation": "nrc"
+        }
+    },
+    {
+        "model": "vng_api_common.jwtsecret",
+        "pk": 1,
+        "fields": {
+            "identifier": "openzaak",
+            "secret": "openzaak"
+        }
+    },
+    {
+        "model": "vng_api_common.jwtsecret",
+        "pk": 2,
+        "fields": {
+            "identifier": "nrc",
+            "secret": "nrc"
+        }
+    }
+]
