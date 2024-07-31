@@ -54,8 +54,16 @@
 				name="JsonToXml"
                 storeResultInSessionKey="FormObject"
 				>
-                <Forward name="success" path="UnwrapObjectsApiDataToSingle"/>
+                <Forward name="success" path="UnwrapOpenZaakEnvelopeToSingle"/>
             </JsonPipe>
+
+            <XsltPipe
+                name="UnwrapOpenZaakEnvelopeToSingle"
+                styleSheetName="Zgw/UnwrapOpenZaakApiEnvelopeToSingle.xslt"
+                >
+                <Param name="Type" value="ZgwObject"/>
+                <Forward name="success" path="UnwrapObjectsApiDataToSingle"/>
+            </XsltPipe>
 
             <XsltPipe
                 name="UnwrapObjectsApiDataToSingle"
