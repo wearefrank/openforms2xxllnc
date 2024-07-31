@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <!-- See src/main/resources/springIbisTestToolCustom.xml -->
+    <changeSet id="LadybugCaseReference:1" author="MLenterman">
+        <comment>Add caseReference column</comment>
+        <addColumn tableName="LADYBUG">
+            <column name="CASEREFERENCE" type="VARCHAR(16)"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
