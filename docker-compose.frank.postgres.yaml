@@ -1,5 +1,3 @@
-version: '3.8'
-
 x-frank-postgres-env:
   environment: &frank-postgres-env
     POSTGRES_USER: frank
@@ -14,8 +12,6 @@ services:
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5400:5432"
-    networks:
-      - frank-backend
     volumes:
       - frank-postgres-data:/var/lib/postgresql/data
   
@@ -32,9 +28,6 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
       - ./docker/frank-postgres-pgadmin/frank-pgadmin-conf.json:/frank-pgadmin-conf.json
-    networks:
-      - frank-stack
-      - frank-backend
     depends_on:
       - frank-postgres
 

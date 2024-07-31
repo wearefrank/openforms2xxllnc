@@ -1,35 +1,15 @@
-version: '3.8'
-
 services:
-  nginx:
-    image: nginx
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./docker/frank-nginx/default.conf
-          target: /etc/nginx/conf.d/default.conf
-    networks:
-      - frank-stack
-      - frank-backend
-    ports:
-      - "9000:9000"
-    depends_on:
-      - frank
-
   frank:
     build:
       context: .
       args:
-        FF_VERSION: ${FF_VERSION:-8.1.0-20240221.213323}
-    image: wearefrank/openforms2xxllnc:${VERSION:-latest}
+        FF_VERSION: ${FF_VERSION:-8.3.0-20240730.042429}
+    image: wearefrank/frank:${VERSION:-latest}
     environment:
       application.server.type.custom: ${TRANSACTION_MANAGER:-NARAYANA}
       credentialFactory.class: nl.nn.credentialprovider.PropertyFileCredentialFactory
       credentialFactory.map.properties: /opt/frank/secrets/credentials.properties
       TZ: ${TIME_ZONE:-Europe/Amsterdam}
-      configurations.notificaties-api-server.classLoaderType: ScanningDirectoryClassLoader
-      configurations.objects-api-server.classLoaderType: ScanningDirectoryClassLoader
-      configurations.xxllnc.classLoaderType: ScanningDirectoryClassLoader
     env_file:
       - .env
     volumes:
@@ -47,17 +27,14 @@ services:
           path: ./src/test/testtool
           target: /opt/frank/testtool
         - action: sync+restart
-          path: ./src/main/configurations/notificaties-api-server/DeploymentSpecifics.properties
-          target: /opt/frank/configurations/notificaties-api-server/DeploymentSpecifics.properties
-        - action: sync+restart
-          path: ./src/main/configurations/objects-api-server/DeploymentSpecifics.properties
-          target: /opt/frank/configurations/objects-api-server/DeploymentSpecifics.properties
-        - action: sync+restart
-          path: ./src/main/configurations/xxllnc/DeploymentSpecifics.properties
-          target: /opt/frank/configurations/xxllnc/DeploymentSpecifics.properties
-        - action: sync+restart
           path: ./src/main/resources/DeploymentSpecifics.properties
           target: /opt/frank/resources/DeploymentSpecifics.properties
+        - action: sync+restart
+          path: ./src/main/resources/ladybug/DatabaseChangelog_Custom.xml
+          target: /opt/frank/resources/ladybug/DatabaseChangelog_Custom.xml
+        - action: sync+restart
+          path: ./src/main/resources/springIbisTestToolCustom.xml
+          target: /opt/frank/resources/springIbisTestToolCustom.xml
         - action: sync+restart
           path: ./src/main/secrets
           target: /opt/frank/secrets

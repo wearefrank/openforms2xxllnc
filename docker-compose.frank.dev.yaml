@@ -1,0 +1,43 @@
+services:
+  nginx:
+    image: nginx
+    volumes:
+      - ./docker/frank-nginx/default.conf:/etc/nginx/conf.d/default.conf
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./docker/frank-nginx/default.conf
+          target: /etc/nginx/conf.d/default.conf
+    ports:
+      - "9000:9000"
+    depends_on:
+      - frank
+
+  frank:
+    extends:
+      file: docker-compose.yaml
+      service: frank
+    build:
+      context: .
+      args:
+        FF_VERSION: ${FF_VERSION:-8.3.0-20240730.042429}
+    image: wearefrank/openforms2xxllnc:${VERSION:-latest}
+    environment:
+      configurations.notificaties-api-server.classLoaderType: ScanningDirectoryClassLoader
+      configurations.objects-api-server.classLoaderType: ScanningDirectoryClassLoader
+      configurations.xxllnc.classLoaderType: ScanningDirectoryClassLoader
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./src/main/configurations/notificaties-api-server/DeploymentSpecifics.properties
+          target: /opt/frank/configurations/notificaties-api-server/DeploymentSpecifics.properties
+        - action: sync+restart
+          path: ./src/main/configurations/objects-api-server/DeploymentSpecifics.properties
+          target: /opt/frank/configurations/objects-api-server/DeploymentSpecifics.properties
+        - action: sync+restart
+          path: ./src/main/configurations/xxllnc/DeploymentSpecifics.properties
+          target: /opt/frank/configurations/xxllnc/DeploymentSpecifics.properties
+
+volumes:
+  frank-logs:
+  frank-h2db-data:

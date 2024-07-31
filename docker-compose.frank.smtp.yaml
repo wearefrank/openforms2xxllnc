@@ -1,8 +1,8 @@
-version: '3.8'
-
 services:
   frank-mailslurper:
     image: oryd/mailslurper:smtps-latest
+    volumes:
+      - ./docker/mailslurper/config.json:/go/src/github.com/mailslurper/mailslurper/cmd/mailslurper/config.json
     develop:
       watch:
         - action: sync+restart
@@ -11,9 +11,6 @@ services:
     ports:
       - "8025:8025"
       - "8026:8080"
-    networks:
-      - frank-stack
-      - frank-backend
 
   frank:
     environment:
