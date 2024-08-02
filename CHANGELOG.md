@@ -1,5 +1,16 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.0.1](https://github.com/wearefrank/openforms2xxllnc/compare/v1.0.0...v1.0.1) (2024-08-02)
+
+### 🎨 Styles
+
+* rename and restructure propreties to follow the more intuitive structure and names from the helm chart ([009d703](https://github.com/wearefrank/openforms2xxllnc/commit/009d703b3e4c023d447c3aaa7163aeb297d055b5))
+
+### 🧑‍💻 Code Refactoring
+
+* base error scenarios send mail condition on dedicated send-mail toggle instead of empty mail-template name ([56af0af](https://github.com/wearefrank/openforms2xxllnc/commit/56af0af78a3dfa46c7ad3a09afd49c568db165d1))
+* no-reply mail sender adapter follows dedicated no-reply-smtp.enabled toggle for adapter active state ([cc92c88](https://github.com/wearefrank/openforms2xxllnc/commit/cc92c886052e1ce724016c422d77c6bc493d3d6d))
+
 ## 1.0.0 (2024-07-31)
 
 ### 🍕 Features
