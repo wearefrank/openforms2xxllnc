@@ -28,10 +28,10 @@
 
             <FixedResultPipe
                 name="SubstituteMailTemplateVariables"
-                filename="${openforms2xxllnc.noreply-smtp.mail-templates-file}"
+                filename="${openforms2xxllnc.mail-templates.templates-file}"
                 substituteVars="true"
                 >
-                <Param name="vars.signature-from-name" value="${openforms2xxllnc.noreply-smtp.signature-from-name}" />
+                <Param name="vars.signature-from-name" value="${openforms2xxllnc.connections.noreply-smtp.signature-from-name}" />
             </FixedResultPipe>
 
             <XsltPipe
@@ -57,8 +57,8 @@
                 storeResultInSessionKey="MailMessage"
                 >
                 <Param name="subject" xpathExpression="/mailTemplates/subject" />
-                <Param name="fromName" value="${openforms2xxllnc.noreply-smtp.default-from-name}" />
-                <Param name="fromAddress" value="${openforms2xxllnc.noreply-smtp.default-from-address}" />
+                <Param name="fromName" value="${openforms2xxllnc.connections.noreply-smtp.default-from-name}" />
+                <Param name="fromAddress" value="${openforms2xxllnc.connections.noreply-smtp.default-from-address}" />
                 <Param name="mailaddresses" sessionKey="originalMessage" xpathExpression="//*[starts-with(name(), 'contactgegevens') or starts-with(name(), 'communicatie')]/*[starts-with(name(), 'eMailadres')]" />
                 <Param name="messageType" xpathExpression="/mailTemplates/messageType" />
                 <Param name="message" xpathExpression="/mailTemplates/message" />
@@ -69,11 +69,11 @@
                 >
                 <MailSender
                     name="NoReplyMailSender"
-                    authAlias="${openforms2xxllnc.noreply-smtp.auth-alias}"
-                    smtpHost="${openforms2xxllnc.noreply-smtp.host}"
-                    smtpPort="${openforms2xxllnc.noreply-smtp.port}"
-                    useSsl="${openforms2xxllnc.noreply-smtp.use-ssl}"
-                    timeout="${openforms2xxllnc.noreply-smtp.timeout}"
+                    authAlias="${openforms2xxllnc.connections.noreply-smtp.auth-alias}"
+                    smtpHost="${openforms2xxllnc.connections.noreply-smtp.host}"
+                    smtpPort="${openforms2xxllnc.connections.noreply-smtp.port}"
+                    useSsl="${openforms2xxllnc.connections.noreply-smtp.use-ssl}"
+                    timeout="${openforms2xxllnc.connections.noreply-smtp.timeout}"
                     > 
                 </MailSender>
             </SenderPipe>

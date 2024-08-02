@@ -2,21 +2,21 @@
     <Scheduler>
 		<IbisActionJob
             name="StopReceiver_WorkflowSelector_Job"
-			active="${openforms2xxllnc.workflows.workflow-selector.stop-receiver.enabled}"
+			active="${openforms2xxllnc.workflows.scheduled-stop-receiver.workflow-selector.enabled}"
             action="STOPADAPTER"
 			adapterName="WorkflowSelector"
             configurationName="bpel"
-			cronExpression="${openforms2xxllnc.workflows.workflow-selector.stop-receiver.cron-expression}"
+			cronExpression="${openforms2xxllnc.workflows.scheduled-stop-receiver.workflow-selector.cron-expression}"
             >
 			<Locker objectId="StopWorkflowSelectorReceiverScheduler-Lock" retention="1" />
 		</IbisActionJob>
 		<IbisActionJob
             name="StartReceiver_WorkflowSelector_Job"
-			active="${openforms2xxllnc.workflows.workflow-selector.start-receiver.enabled}"
+			active="${openforms2xxllnc.workflows.scheduled-start-receiver.workflow-selector.enabled}"
             action="STARTADAPTER"
 			adapterName="WorkflowSelector"
             configurationName="bpel"
-			cronExpression="${openforms2xxllnc.workflows.workflow-selector.start-receiver.cron-expression}"
+			cronExpression="${openforms2xxllnc.workflows.scheduled-start-receiver.workflow-selector.cron-expression}"
             >
 			<Locker objectId="StartWorkflowSelectorReceiverScheduler-Lock" retention="1" />
 		</IbisActionJob>

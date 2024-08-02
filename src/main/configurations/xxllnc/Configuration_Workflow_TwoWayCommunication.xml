@@ -63,7 +63,7 @@
                 xpathExpression="not(//*[starts-with(name(), 'uw-gegevens')]/*/*[ends-with(name(), 'MD')] or //*[starts-with(name(), 'uw-gegevens')]/*/*[ends-with(name(), 'MEH')])"
                 >
                 <Forward name="then" path="UwGegevensSubjectUnauthenticated_Exception" />
-                <Forward name="else" path="EXIT" />
+                <Forward name="else" path="EXIT" /> <!-- to geefZaakDetails -->
             </XmlIfPipe>
 
             <ExceptionPipe name="UwGegevensSubjectUnauthenticated_Exception" />
@@ -95,7 +95,7 @@
             <PutInSessionPipe
                 name="CaseNotFound_StoreMailTemplateName"
                 >
-                <Param name="TemplateName" value="${openforms2xxllnc.workflows.tweewegcommunicatie.on-case-not-found.mail-template}" />
+                <Param name="TemplateName" value="${openforms2xxllnc.workflows.on-error-actions.on-case-not-found.template-name}" />
                 <Forward name="success" path="CaseNotFound_SendNoReplyUserEmailCommand" />
             </PutInSessionPipe>
 
@@ -180,7 +180,7 @@
             <PutInSessionPipe
                 name="SubjectNotEqualsCaseSubject_StoreMailTemplateName"
                 >
-                <Param name="TemplateName" value="${openforms2xxllnc.workflows.tweewegcommunicatie.on-subject-not-equals-case-subject.mail-template}" />
+                <Param name="TemplateName" value="${openforms2xxllnc.workflows.on-error-actions.on-subject-not-equals-case-subject.template-name}" />
                 <Forward name="success" path="SubjectNotEqualsCaseSubject_SendNoReplyUserEmailCommand" />
             </PutInSessionPipe>
 

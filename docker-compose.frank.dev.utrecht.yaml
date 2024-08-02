@@ -1,5 +1,8 @@
 services:
   frank:
     environment:
-      openforms2xxllnc.workflows.tweewegcommunicatie.on-case-not-found.mail-template: unable-to-add-document-to-case-default
-      openforms2xxllnc.workflows.tweewegcommunicatie.on-subject-not-equals-case-subject.mail-template: unable-to-add-document-to-case-default
+      openforms2xxllnc.connections.noreply-smtp.enabled: true
+      openforms2xxllnc.workflows.on-error-actions.on-case-not-found.send-mail: true
+      openforms2xxllnc.workflows.on-error-actions.on-case-not-found.template-name: unable-to-add-document-to-case-default
+      openforms2xxllnc.workflows.on-error-actions.on-subject-not-equals-case-subject.send-mail: true
+      openforms2xxllnc.workflows.on-error-actions.on-subject-not-equals-case-subject.template-name: unable-to-add-document-to-case-default

@@ -20,7 +20,7 @@
                 name="CheckForAuthType"
                 xpathExpression="$valueAuthType"
                 >
-                <Param name="valueAuthType" value="${openforms2xxllnc.objects-api.auth-type}"/>
+                <Param name="valueAuthType" value="${openforms2xxllnc.connections.objects-api.auth-type}"/>
                 <Forward name="jwt" path="createJwt"/>
                 <Forward name="basic" path="GetUserCredentialForBasicAuth"/>
                 <Forward name="value" path="CreateValueAuthorizationHeader"/>
@@ -30,10 +30,10 @@
             <JwtPipe name="createJwt"
                 expirationTime="600"
                 storeResultInSessionKey="myToken"
-                authAlias="${openforms2xxllnc.objects-api.auth-alias}">
-                <Param name="client_id" pattern="{username}" authAlias="${openforms2xxllnc.objects-api.auth-alias}" hidden="true"/>
-                <Param name="user_id" pattern="{username}" authAlias="${openforms2xxllnc.objects-api.auth-alias}" hidden="true"/>
-                <Param name="user_representation" pattern="{username}" authAlias="${openforms2xxllnc.objects-api.auth-alias}" hidden="true"/>
+                authAlias="${openforms2xxllnc.connections.objects-api.auth-alias}">
+                <Param name="client_id" pattern="{username}" authAlias="${openforms2xxllnc.connections.objects-api.auth-alias}" hidden="true"/>
+                <Param name="user_id" pattern="{username}" authAlias="${openforms2xxllnc.connections.objects-api.auth-alias}" hidden="true"/>
+                <Param name="user_representation" pattern="{username}" authAlias="${openforms2xxllnc.connections.objects-api.auth-alias}" hidden="true"/>
                 <Forward name="success" path="CreateJwtAuthorizationHeader" />
                 <Forward name="exception" path="EXCEPTION" />
             </JwtPipe>
@@ -48,8 +48,8 @@
 
             <PutInSessionPipe name="GetUserCredentialForBasicAuth">
                 <Param name="user_credential" xpathExpression="concat($username,':',$password)" hidden="true">
-                    <Param name="username" pattern="{username}" authAlias="${openforms2xxllnc.objects-api.auth-alias}" hidden="true"/>
-                    <Param name="password" pattern="{password}" authAlias="${openforms2xxllnc.objects-api.auth-alias}" hidden="true"/>
+                    <Param name="username" pattern="{username}" authAlias="${openforms2xxllnc.connections.objects-api.auth-alias}" hidden="true"/>
+                    <Param name="password" pattern="{password}" authAlias="${openforms2xxllnc.connections.objects-api.auth-alias}" hidden="true"/>
                 </Param>
                 <Forward name="success" path="CreateBasicAuthToken" />
             </PutInSessionPipe>
@@ -72,7 +72,7 @@
 
             <!-- valueTokenGeneratorPipe -->
             <PutInSessionPipe name="CreateValueAuthorizationHeader">
-                <Param name="Authorization" pattern="{password}" authAlias="${openforms2xxllnc.objects-api.auth-alias}" hidden="true" />
+                <Param name="Authorization" pattern="{password}" authAlias="${openforms2xxllnc.connections.objects-api.auth-alias}" hidden="true" />
                 <Forward name="success" path="EXIT" />
             </PutInSessionPipe>
         </Pipeline>

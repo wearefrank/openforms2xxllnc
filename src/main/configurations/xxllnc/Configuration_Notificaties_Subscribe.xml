@@ -21,9 +21,9 @@
 				name="CreateSubscriptionCreateRequest"
 				styleSheetName="Zgw/Notificaties/Model/CreateSubscription.xsl"
 				>
-				<Param name="callbackURL" value="${openforms2xxllnc.notificaties-api.subscription.callback}" />
-				<Param name="authorization" pattern="{password}" authAlias="${openforms2xxllnc.notificaties-api.subscription.auth-alias}" hidden="true" />
-				<Param name="producttype" value="${openforms2xxllnc.notificaties-api.subscription.filters.object-type}" />
+				<Param name="callbackURL" value="${openforms2xxllnc.connections.notificaties-api.subscription.callback}" />
+				<Param name="authorization" pattern="{password}" authAlias="${openforms2xxllnc.connections.notificaties-api.subscription.auth-alias}" hidden="true" />
+				<Param name="producttype" value="${openforms2xxllnc.connections.notificaties-api.subscription.filters.object-type}" />
 				<Forward name="success" path="GetAuthorizationHeaderForNotificatiesApi" />
 			</XsltPipe>
 
@@ -57,11 +57,11 @@
 					name="SubscriptionCreateSenderHttpSender"
 					methodType="POST"
 					headersParams="Authorization,Accept"
-                    timeout="${openforms2xxllnc.notificaties-api.timeout}"
+                    timeout="${openforms2xxllnc.connections.notificaties-api.timeout}"
                     maxExecuteRetries="5"
                     contentType="application/json"
 					>
-					<Param name="url" value="${openforms2xxllnc.notificaties-api.root-url}abonnement" />
+					<Param name="url" value="${openforms2xxllnc.connections.notificaties-api.root-url}abonnement" />
 					<Param name="Accept" value="application/json" />
                     <Param name="Authorization" sessionKey="Authorization" />
 				</HttpSender>

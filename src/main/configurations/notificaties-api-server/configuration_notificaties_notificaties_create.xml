@@ -41,7 +41,7 @@
 				preserveInput="true"
 				xpathExpression="/headers/header[@name = 'Authorization']/text() != $Authorization"
 				>
-				<Param name="Authorization" pattern="{password}" authAlias="${openforms2xxllnc.notificaties-api.subscription.auth-alias}" hidden="true" />
+				<Param name="Authorization" pattern="{password}" authAlias="${openforms2xxllnc.connections.notificaties-api.subscription.auth-alias}" hidden="true" />
 				<Forward name="then" path="Unauthorized" />
 				<Forward name="else" path="JsonToXml" />
 			</XmlIfPipe>

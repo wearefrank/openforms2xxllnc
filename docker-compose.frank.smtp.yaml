@@ -14,10 +14,10 @@ services:
 
   frank:
     environment:
-      openforms2xxllnc.noreply-smtp.host: frank-mailslurper
-      openforms2xxllnc.noreply-smtp.port: 2500
-      openforms2xxllnc.noreply-smtp.use-ssl: false
-      openforms2xxllnc.noreply-smtp.timeout: 60000
-      openforms2xxllnc.noreply-smtp.auth-alias: noreply-smtp
+      openforms2xxllnc.connections.noreply-smtp.host: frank-mailslurper
+      openforms2xxllnc.connections.noreply-smtp.port: 2500
+      openforms2xxllnc.connections.noreply-smtp.use-ssl: false
+      openforms2xxllnc.connections.noreply-smtp.timeout: 60000
+      openforms2xxllnc.connections.noreply-smtp.auth-alias: noreply-smtp
     depends_on:
       - frank-mailslurper
