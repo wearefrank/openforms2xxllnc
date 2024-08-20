@@ -1,0 +1,52 @@
+<Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../FrankConfig.xsd">
+    <Adapter name="WrapZakLv01Request"
+        active="${WrapZakLv01Request.Active}"
+        description="">
+
+        <Receiver name="WrapZakLv01Request">
+            <JavaListener name="WrapZakLv01Request" returnedSessionKeys="Error" />
+        </Receiver>
+
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+
+            <XsltPipe 
+                name="CreateStuurgegevens"
+                styleSheetName="Common/xsl/CreateStuurgegevens.xslt"
+                storeResultInSessionKey="Stuurgegevens">
+                <Forward name="success" path="CreateParameters" />
+            </XsltPipe>
+
+            <XsltPipe 
+                name="CreateParameters"
+                styleSheetName="Common/xsl/CreateParameters.xslt"
+                storeResultInSessionKey="Parameters">
+                <Forward name="success" path="CreateGelijk" />
+            </XsltPipe>
+
+            <XsltPipe 
+                name="CreateGelijk"
+                styleSheetName="Common/xsl/CreateGelijk.xslt"
+                storeResultInSessionKey="Gelijk">
+                <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber"/>
+                <Forward name="success" path="WrapZakLv01Request" />
+            </XsltPipe>
+
+            <SoapWrapperPipe 
+                name="WrapZakLv01Request"
+                getInputFromFixedValue="&lt;EmptyInput/&gt;"
+                soapBodyStyleSheet="Common/xsl/CreateZakLv01Request.xslt"
+                storeResultInSessionKey="ZakLv01RequestMessage">
+                <Param name="Stuurgegevens" sessionKey="Stuurgegevens" type="DOMDOC"/>
+                <Param name="Parameters" sessionKey="Parameters" type="DOMDOC"/>
+                <Param name="Gelijk" sessionKey="Gelijk" type="DOMDOC"/>
+                <Param name="Scope" sessionKey="Scope" type="DOMDOC"/>
+                <Forward name="success" path="EXIT" />
+            </SoapWrapperPipe>
+            
+        </Pipeline>
+    </Adapter>
+</Module>
