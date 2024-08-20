@@ -4,13 +4,8 @@
         active="${openforms2xxllnc.workflows.auto-retries.workflow-selector.enabled}"
         description=""
         >
-
-        <Receiver
-            name="AutoRetry_WorkflowSelector"
-            >
-            <JavaListener
-                name="AutoRetry_WorkflowSelector"
-                />
+        <Receiver name="AutoRetry_WorkflowSelector">
+            <JavaListener name="AutoRetry_WorkflowSelector"/>
         </Receiver>
 
         <Pipeline>
@@ -37,13 +32,8 @@
         active="${openforms2xxllnc.workflows.auto-retries.add-documents-to-case.enabled}"
         description=""
         >
-
-        <Receiver
-            name="AutoRetry_AddDocumentsToCase"
-            >
-            <JavaListener
-                name="AutoRetry_AddDocumentsToCase"
-                />
+        <Receiver name="AutoRetry_AddDocumentsToCase">
+            <JavaListener name="AutoRetry_AddDocumentsToCase"/>
         </Receiver>
 
         <Pipeline>

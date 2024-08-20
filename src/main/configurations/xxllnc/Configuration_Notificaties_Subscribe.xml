@@ -28,17 +28,17 @@
 			</XsltPipe>
 
 			<SenderPipe
-                name="GetAuthorizationHeaderForNotificatiesApi"
-                getInputFromFixedValue="&lt;dummy/&gt;"
-                >
-                <IbisLocalSender
-                    name="GetAuthorizationHeaderForNotificatiesApiSender"
-                    javaListener="GenerateAuthorizationHeaderForNotificatiesApi"
-                    returnedSessionKeys="Error,Authorization"
-                    >
-                </IbisLocalSender>
-                <Forward name="success" path="SubscriptionCreateSender" />
-            </SenderPipe>
+				name="GetAuthorizationHeaderForNotificatiesApi"
+				getInputFromFixedValue="&lt;dummy/&gt;"
+				>
+				<IbisLocalSender
+						name="GetAuthorizationHeaderForNotificatiesApiSender"
+						javaListener="GenerateAuthorizationHeaderForNotificatiesApi"
+						returnedSessionKeys="Error,Authorization"
+						>
+				</IbisLocalSender>
+				<Forward name="success" path="SubscriptionCreateSender" />
+      </SenderPipe>
 
 			<SenderPipe
 				name="SubscriptionCreateSender"
