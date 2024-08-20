@@ -9,9 +9,7 @@
             name="Workflow_TwoWayCommunication"
             transactionAttribute="NotSupported"
             >
-            <JavaListener
-                name="Workflow_TwoWayCommunication"
-                />
+            <JavaListener name="Workflow_TwoWayCommunication"/>
         </Receiver>
         <!-- <Receiver
             name="Workflow_TwoWayCommunicationHandler"
@@ -63,20 +61,53 @@
                 xpathExpression="not(//*[starts-with(name(), 'uw-gegevens')]/*/*[ends-with(name(), 'MD')] or //*[starts-with(name(), 'uw-gegevens')]/*/*[ends-with(name(), 'MEH')])"
                 >
                 <Forward name="then" path="UwGegevensSubjectUnauthenticated_Exception" />
-                <Forward name="else" path="EXIT" /> <!-- to geefZaakDetails -->
+                <Forward name="else" path="CallWrapZakLv01Request" />
             </XmlIfPipe>
 
             <ExceptionPipe name="UwGegevensSubjectUnauthenticated_Exception" />
 
-            <!-- Create geefZaakDetails request message and wrap with soapWrapperPipe -->
+            <SenderPipe 
+                name="CallWrapZakLv01Request"
+                storeResultInSessionKey="ZakLv01RequestMessage">
+                <IbisLocalSender
+                    name="CallWrapZakLv01RequestSender"
+                    javaListener="WrapZakLv01Request"
+                    returnedSessionKeys="Error">
+                    <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber"/>
+                </IbisLocalSender>
+                <Forward name="success" path="GeefZaakDetailsSender" />
+                <Forward name="exception" path="EXCEPTION" />
+            </SenderPipe>
 
-            <!-- WebserviceSender with above -->
+            <SenderPipe
+                name="GeefZaakDetailsSender">
+                <WebServiceSender
+                    name="GeefZaakDetailsWebServiceSender"
+                    soap="false"
+                    soapAction="http://www.egem.nl/StUF/sector/zkn/0310/geefZaakdetails_Lv01"
+                    contentType="text/xml"
+                    timeout="${openforms2xxllnc.connections.beantwoord-vraag.timeout}"
+                    throwApplicationFaults="false"
+                    >
+                    <Param name="url" value="${openforms2xxllnc.connections.beantwoord-vraag.endpoint}" />
+                </WebServiceSender>
+                <Forward name="success" path="UnwrapZakLa01Response" />
+                <Forward name="exception" path="SoapFault_Exception" />
+            </SenderPipe>
 
-            <!-- Unwrap soap response envelope -->
+            <ExceptionPipe name="SoapFault_Exception"/>
+
+            <SoapWrapperPipe 
+                name="UnwrapZakLa01Response"
+                storeResultInSessionKey="UnwrappedZakLa01Response"
+                direction="UNWRAP"
+                removeOutputNamespaces="true">
+                <Forward name="success" path="CaseNotFound_Condition" />
+            </SoapWrapperPipe>
 
             <XmlIfPipe
                 name="CaseNotFound_Condition"
-                xpathExpression="string-length(//*:lookUpCaseIdsResponse/*:caseIdMessage/*:cases/*:case) gt 0"
+                xpathExpression="count(/zakLa01/antwoord/object/*) gt 0"
                 >
                 <Forward name="then" path="CheckForUwGegevensIsPerson" />
                 <Forward name="else" path="CaseNotFound_MailCondition" />
@@ -134,7 +165,7 @@
                 name="StorePersonIdentifiers"
                 >
                 <Param name="UwGegevensSubject" hidden="true" sessionKey="UwGegevens" xpathExpression="//*[starts-with(name(), 'uw-gegevens')]//*[starts-with(name(), 'persoonsgegevens')]/*[starts-with(name(), 'bsn')]" />
-                <Param name="CaseInitiatingSubject" hidden="true" sessionKey="ReadCasesResponseMessage" xpathExpression="//*:readCasesResponse/*:caseDetailsMessage/*:cases/*:case/*:initiatingSubject/*:person/*:citizenNumber" />
+                <Param name="CaseInitiatingSubject" hidden="true" sessionKey="UnwrappedZakLa01Response" xpathExpression="/zakLa01/antwoord/object/heeftAlsInitiator/gerelateerde/natuurlijkPersoon/inp.bsn" />
                 <Forward name="success" path="CheckForUwGegevensSubjectMatchingCaseInitiatingSubject" />
             </PutInSessionPipe>
 
@@ -153,7 +184,7 @@
                 name="StoreOrganizationIdentifiers"
                 >
                 <Param name="UwGegevensSubject" sessionKey="UwGegevens" xpathExpression="//*[starts-with(name(), 'uw-gegevens')]//*[starts-with(name(), 'gegevensBedrijfOrganisatie')]/*[starts-with(name(), 'kvKNummer')]" />
-                <Param name="CaseInitiatingSubject" sessionKey="ReadCasesResponseMessage" xpathExpression="//*:readCasesResponse/*:caseDetailsMessage/*:cases/*:case/*:initiatingSubject/*:organization/*:nnpId" />
+                <Param name="CaseInitiatingSubject" sessionKey="UnwrappedZakLa01Response" xpathExpression="/zakLa01/antwoord/object/heeftAlsInitiator/gerelateerde/nietNatuurlijkPersoon/inn.nnpId" />
                 <Forward name="success" path="CheckForUwGegevensSubjectMatchingCaseInitiatingSubject" />
             </PutInSessionPipe>
 
