@@ -66,6 +66,7 @@
 
             <ExceptionPipe name="UwGegevensSubjectUnauthenticated_Exception" />
 
+            <!-- Create GeefZaakDetails message -->
             <SenderPipe 
                 name="CallWrapZakLv01Request"
                 storeResultInSessionKey="ZakLv01RequestMessage">
@@ -80,7 +81,8 @@
             </SenderPipe>
 
             <SenderPipe
-                name="GeefZaakDetailsSender">
+                name="GeefZaakDetailsSender"
+                getInputFromSessionKey="ZakLv01RequestMessage">
                 <WebServiceSender
                     name="GeefZaakDetailsWebServiceSender"
                     soap="false"
@@ -270,6 +272,7 @@
                         <Param name="TargetCaseReferenceNumber" xpathExpression="/*/CaseReferenceNumber" />
                         <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/ZgwObject/public_reference" />
                     </Param>
+                    <Param name="zdsZaak" sessionKey="UnwrappedZakLa01Response"/>
 				</MessageStoreSender>
                 <Forward name="success" path="EXIT" />
             </SenderPipe>

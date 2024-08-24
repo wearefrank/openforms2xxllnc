@@ -116,8 +116,25 @@
                 <Param name="Taal" xpathExpression="concat(concat($Alpha2, '_'), upper-case($Alpha2))">
                     <Param name="Alpha2" sessionKey="Alpha2" />
                 </Param>
-                <Forward name="success" path="EXIT"/>
+                <Forward name="success" path="CallWrapEdcLk01Request"/>
             </XsltPipe>
+
+            <SenderPipe 
+                name="CallWrapEdcLk01Request"
+                storeResultInSessionKey="EdcLk01RequestMessage">
+                <IbisLocalSender
+                    name="CallWrapEdcLk01RequestSender"
+                    javaListener="WrapEdcLk01Request"
+                    returnedSessionKeys="Error">
+                    <Param name="ZgwEnkelvoudigInformatieObject" sessionKey="ZgwEnkelvoudigInformatieObject"/>
+                    <Param name="ZdsZaak" sessionKey="zdsZaak" type="DOMDOC"/>
+                    <Param name="Base64Inhoud" sessionKey="ZgwEnkelvoudigInformatieObjectInhoud"/>
+                </IbisLocalSender>
+                <Forward name="success" path="EXIT"/>
+                <Forward name="exception" path="EXCEPTION"/>
+            </SenderPipe>
+
+
 
             <!-- ZgwEnkelvoudigInformatieObject + ZgwZaak to object entiteitType="EDC" Translate(from ZaakBrug) -->
 

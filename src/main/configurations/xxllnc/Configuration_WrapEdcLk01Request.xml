@@ -1,0 +1,53 @@
+<Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../FrankConfig.xsd">
+  <Adapter name="WrapEdcLk01Request"
+      active="${WrapEdcLk01Request.Active}"
+      description="">
+
+      <Receiver name="WrapEdcLk01Request">
+          <JavaListener name="WrapEdcLk01Request" returnedSessionKeys="Error" />
+      </Receiver>
+
+      <Pipeline>
+          <Exits>
+              <Exit name="EXIT" state="SUCCESS" />
+              <Exit name="EXCEPTION" state="ERROR" />
+          </Exits>
+
+          <XsltPipe 
+              name="CreateStuurgegevens"
+              styleSheetName="Common/xsl/CreateStuurgegevens.xslt"
+              storeResultInSessionKey="Stuurgegevens">
+              <Forward name="success" path="CreateParameters" />
+          </XsltPipe>
+
+          <XsltPipe 
+              name="CreateParameters"
+              styleSheetName="Common/xsl/CreateParametersLk01.xslt"
+              storeResultInSessionKey="Parameters">
+              <Forward name="success" path="CreateObject" />
+          </XsltPipe>
+
+          <XsltPipe 
+              name="CreateObject"
+              getInputFromSessionKey="ZgwEnkelvoudigInformatieObject"
+              styleSheetName="Common/xsl/CreateObjectLk01.xslt"
+              storeResultInSessionKey="Object">
+              <Param name="ZdsZaak" sessionKey="ZdsZaak" type="DOMDOC"/>
+              <Param name="Base64Inhoud" sessionKey="Base64Inhoud"/>
+              <Forward name="success" path="WrapEdcLk01Request" />
+          </XsltPipe>
+
+          <SoapWrapperPipe 
+              name="WrapEdcLk01Request"
+              getInputFromFixedValue="ZgwEnkelvoudigInformatieObject"
+              soapBodyStyleSheet="Common/xsl/CreateEdcLk01Request.xslt"
+              storeResultInSessionKey="EdcLk01RequestMessage">
+              <Param name="Stuurgegevens" sessionKey="Stuurgegevens" type="DOMDOC"/>
+              <Param name="Parameters" sessionKey="Parameters" type="DOMDOC"/>
+              <Param name="Object" sessionKey="Object" type="DOMDOC"/>
+              <Forward name="success" path="EXIT" />
+          </SoapWrapperPipe>
+          
+      </Pipeline>
+  </Adapter>
+</Module>

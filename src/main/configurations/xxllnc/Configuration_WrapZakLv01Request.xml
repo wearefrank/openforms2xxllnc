@@ -22,7 +22,7 @@
 
             <XsltPipe 
                 name="CreateParameters"
-                styleSheetName="Common/xsl/CreateParameters.xslt"
+                styleSheetName="Common/xsl/CreateParametersLv01.xslt"
                 storeResultInSessionKey="Parameters">
                 <Forward name="success" path="CreateGelijk" />
             </XsltPipe>
@@ -46,7 +46,7 @@
                 <Param name="Scope" sessionKey="Scope" type="DOMDOC"/>
                 <Forward name="success" path="EXIT" />
             </SoapWrapperPipe>
-            
+
         </Pipeline>
     </Adapter>
 </Module>

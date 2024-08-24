@@ -40,6 +40,7 @@
                         <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/*/CaseReferenceNumber" />
                     </Param>
                     <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/*/CaseReferenceNumber" />
+                    <Param name="zdsZaak" sessionKey="zdsZaak" type="DOMDOC"/>
                 </IbisLocalSender>
                 <!-- <MessageStoreSender
 					name="AddDocumentToCaseCommandMessageStoreSender"
