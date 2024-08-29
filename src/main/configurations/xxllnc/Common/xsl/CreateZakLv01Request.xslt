@@ -6,44 +6,11 @@
     <xsl:param name="Scope" as="node()?" />
    
 	<xsl:template match="/">
-        <zakLv01 xmlns="http://www.egem.nl/StUF/sector/zkn/0310">
-            <stuurgegevens>
-                <StUF:berichtcode><xsl:value-of select="$Stuurgegevens/stuurgegevens/berichtcode"/></StUF:berichtcode>
-                <StUF:zender>
-                    <StUF:organisatie><xsl:value-of select="$Stuurgegevens/stuurgegevens/zender/organisatie"/></StUF:organisatie>
-                    <StUF:applicatie><xsl:value-of select="$Stuurgegevens/stuurgegevens/zender/applicatie"/></StUF:applicatie>
-                </StUF:zender>
-                <StUF:ontvanger>
-                    <StUF:organisatie><xsl:value-of select="$Stuurgegevens/stuurgegevens/ontvanger/organisatie"/></StUF:organisatie>
-                    <StUF:applicatie><xsl:value-of select="$Stuurgegevens/stuurgegevens/ontvanger/applicatie"/></StUF:applicatie>
-                </StUF:ontvanger>
-                <StUF:referentienummer><xsl:value-of select="$Stuurgegevens/stuurgegevens/referentienummer"/></StUF:referentienummer>
-                <StUF:tijdstipBericht><xsl:value-of select="$Stuurgegevens/stuurgegevens/tijdstipBericht"/></StUF:tijdstipBericht>
-                <StUF:entiteittype><xsl:value-of select="$Stuurgegevens/stuurgegevens/entiteittype"/></StUF:entiteittype>
-            </stuurgegevens>
-            <parameters>
-                <StUF:sortering><xsl:value-of select="$Parameters/parameters/sortering"/></StUF:sortering>
-                <StUF:indicatorVervolgvraag><xsl:value-of select="$Parameters/parameters/indicatorVervolgvraag"/></StUF:indicatorVervolgvraag>
-            </parameters>
-            <gelijk StUF:entiteittype="ZAK">
-                <identificatie><xsl:value-of select="$Gelijk/gelijk/identificatie"/></identificatie>
-            </gelijk>
-            <scope>
-                <object StUF:entiteittype="ZAK">
-                    <identificatie xsi:nil="true"/>
-                    <omschrijving xsi:nil="true"/>
-                    <toelichting xsi:nil="true"/>
-                    <isVan StUF:entiteittype="ZAKZKT">
-                        <gerelateerde StUF:entiteittype="ZKT">
-                            <omschrijving xsi:nil="true"/>
-                            <code xsi:nil="true"/>
-                        </gerelateerde>
-                    </isVan>
-                    <heeftAlsInitiator StUF:entiteittype="ZAKBTRINI">
-                        <gerelateerde/>
-                    </heeftAlsInitiator>
-                </object>
-            </scope>
+        <zakLv01>
+            <xsl:copy-of select="$Stuurgegevens/stuurgegevens" />
+            <xsl:copy-of select="$Parameters/parameters" />
+            <xsl:copy-of select="$Gelijk/gelijk" />
+            <xsl:copy-of select="$Scope/scope" />
         </zakLv01>
 	</xsl:template>
 </xsl:stylesheet>
