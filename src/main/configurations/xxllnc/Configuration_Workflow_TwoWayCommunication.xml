@@ -247,6 +247,7 @@
                 >
                 <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />
                 <Param name="CommaSeperatedUrls" xpathExpression="string-join((//attachments/text(), //pdf_url/text()), ',')" />
+                <Param name="ZdsZaak" sessionKey="UnwrappedZakLa01Response" type="DOMDOC"/>
                 <Forward name="success" path="CheckForDocumentsToAddToCase" />
             </XsltPipe>
 
@@ -262,18 +263,17 @@
             name="AddDocumentsToCaseCommandSender"
             transactionAttribute="Required"
             >
-            <MessageStoreSender
-					name="AddDocumentsToCaseCommandMessageStoreSender"
-					slotId="${instance.name}/AddDocumentsToCaseCommand"
+                <MessageStoreSender
+                    name="AddDocumentsToCaseCommandMessageStoreSender"
+                    slotId="${instance.name}/AddDocumentsToCaseCommand"
                     onlyStoreWhenMessageIdUnique="true"
                     transacted="true"
-					>
+                    >
                     <Param name="messageId" xpathExpression="concat($CaseReferenceNumber, '-', $TargetCaseReferenceNumber)">
                         <Param name="TargetCaseReferenceNumber" xpathExpression="/*/CaseReferenceNumber" />
                         <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/ZgwObject/public_reference" />
                     </Param>
-                    <Param name="zdsZaak" sessionKey="UnwrappedZakLa01Response"/>
-				</MessageStoreSender>
+                </MessageStoreSender>
                 <Forward name="success" path="EXIT" />
             </SenderPipe>
 

@@ -32,14 +32,17 @@
               getInputFromSessionKey="ZgwEnkelvoudigInformatieObject"
               styleSheetName="Common/xsl/CreateObjectLk01.xslt"
               storeResultInSessionKey="Object">
-              <Param name="ZdsZaak" sessionKey="ZdsZaak" type="DOMDOC"/>
               <Param name="Base64Inhoud" sessionKey="Base64Inhoud"/>
+              <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />
+              <Param name="CaseDescription" sessionKey="CaseDescription" />
+              <Param name="CaseTypeDescription" sessionKey="CaseTypeDescription" />
+              <Param name="CaseTypeCode" sessionKey="CaseTypeCode" />
               <Forward name="success" path="WrapEdcLk01Request" />
           </XsltPipe>
 
           <SoapWrapperPipe 
               name="WrapEdcLk01Request"
-              getInputFromFixedValue="ZgwEnkelvoudigInformatieObject"
+              getInputFromFixedValue="&lt;EmptyInput/&gt;"
               soapBodyStyleSheet="Common/xsl/CreateEdcLk01Request.xslt"
               storeResultInSessionKey="EdcLk01RequestMessage">
               <Param name="Stuurgegevens" sessionKey="Stuurgegevens" type="DOMDOC"/>
@@ -47,7 +50,6 @@
               <Param name="Object" sessionKey="Object" type="DOMDOC"/>
               <Forward name="success" path="EXIT" />
           </SoapWrapperPipe>
-          
       </Pipeline>
   </Adapter>
 </Module>

@@ -11,6 +11,7 @@
     <xsl:param name="CaseReferenceNumber" select="''" as="xs:string" />
     <xsl:param name="Provider" as="node()?" />
     <xsl:param name="CommaSeperatedUrls" select="''" as="xs:string" />
+    <xsl:param name="ZdsZaak" as="node()?" />
     
     <xsl:template match="@*|node()">
         <xsl:copy>
@@ -21,6 +22,9 @@
     <xsl:template match="/">
         <AddDocumentsToCaseCommand>
             <CaseReferenceNumber><xsl:value-of select="$CaseReferenceNumber"/></CaseReferenceNumber>
+            <CaseDescription><xsl:value-of select="$ZdsZaak/zakLa01/antwoord/object/omschrijving"/></CaseDescription>
+            <CaseTypeDescription><xsl:value-of select="$ZdsZaak/zakLa01/antwoord/object/isVan/gerelateerde/omschrijving"/></CaseTypeDescription>
+            <CaseTypeCode><xsl:value-of select="$ZdsZaak/zakLa01/antwoord/object/isVan/gerelateerde/code"/></CaseTypeCode>
             <xsl:copy-of select="$Provider"/>
             <xsl:for-each select="tokenize($CommaSeperatedUrls, ',')">
                 <url><xsl:value-of select="current()" /></url>

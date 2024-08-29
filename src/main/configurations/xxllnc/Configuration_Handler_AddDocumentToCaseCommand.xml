@@ -90,10 +90,10 @@
                 lineLength="0"
                 storeResultInSessionKey="ZgwEnkelvoudigInformatieObjectInhoud"
                 >
-                <Forward name="success" path="ConvertISO639TaalSender" />
+                <Forward name="success" path="EnrichZgwEnkelvoudigInformatieObject" />
             </Base64Pipe>
 
-            <SenderPipe
+            <!-- <SenderPipe
                 name="ConvertISO639TaalSender"
                 getInputFromFixedValue="&lt;dummy/&gt;"
                 storeResultInSessionKey="Alpha2"
@@ -105,7 +105,7 @@
                 </IbisLocalSender>
                 <Param name="Alpha3" sessionKey="ZgwEnkelvoudigInformatieObject" xpathExpression="//taal" />
                 <Forward name="success" path="EnrichZgwEnkelvoudigInformatieObject" />
-            </SenderPipe>
+            </SenderPipe> -->
 
             <XsltPipe
                 name="EnrichZgwEnkelvoudigInformatieObject"
@@ -113,12 +113,13 @@
                 styleSheetName="Zgw/Documenten/Model/ZgwEnkelvoudigInformatieObject.xslt"
                 storeResultInSessionKey="ZgwEnkelvoudigInformatieObject"
                 >
-                <Param name="Taal" xpathExpression="concat(concat($Alpha2, '_'), upper-case($Alpha2))">
+                <!-- <Param name="Taal" xpathExpression="concat(concat($Alpha2, '_'), upper-case($Alpha2))">
                     <Param name="Alpha2" sessionKey="Alpha2" />
-                </Param>
+                </Param> -->
                 <Forward name="success" path="CallWrapEdcLk01Request"/>
             </XsltPipe>
 
+            <!-- Create VoegZaakdocumentToe message -->
             <SenderPipe 
                 name="CallWrapEdcLk01Request"
                 storeResultInSessionKey="EdcLk01RequestMessage">
@@ -127,22 +128,42 @@
                     javaListener="WrapEdcLk01Request"
                     returnedSessionKeys="Error">
                     <Param name="ZgwEnkelvoudigInformatieObject" sessionKey="ZgwEnkelvoudigInformatieObject"/>
-                    <Param name="ZdsZaak" sessionKey="zdsZaak" type="DOMDOC"/>
                     <Param name="Base64Inhoud" sessionKey="ZgwEnkelvoudigInformatieObjectInhoud"/>
+                    <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />
+                    <Param name="CaseDescription" sessionKey="CaseDescription" />
+                    <Param name="CaseTypeDescription" sessionKey="CaseTypeDescription" />
+                    <Param name="CaseTypeCode" sessionKey="CaseTypeCode" />
                 </IbisLocalSender>
-                <Forward name="success" path="EXIT"/>
+                <Forward name="success" path="VoegZaakdocumentToeSender"/>
                 <Forward name="exception" path="EXCEPTION"/>
             </SenderPipe>
 
+            <SenderPipe
+                name="VoegZaakdocumentToeSender"
+                getInputFromSessionKey="EdcLk01RequestMessage">
+                <WebServiceSender
+                    name="VoegZaakdocumentToeWebServiceSender"
+                    soap="false"
+                    soapAction="http://www.egem.nl/StUF/sector/zkn/0310/voegZaakdocumentToe_Lk01"
+                    contentType="text/xml"
+                    timeout="${openforms2xxllnc.connections.ontvang-asynchroon.timeout}"
+                    throwApplicationFaults="false"
+                    >
+                    <Param name="url" value="${openforms2xxllnc.connections.ontvang-asynchroon.endpoint}" />
+                </WebServiceSender>
+                <Forward name="success" path="UnwrapBv03BerichtResponse" />
+                <Forward name="exception" path="SoapFault_Exception" />
+            </SenderPipe>
 
+            <ExceptionPipe name="SoapFault_Exception"/>
 
-            <!-- ZgwEnkelvoudigInformatieObject + ZgwZaak to object entiteitType="EDC" Translate(from ZaakBrug) -->
-
-            <!-- Wrap above in VoegZaakdocumentToe message with soapWrapperPipe -->
-
-            <!-- WebserviceSender with above -->
-
-            <!-- Unwrap soap envelope -->
+            <SoapWrapperPipe 
+                name="UnwrapBv03BerichtResponse"
+                storeResultInSessionKey="UnwrappedBv03BerichtResponse"
+                direction="UNWRAP"
+                removeOutputNamespaces="true">
+                <Forward name="success" path="EXIT" />
+            </SoapWrapperPipe>
 
         </Pipeline>
     </Adapter>
