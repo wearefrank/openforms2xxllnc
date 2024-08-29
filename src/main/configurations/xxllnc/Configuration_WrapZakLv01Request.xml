@@ -32,6 +32,13 @@
                 styleSheetName="Common/xsl/CreateGelijk.xslt"
                 storeResultInSessionKey="Gelijk">
                 <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber"/>
+                <Forward name="success" path="CreateScope" />
+            </XsltPipe>
+
+            <XsltPipe 
+                name="CreateScope"
+                styleSheetName="Common/xsl/CreateScope.xslt"
+                storeResultInSessionKey="Scope">
                 <Forward name="success" path="WrapZakLv01Request" />
             </XsltPipe>
 
