@@ -127,6 +127,7 @@
                     name="CallWrapEdcLk01RequestSender"
                     javaListener="WrapEdcLk01Request"
                     returnedSessionKeys="Error">
+                    <Param name="CorrelationId" sessionKey="CorrelationId"/>
                     <Param name="ZgwEnkelvoudigInformatieObject" sessionKey="ZgwEnkelvoudigInformatieObject"/>
                     <Param name="Base64Inhoud" sessionKey="ZgwEnkelvoudigInformatieObjectInhoud"/>
                     <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />

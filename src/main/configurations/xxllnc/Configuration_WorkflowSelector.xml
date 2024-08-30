@@ -93,6 +93,7 @@
                     javaListener="Workflow_TwoWayCommunication"
                     >
                     <Param name="Formdata" sessionKey="Formdata" type="DOMDOC" />
+                    <Param name="CorrelationId" sessionKey="cid" />
                 </IbisLocalSender>
                 <!-- <MessageStoreSender
 					name="Workflow_TwoWayCommunicationMessageStoreSender"

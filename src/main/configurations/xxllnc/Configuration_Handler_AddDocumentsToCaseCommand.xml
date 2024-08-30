@@ -39,6 +39,7 @@
                         <Param name="messageId" xpathExpression="concat($CaseReferenceNumber, '-', tokenize(/url, '/')[last()])">
                             <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/*/CaseReferenceNumber" />
                         </Param>
+                        <Param name="CorrelationId" sessionKey="cid" />
                         <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/*/CaseReferenceNumber" />
                         <Param name="CaseDescription" sessionKey="originalMessage" xpathExpression="/*/CaseDescription" />
                         <Param name="CaseTypeDescription" sessionKey="originalMessage" xpathExpression="/*/CaseTypeDescription" />

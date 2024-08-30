@@ -17,6 +17,7 @@
               name="CreateStuurgegevens"
               styleSheetName="Common/xsl/CreateStuurgegevens.xslt"
               storeResultInSessionKey="Stuurgegevens">
+              <Param name="CorrelationId" sessionKey="CorrelationId"/>
               <Forward name="success" path="CreateParameters" />
           </XsltPipe>
 
