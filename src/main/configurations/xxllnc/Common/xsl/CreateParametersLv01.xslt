@@ -2,9 +2,9 @@
 	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
    
 	<xsl:template match="/">
-            <parameters>
-                <StUF:sortering>0</StUF:sortering>
-                <StUF:indicatorVervolgvraag>false</StUF:indicatorVervolgvraag>
-            </parameters>
+        <parameters>
+            <StUF:sortering>0</StUF:sortering>
+            <StUF:indicatorVervolgvraag>false</StUF:indicatorVervolgvraag>
+        </parameters>
 	</xsl:template>
 </xsl:stylesheet>

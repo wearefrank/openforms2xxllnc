@@ -2,9 +2,9 @@
 	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
    
 	<xsl:template match="/">
-            <parameters>
-                <StUF:mutatiesoort>T</StUF:mutatiesoort>
-                <StUF:indicatorOvername>V</StUF:indicatorOvername>
-            </parameters>
+        <parameters>
+            <StUF:mutatiesoort>T</StUF:mutatiesoort>
+            <StUF:indicatorOvername>V</StUF:indicatorOvername>
+        </parameters>
 	</xsl:template>
 </xsl:stylesheet>
