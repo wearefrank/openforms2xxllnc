@@ -16,30 +16,34 @@
             <XsltPipe 
                 name="CreateStuurgegevens"
                 styleSheetName="Common/xsl/CreateStuurgegevens.xslt"
-                storeResultInSessionKey="Stuurgegevens">
-                <Param name="CorrelationId" sessionKey="CorrelationId"/>
+                storeResultInSessionKey="Stuurgegevens"
+                >
+                <Param name="CorrelationId" sessionKey="CorrelationId" />
                 <Forward name="success" path="CreateParameters" />
             </XsltPipe>
 
             <XsltPipe 
                 name="CreateParameters"
                 styleSheetName="Common/xsl/CreateParametersLv01.xslt"
-                storeResultInSessionKey="Parameters">
+                storeResultInSessionKey="Parameters"
+                >
                 <Forward name="success" path="CreateGelijk" />
             </XsltPipe>
 
             <XsltPipe 
                 name="CreateGelijk"
                 styleSheetName="Common/xsl/CreateGelijk.xslt"
-                storeResultInSessionKey="Gelijk">
-                <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber"/>
+                storeResultInSessionKey="Gelijk"
+                >
+                <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />
                 <Forward name="success" path="CreateScope" />
             </XsltPipe>
 
             <XsltPipe 
                 name="CreateScope"
                 styleSheetName="Common/xsl/CreateScope.xslt"
-                storeResultInSessionKey="Scope">
+                storeResultInSessionKey="Scope"
+                >
                 <Forward name="success" path="WrapZakLv01Request" />
             </XsltPipe>
 
@@ -47,11 +51,12 @@
                 name="WrapZakLv01Request"
                 getInputFromFixedValue="&lt;EmptyInput/&gt;"
                 soapBodyStyleSheet="Common/xsl/CreateZakLv01Request.xslt"
-                storeResultInSessionKey="ZakLv01RequestMessage">
-                <Param name="Stuurgegevens" sessionKey="Stuurgegevens" type="DOMDOC"/>
-                <Param name="Parameters" sessionKey="Parameters" type="DOMDOC"/>
-                <Param name="Gelijk" sessionKey="Gelijk" type="DOMDOC"/>
-                <Param name="Scope" sessionKey="Scope" type="DOMDOC"/>
+                storeResultInSessionKey="ZakLv01RequestMessage"
+                >
+                <Param name="Stuurgegevens" sessionKey="Stuurgegevens" type="DOMDOC" />
+                <Param name="Parameters" sessionKey="Parameters" type="DOMDOC" />
+                <Param name="Gelijk" sessionKey="Gelijk" type="DOMDOC" />
+                <Param name="Scope" sessionKey="Scope" type="DOMDOC" />
                 <Forward name="success" path="EXIT" />
             </SoapWrapperPipe>
 

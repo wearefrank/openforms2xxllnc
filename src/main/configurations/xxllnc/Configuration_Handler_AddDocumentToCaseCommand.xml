@@ -122,26 +122,29 @@
             <!-- Create VoegZaakdocumentToe message -->
             <SenderPipe 
                 name="CallWrapEdcLk01Request"
-                storeResultInSessionKey="EdcLk01RequestMessage">
+                storeResultInSessionKey="EdcLk01RequestMessage"
+                >
                 <IbisLocalSender
                     name="CallWrapEdcLk01RequestSender"
                     javaListener="WrapEdcLk01Request"
-                    returnedSessionKeys="Error">
-                    <Param name="CorrelationId" sessionKey="CorrelationId"/>
-                    <Param name="ZgwEnkelvoudigInformatieObject" sessionKey="ZgwEnkelvoudigInformatieObject"/>
-                    <Param name="Base64Inhoud" sessionKey="ZgwEnkelvoudigInformatieObjectInhoud"/>
+                    returnedSessionKeys="Error"
+                    >
+                    <Param name="CorrelationId" sessionKey="CorrelationId" />
+                    <Param name="ZgwEnkelvoudigInformatieObject" sessionKey="ZgwEnkelvoudigInformatieObject" />
+                    <Param name="Base64Inhoud" sessionKey="ZgwEnkelvoudigInformatieObjectInhoud" />
                     <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />
                     <Param name="CaseDescription" sessionKey="CaseDescription" />
                     <Param name="CaseTypeDescription" sessionKey="CaseTypeDescription" />
                     <Param name="CaseTypeCode" sessionKey="CaseTypeCode" />
                 </IbisLocalSender>
-                <Forward name="success" path="VoegZaakdocumentToeSender"/>
-                <Forward name="exception" path="EXCEPTION"/>
+                <Forward name="success" path="VoegZaakdocumentToeSender" />
+                <Forward name="exception" path="EXCEPTION" />
             </SenderPipe>
 
             <SenderPipe
                 name="VoegZaakdocumentToeSender"
-                getInputFromSessionKey="EdcLk01RequestMessage">
+                getInputFromSessionKey="EdcLk01RequestMessage"
+                >
                 <WebServiceSender
                     name="VoegZaakdocumentToeWebServiceSender"
                     soap="false"
@@ -162,7 +165,8 @@
                 name="UnwrapBv03BerichtResponse"
                 storeResultInSessionKey="UnwrappedBv03BerichtResponse"
                 direction="UNWRAP"
-                removeOutputNamespaces="true">
+                removeOutputNamespaces="true"
+                >
                 <Forward name="success" path="EXIT" />
             </SoapWrapperPipe>
 

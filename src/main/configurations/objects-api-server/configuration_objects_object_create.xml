@@ -1,25 +1,25 @@
 <Module
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="../FrankConfig.xsd"
->
-	<Adapter
+	>
+    <Adapter
 		name="objects_object_create"
 		active="${objects_object_create.active}"
-	>
+    >
 
 		<Receiver name="objects_object_create">
-			<ApiListener
-				name="objects_object_create"
+            <ApiListener
+                name="objects_object_create"
 				method="POST"
 				uriPattern="/objects/api/v2/objects"
 				headerParams="Host,X-Forwarded-Proto"
 				produces="JSON"
 				consumes="JSON"
-			/>
+            />
 		</Receiver>
 		<Receiver name="objects_object_create">
-			<JavaListener name="objects_object_create" />
-		</Receiver>
+            <JavaListener name="objects_object_create" />
+        </Receiver>
 
 		<Pipeline>
 			<Exits>
@@ -37,9 +37,9 @@
 			</Exits>
 
 			<SenderPipe
-				name="WorkflowSelectorSender"
-			>
-				<!-- <IbisLocalSender
+                name="WorkflowSelectorSender"
+                >
+                <!-- <IbisLocalSender
                     name="WorkflowSelectorLocalSender"
                     javaListener="WorkflowSelector"
                     >
@@ -47,13 +47,13 @@
 				<MessageStoreSender
 					name="WorkflowSelectorMessageStoreSender"
 					slotId="${instance.name}/WorkflowSelector"
-					onlyStoreWhenMessageIdUnique="true"
+                    onlyStoreWhenMessageIdUnique="true"
 					transacted="true"
-				>
+                    >
 				</MessageStoreSender>
-				<Forward name="success" path="Created" />
-				<Forward name="exception" path="InternalServerError" />
-			</SenderPipe>
+                <Forward name="success" path="Created" />
+                <Forward name="exception" path="InternalServerError" />
+            </SenderPipe>
 
 		</Pipeline>
 	</Adapter>

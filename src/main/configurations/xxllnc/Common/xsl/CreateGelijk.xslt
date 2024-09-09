@@ -3,8 +3,8 @@
     <xsl:param name="CaseReferenceNumber" as="xs:string" />
    
 	<xsl:template match="/">
-            <gelijk StUF:entiteittype="ZAK">
-                <identificatie><xsl:value-of select="$CaseReferenceNumber"/></identificatie>
-            </gelijk>
+        <gelijk StUF:entiteittype="ZAK">
+            <identificatie><xsl:value-of select="$CaseReferenceNumber"/></identificatie>
+        </gelijk>
 	</xsl:template>
 </xsl:stylesheet>

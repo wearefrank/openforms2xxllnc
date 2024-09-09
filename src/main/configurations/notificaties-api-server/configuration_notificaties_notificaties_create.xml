@@ -62,19 +62,19 @@
 			</XmlIfPipe>
 
 			<SenderPipe
-				name="GetAuthorizationHeaderForObjectsApi"
-				getInputFromFixedValue="&lt;dummy/&gt;"
+                name="GetAuthorizationHeaderForObjectsApi"
+                getInputFromFixedValue="&lt;dummy/&gt;"
 				preserveInput="true"
-				>
-				<IbisLocalSender
-					name="GetAuthorizationHeaderForObjectsApiSender"
-					javaListener="GenerateAuthorizationHeaderForObjectsApi"
-					returnedSessionKeys="Error,Authorization"
-					>
-				</IbisLocalSender>
-				<Forward name="success" path="ResourceRequestSender" />
-				<Forward name="exception" path="InternalServerError" />
-        </SenderPipe>
+                >
+                <IbisLocalSender
+                    name="GetAuthorizationHeaderForObjectsApiSender"
+                    javaListener="GenerateAuthorizationHeaderForObjectsApi"
+                    returnedSessionKeys="Error,Authorization"
+                    >
+                </IbisLocalSender>
+                <Forward name="success" path="ResourceRequestSender" />
+                <Forward name="exception" path="InternalServerError" />
+            </SenderPipe>
 
 			<SenderPipe
 				name="ResourceRequestSender"

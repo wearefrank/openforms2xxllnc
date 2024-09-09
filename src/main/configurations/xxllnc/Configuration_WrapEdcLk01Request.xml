@@ -16,15 +16,17 @@
           <XsltPipe 
               name="CreateStuurgegevens"
               styleSheetName="Common/xsl/CreateStuurgegevens.xslt"
-              storeResultInSessionKey="Stuurgegevens">
-              <Param name="CorrelationId" sessionKey="CorrelationId"/>
+              storeResultInSessionKey="Stuurgegevens"
+              >
+              <Param name="CorrelationId" sessionKey="CorrelationId" />
               <Forward name="success" path="CreateParameters" />
           </XsltPipe>
 
           <XsltPipe 
               name="CreateParameters"
               styleSheetName="Common/xsl/CreateParametersLk01.xslt"
-              storeResultInSessionKey="Parameters">
+              storeResultInSessionKey="Parameters"
+              >
               <Forward name="success" path="CreateObject" />
           </XsltPipe>
 
@@ -32,8 +34,9 @@
               name="CreateObject"
               getInputFromSessionKey="ZgwEnkelvoudigInformatieObject"
               styleSheetName="Common/xsl/CreateObjectLk01.xslt"
-              storeResultInSessionKey="Object">
-              <Param name="Base64Inhoud" sessionKey="Base64Inhoud"/>
+              storeResultInSessionKey="Object"
+              >
+              <Param name="Base64Inhoud" sessionKey="Base64Inhoud" />
               <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />
               <Param name="CaseDescription" sessionKey="CaseDescription" />
               <Param name="CaseTypeDescription" sessionKey="CaseTypeDescription" />
@@ -45,8 +48,9 @@
               name="WrapEdcLk01Request"
               getInputFromFixedValue="&lt;EmptyInput/&gt;"
               soapBodyStyleSheet="Common/xsl/CreateEdcLk01Request.xslt"
-              storeResultInSessionKey="EdcLk01RequestMessage">
-              <Param name="Stuurgegevens" sessionKey="Stuurgegevens" type="DOMDOC"/>
+              storeResultInSessionKey="EdcLk01RequestMessage"
+              >
+              <Param name="Stuurgegevens" sessionKey="Stuurgegevens" type="DOMDOC" />
               <Param name="Parameters" sessionKey="Parameters" type="DOMDOC"/>
               <Param name="Object" sessionKey="Object" type="DOMDOC"/>
               <Forward name="success" path="EXIT" />

@@ -69,13 +69,15 @@
             <!-- Create GeefZaakDetails message -->
             <SenderPipe 
                 name="CallWrapZakLv01Request"
-                storeResultInSessionKey="ZakLv01RequestMessage">
+                storeResultInSessionKey="ZakLv01RequestMessage"
+                >
                 <IbisLocalSender
                     name="CallWrapZakLv01RequestSender"
                     javaListener="WrapZakLv01Request"
-                    returnedSessionKeys="Error">
-                    <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber"/>
-                    <Param name="CorrelationId" sessionKey="CorrelationId"/>
+                    returnedSessionKeys="Error"
+                    >
+                    <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />
+                    <Param name="CorrelationId" sessionKey="CorrelationId" />
                 </IbisLocalSender>
                 <Forward name="success" path="GeefZaakDetailsSender" />
                 <Forward name="exception" path="EXCEPTION" />
@@ -83,7 +85,8 @@
 
             <SenderPipe
                 name="GeefZaakDetailsSender"
-                getInputFromSessionKey="ZakLv01RequestMessage">
+                getInputFromSessionKey="ZakLv01RequestMessage"
+                >
                 <WebServiceSender
                     name="GeefZaakDetailsWebServiceSender"
                     soap="false"
@@ -104,7 +107,8 @@
                 name="UnwrapZakLa01Response"
                 storeResultInSessionKey="UnwrappedZakLa01Response"
                 direction="UNWRAP"
-                removeOutputNamespaces="true">
+                removeOutputNamespaces="true"
+                >
                 <Forward name="success" path="CaseNotFound_Condition" />
             </SoapWrapperPipe>
 

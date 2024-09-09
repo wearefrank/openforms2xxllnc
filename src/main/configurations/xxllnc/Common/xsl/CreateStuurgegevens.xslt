@@ -3,19 +3,19 @@
     <xsl:param name="CorrelationId"/>
    
 	<xsl:template match="/">
-            <stuurgegevens>
-                <StUF:berichtcode>Lv01</StUF:berichtcode>
-                <StUF:zender>
-                    <StUF:organisatie>1900</StUF:organisatie>
-                    <StUF:applicatie>OpenForms2xxllnc</StUF:applicatie>
-                </StUF:zender>
-                <StUF:ontvanger>
-                    <StUF:organisatie>1900</StUF:organisatie>
-                    <StUF:applicatie>CDR</StUF:applicatie>
-                </StUF:ontvanger>
-                <StUF:referentienummer><xsl:value-of select="$CorrelationId"/></StUF:referentienummer>
-                <StUF:tijdstipBericht><xsl:value-of select="format-dateTime(current-dateTime(), '[Y0001][M01][D01][H01][m01][s01]')"/></StUF:tijdstipBericht>
-                <StUF:entiteittype>ZAK</StUF:entiteittype>
-            </stuurgegevens>
+        <stuurgegevens>
+            <StUF:berichtcode>Lv01</StUF:berichtcode>
+            <StUF:zender>
+                <StUF:organisatie>1900</StUF:organisatie>
+                <StUF:applicatie>OpenForms2xxllnc</StUF:applicatie>
+            </StUF:zender>
+            <StUF:ontvanger>
+                <StUF:organisatie>1900</StUF:organisatie>
+                <StUF:applicatie>CDR</StUF:applicatie>
+            </StUF:ontvanger>
+            <StUF:referentienummer><xsl:value-of select="$CorrelationId"/></StUF:referentienummer>
+            <StUF:tijdstipBericht><xsl:value-of select="format-dateTime(current-dateTime(), '[Y0001][M01][D01][H01][m01][s01]')"/></StUF:tijdstipBericht>
+            <StUF:entiteittype>ZAK</StUF:entiteittype>
+        </stuurgegevens>
 	</xsl:template>
 </xsl:stylesheet>
