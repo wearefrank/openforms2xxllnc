@@ -1,5 +1,17 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.0.2](https://github.com/wearefrank/openforms2xxllnc/compare/v1.0.1...v1.0.2) (2024-09-09)
+
+### 🤖 Build System
+
+* **dependencies:** bump the docusaurus group across 1 directory with 7 updates ([#10](https://github.com/wearefrank/openforms2xxllnc/issues/10)) ([6c6ac2b](https://github.com/wearefrank/openforms2xxllnc/commit/6c6ac2b38b370e0ef865ea655d859840f899f58c))
+* **dependencies:** bump the github-actions group across 1 directory with 3 updates ([#3](https://github.com/wearefrank/openforms2xxllnc/issues/3)) ([de1b07a](https://github.com/wearefrank/openforms2xxllnc/commit/de1b07a70bf4dd52fde1f05f10adee82b21df71a))
+* **dependencies:** bump wearefrank/ci-cd-templates ([#9](https://github.com/wearefrank/openforms2xxllnc/issues/9)) ([3b7b060](https://github.com/wearefrank/openforms2xxllnc/commit/3b7b0604fce66736be9541e2ba14aad1e5510275))
+
+### 🔁 Continuous Integration
+
+* correct ff version bumper workflow schedule syntax ([7e46af4](https://github.com/wearefrank/openforms2xxllnc/commit/7e46af4bf77daa45bf64a39b7a7a89388fd53592))
+
 ## [1.0.1](https://github.com/wearefrank/openforms2xxllnc/compare/v1.0.0...v1.0.1) (2024-08-02)
 
 ### 🎨 Styles
