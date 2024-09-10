@@ -77,7 +77,6 @@
                     returnedSessionKeys="Error"
                     >
                     <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />
-                    <Param name="CorrelationId" sessionKey="CorrelationId" />
                 </IbisLocalSender>
                 <Forward name="success" path="GeefZaakDetailsSender" />
                 <Forward name="exception" path="EXCEPTION" />
