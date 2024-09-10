@@ -90,38 +90,13 @@
                 lineLength="0"
                 storeResultInSessionKey="ZgwEnkelvoudigInformatieObjectInhoud"
                 >
-                <Forward name="success" path="EnrichZgwEnkelvoudigInformatieObject" />
+                <Forward name="success" path="CallWrapEdcLk01Request" />
             </Base64Pipe>
-
-            <!-- <SenderPipe
-                name="ConvertISO639TaalSender"
-                getInputFromFixedValue="&lt;dummy/&gt;"
-                storeResultInSessionKey="Alpha2"
-                >
-                <IbisLocalSender
-                    name="ConvertISO639TaalLocalSender"
-                    javaListener="ConvertISO639Taal"
-                    >
-                </IbisLocalSender>
-                <Param name="Alpha3" sessionKey="ZgwEnkelvoudigInformatieObject" xpathExpression="//taal" />
-                <Forward name="success" path="EnrichZgwEnkelvoudigInformatieObject" />
-            </SenderPipe> -->
-
-            <XsltPipe
-                name="EnrichZgwEnkelvoudigInformatieObject"
-                getInputFromSessionKey="ZgwEnkelvoudigInformatieObject"
-                styleSheetName="Zgw/Documenten/Model/ZgwEnkelvoudigInformatieObject.xslt"
-                storeResultInSessionKey="ZgwEnkelvoudigInformatieObject"
-                >
-                <!-- <Param name="Taal" xpathExpression="concat(concat($Alpha2, '_'), upper-case($Alpha2))">
-                    <Param name="Alpha2" sessionKey="Alpha2" />
-                </Param> -->
-                <Forward name="success" path="CallWrapEdcLk01Request"/>
-            </XsltPipe>
 
             <!-- Create VoegZaakdocumentToe message -->
             <SenderPipe 
                 name="CallWrapEdcLk01Request"
+                getInputFromFixedValue="&lt;EmptyInput/&gt;"
                 storeResultInSessionKey="EdcLk01RequestMessage"
                 >
                 <IbisLocalSender
