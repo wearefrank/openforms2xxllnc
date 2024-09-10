@@ -112,7 +112,6 @@
                     <Param name="CaseTypeCode" sessionKey="CaseTypeCode" />
                 </IbisLocalSender>
                 <Forward name="success" path="VoegZaakdocumentToeSender" />
-                <Forward name="exception" path="EXCEPTION" />
             </SenderPipe>
 
             <SenderPipe

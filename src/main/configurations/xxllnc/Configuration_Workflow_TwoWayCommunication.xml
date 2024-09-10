@@ -79,7 +79,6 @@
                     <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />
                 </IbisLocalSender>
                 <Forward name="success" path="GeefZaakDetailsSender" />
-                <Forward name="exception" path="EXCEPTION" />
             </SenderPipe>
 
             <SenderPipe
