@@ -18,7 +18,13 @@
                 styleSheetName="Common/xsl/CreateStuurgegevens.xslt"
                 storeResultInSessionKey="Stuurgegevens"
                 >
+                <Param name="BerichtCode" value="Lv01" />
+                <Param name="ZenderOrganisatie" value="${openforms2xxllnc.workflows.stuurgegevens.zender.organisatie}" />
+                <Param name="ZenderApplicatie" value="${openforms2xxllnc.workflows.stuurgegevens.zender.applicatie}" />
+                <Param name="OntvangerOrganisatie" value="${openforms2xxllnc.workflows.stuurgegevens.ontvanger.organisatie}" />
+                <Param name="OntvangerApplicatie" value="${openforms2xxllnc.workflows.stuurgegevens.ontvanger.applicatie}" />
                 <Param name="CorrelationId" sessionKey="cid" />
+                <Param name="EntiteitType" value="ZAK" />
                 <Forward name="success" path="CreateParameters" />
             </XsltPipe>
 
