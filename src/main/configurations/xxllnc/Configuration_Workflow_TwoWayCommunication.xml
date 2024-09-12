@@ -38,6 +38,7 @@
                 <Forward name="success" path="UwGegevensMissing_Condition" />
             </PutInSessionPipe>
 
+            <!-- UwGegevensMissing - Start -->
             <XmlIfPipe
                 name="UwGegevensMissing_Condition"
                 xpathExpression="string-length(//*[starts-with(name(), 'uw-gegevens')]) = 0"
@@ -47,6 +48,7 @@
             </XmlIfPipe>
             
             <ExceptionPipe name="UwGegevensMissing_Exception" />
+            <!-- UwGegevensMissing - End-->
 
             <XsltPipe
                 name="FilterUwGegevensSection"
@@ -56,6 +58,7 @@
                 <Forward name="success" path="UwGegevensSubjectUnauthenticated_Condition" />
             </XsltPipe>
 
+            <!-- UwGegevensSubjectUnauthenticated - Start -->
             <XmlIfPipe
                 name="UwGegevensSubjectUnauthenticated_Condition"
                 xpathExpression="not(//*[starts-with(name(), 'uw-gegevens')]/*/*[ends-with(name(), 'MD')] or //*[starts-with(name(), 'uw-gegevens')]/*/*[ends-with(name(), 'MEH')])"
@@ -65,6 +68,7 @@
             </XmlIfPipe>
 
             <ExceptionPipe name="UwGegevensSubjectUnauthenticated_Exception" />
+            <!-- UwGegevensSubjectUnauthenticated - End -->
 
             <!-- Create GeefZaakDetails message -->
             <SenderPipe 
@@ -110,6 +114,7 @@
                 <Forward name="success" path="CaseNotFound_Condition" />
             </SoapWrapperPipe>
 
+            <!-- CaseNotFound - Start -->
             <XmlIfPipe
                 name="CaseNotFound_Condition"
                 xpathExpression="count(/zakLa01/antwoord/object/*) gt 0"
@@ -143,7 +148,7 @@
 				<MessageStoreSender
 					name="CaseNotFound_SendNoReplyUserEmailCommandMessageStoreSender"
 					slotId="${instance.name}/SendNoReplyUserEmailCommand"
-                    sessionKeys="TemplateName"
+                    sessionKeys="TemplateName,CaseReferenceNumber"
                     onlyStoreWhenMessageIdUnique="true"
                     transacted="true"
 					>
@@ -156,7 +161,9 @@
 			</SenderPipe>
 
             <ExceptionPipe name="CaseNotFound_Exception" />
+            <!-- CaseNotFound - End -->
 
+            <!-- SubjectNotEqualsCaseSubject - Start -->
             <XmlIfPipe
                 name="CheckForUwGegevensIsPerson"
                 getInputFromSessionKey="UwGegevens"
@@ -199,7 +206,7 @@
                 >
                 <Param name="UwGegevensSubject" sessionKey="UwGegevensSubject" />
                 <Param name="CaseInitiatingSubject" sessionKey="CaseInitiatingSubject" />
-                <Forward name="then" path="CreateAddDocumentsToCaseCommand" />
+                <Forward name="then" path="CaseClosed_Condition" />
                 <Forward name="else" path="SubjectNotEqualsCaseSubject_MailCondition" />
             </XmlIfPipe>
 
@@ -228,7 +235,7 @@
 				<MessageStoreSender
 					name="SubjectNotEqualsCaseSubject_SendNoReplyUserEmailCommandMessageStoreSender"
 					slotId="${instance.name}/SendNoReplyUserEmailCommand"
-                    sessionKeys="TemplateName"
+                    sessionKeys="TemplateName,CaseReferenceNumber"
                     onlyStoreWhenMessageIdUnique="true"
                     transacted="true"
 					>
@@ -241,6 +248,57 @@
 			</SenderPipe>
 
             <ExceptionPipe name="SubjectNotEqualsCaseSubject_Exception" />
+            <!-- SubjectNotEqualsCaseSubject - End -->
+
+            <!-- CaseClosed - Start -->
+            <XmlIfPipe
+                name="CaseClosed_Condition"
+                getInputFromSessionKey="UnwrappedZakLa01Response"
+                xpathExpression="/zakLa01/antwoord/object/einddatum != ''"
+                >
+                <Forward name="then" path="CaseClosed_MailCondition" />
+                <Forward name="else" path="CreateAddDocumentsToCaseCommand" />
+            </XmlIfPipe>
+
+            <XmlIfPipe
+                name="CaseClosed_MailCondition"
+                xpathExpression="boolean($NoReplySmtpEnabled) and boolean($SendMail)"
+                >
+                <Param name="NoReplySmtpEnabled" value="${openforms2xxllnc.connections.noreply-smtp.enabled}" />
+                <Param name="SendMail" value="${openforms2xxllnc.workflows.on-error-actions.on-case-closed.send-mail}" />
+                <Forward name="then" path="CaseClosed_StoreMailTemplateName" />
+                <Forward name="else" path="CaseClosed_Exception" />
+            </XmlIfPipe>
+
+            <PutInSessionPipe
+                name="CaseClosed_StoreMailTemplateName"
+                >
+                <Param name="TemplateName" value="${openforms2xxllnc.workflows.on-error-actions.on-case-closed.template-name}" />
+                <Forward name="success" path="CaseClosed_SendNoReplyUserEmailCommand" />
+            </PutInSessionPipe>
+
+            <SenderPipe
+				name="CaseClosed_SendNoReplyUserEmailCommand"
+                getInputFromSessionKey="UwGegevens"
+                transactionAttribute="Required"
+				>
+				<MessageStoreSender
+					name="CaseClosed_SendNoReplyUserEmailCommandMessageStoreSender"
+					slotId="${instance.name}/SendNoReplyUserEmailCommand"
+                    sessionKeys="TemplateName,CaseReferenceNumber"
+                    onlyStoreWhenMessageIdUnique="true"
+                    transacted="true"
+					>
+                    <Param name="messageId" xpathExpression="concat($CaseReferenceNumber, '-', $TargetCaseReferenceNumber)">
+                        <Param name="TargetCaseReferenceNumber" sessionKey="CaseReferenceNumber" />
+                        <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/ZgwObject/public_reference" />
+                    </Param>
+				</MessageStoreSender>
+                <Forward name="success" path="EXIT" />
+			</SenderPipe>
+
+            <ExceptionPipe name="CaseClosed_Exception" />
+            <!-- CaseClosed - End -->
 
             <XsltPipe
                 name="CreateAddDocumentsToCaseCommand"
