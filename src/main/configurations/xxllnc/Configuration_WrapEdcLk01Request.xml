@@ -1,0 +1,66 @@
+<Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../FrankConfig.xsd">
+    <Adapter name="WrapEdcLk01Request"
+        active="${WrapEdcLk01Request.Active}"
+        description="">
+
+        <Receiver name="WrapEdcLk01Request">
+            <JavaListener name="WrapEdcLk01Request" returnedSessionKeys="Error" />
+        </Receiver>
+
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+
+            <XsltPipe 
+                name="CreateStuurgegevens"
+                styleSheetName="Common/xsl/CreateStuurgegevens.xslt"
+                storeResultInSessionKey="Stuurgegevens"
+                >
+                <Param name="BerichtCode" value="Lv01" />
+                <Param name="ZenderOrganisatie" value="${openforms2xxllnc.workflows.stuurgegevens.zender.organisatie}" />
+                <Param name="ZenderApplicatie" value="${openforms2xxllnc.workflows.stuurgegevens.zender.applicatie}" />
+                <Param name="OntvangerOrganisatie" value="${openforms2xxllnc.workflows.stuurgegevens.ontvanger.organisatie}" />
+                <Param name="OntvangerApplicatie" value="${openforms2xxllnc.workflows.stuurgegevens.ontvanger.applicatie}" />
+                <Param name="CorrelationId" sessionKey="cid" />
+                <Param name="EntiteitType" value="ZAK" />
+                <Forward name="success" path="CreateParameters" />
+            </XsltPipe>
+
+            <XsltPipe 
+                name="CreateParameters"
+                styleSheetName="Common/xsl/CreateParametersLk01.xslt"
+                storeResultInSessionKey="Parameters"
+                >
+                <Forward name="success" path="CreateObject" />
+            </XsltPipe>
+
+            <XsltPipe 
+                name="CreateObject"
+                getInputFromSessionKey="ZgwEnkelvoudigInformatieObject"
+                styleSheetName="Common/xsl/CreateObjectLk01.xslt"
+                storeResultInSessionKey="Object"
+                >
+                <Param name="Base64Inhoud" sessionKey="Base64Inhoud" />
+                <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />
+                <Param name="CaseDescription" sessionKey="CaseDescription" />
+                <Param name="CaseTypeDescription" sessionKey="CaseTypeDescription" />
+                <Param name="CaseTypeCode" sessionKey="CaseTypeCode" />
+                <Forward name="success" path="WrapEdcLk01Request" />
+            </XsltPipe>
+
+            <SoapWrapperPipe 
+                name="WrapEdcLk01Request"
+                getInputFromFixedValue="&lt;EmptyInput/&gt;"
+                soapBodyStyleSheet="Common/xsl/CreateEdcLk01Request.xslt"
+                storeResultInSessionKey="EdcLk01RequestMessage"
+                >
+                <Param name="Stuurgegevens" sessionKey="Stuurgegevens" type="DOMDOC" />
+                <Param name="Parameters" sessionKey="Parameters" type="DOMDOC"/>
+                <Param name="Object" sessionKey="Object" type="DOMDOC"/>
+                <Forward name="success" path="EXIT" />
+            </SoapWrapperPipe>
+        </Pipeline>
+    </Adapter>
+</Module>

@@ -40,17 +40,20 @@
                         <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/*/CaseReferenceNumber" />
                     </Param>
                     <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/*/CaseReferenceNumber" />
+                    <Param name="CaseDescription" sessionKey="originalMessage" xpathExpression="/*/CaseDescription" />
+                    <Param name="CaseTypeDescription" sessionKey="originalMessage" xpathExpression="/*/CaseTypeDescription" />
+                    <Param name="CaseTypeCode" sessionKey="originalMessage" xpathExpression="/*/CaseTypeCode" />
                 </IbisLocalSender>
                 <!-- <MessageStoreSender
-					name="AddDocumentToCaseCommandMessageStoreSender"
-					slotId="${instance.name}/AddDocumentToCaseCommand"
+                    name="AddDocumentToCaseCommandMessageStoreSender"
+                    slotId="${instance.name}/AddDocumentToCaseCommand"
                     onlyStoreWhenMessageIdUnique="true"
-					>
+                    >
                     <Param name="messageId" xpathExpression="concat($CaseReferenceNumber, '-', tokenize(/url, '/')[last()])">
                         <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/*/CaseReferenceNumber" />
                     </Param>
                     <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/*/CaseReferenceNumber" />
-				</MessageStoreSender> -->
+                </MessageStoreSender> -->
                 <Forward name="success" path="EXIT" />
             </ForEachChildElementPipe>
         </Pipeline>

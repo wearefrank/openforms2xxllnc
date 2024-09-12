@@ -11,6 +11,8 @@
     <!ENTITY StartStopReceiverScheduler SYSTEM "./Configuration_StartStopReceiverScheduler.xml">
     <!ENTITY Workflow_TwoWayCommunication SYSTEM "./Configuration_Workflow_TwoWayCommunication.xml">
     <!ENTITY WorkflowSelector SYSTEM "./Configuration_WorkflowSelector.xml">
+    <!ENTITY WrapEdcLk01Request SYSTEM "./Configuration_WrapEdcLk01Request.xml">
+    <!ENTITY WrapZakLv01Request SYSTEM "./Configuration_WrapZakLv01Request.xml">
     ]>
 
 <configuration name="xxllnc">
@@ -26,4 +28,6 @@
     &Notificaties_Subscribe;
     &Workflow_TwoWayCommunication;
     &WorkflowSelector;
+    &WrapEdcLk01Request;
+    &WrapZakLv01Request;
 </configuration>
