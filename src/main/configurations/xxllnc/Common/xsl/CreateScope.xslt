@@ -7,6 +7,7 @@
                 <identificatie xsi:nil="true"/>
                 <omschrijving xsi:nil="true"/>
                 <toelichting xsi:nil="true"/>
+                <einddatum xsi:nil="true"/>
                 <isVan StUF:entiteittype="ZAKZKT">
                     <gerelateerde StUF:entiteittype="ZKT">
                         <omschrijving xsi:nil="true"/>
