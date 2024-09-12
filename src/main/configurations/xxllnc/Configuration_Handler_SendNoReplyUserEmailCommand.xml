@@ -16,7 +16,7 @@
 				slotId="${instance.name}/SendNoReplyUserEmailCommand"
                 peekUntransacted="true"
                 statusValueInProcess="I"
-                sessionKeys="TemplateName"
+                sessionKeys="TemplateName,CaseReferenceNumber"
 				/>
         </Receiver>
 
@@ -32,6 +32,7 @@
                 substituteVars="true"
                 >
                 <Param name="vars.signature-from-name" value="${openforms2xxllnc.connections.noreply-smtp.signature-from-name}" />
+                <Param name="vars.case-reference" sessionKey="CaseReferenceNumber" />
             </FixedResultPipe>
 
             <XsltPipe
