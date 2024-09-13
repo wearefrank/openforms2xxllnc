@@ -1,5 +1,11 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.2.0](https://github.com/wearefrank/openforms2xxllnc/compare/v1.1.1...v1.2.0) (2024-09-13)
+
+### 🍕 Features
+
+* two-way communication workflow can be configured to send a noreply email when target case is already closed ([#12](https://github.com/wearefrank/openforms2xxllnc/issues/12)) ([e377219](https://github.com/wearefrank/openforms2xxllnc/commit/e377219059b1d04beb5d6acce8683620b15c7f0d))
+
 ## [1.1.1](https://github.com/wearefrank/openforms2xxllnc/compare/v1.1.0...v1.1.1) (2024-09-13)
 
 ### 🐛 Bug Fixes
