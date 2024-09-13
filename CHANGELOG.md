@@ -1,5 +1,15 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.1.0](https://github.com/wearefrank/openforms2xxllnc/compare/v1.0.2...v1.1.0) (2024-09-13)
+
+### 🍕 Features
+
+* translate forms object to zs-dms geefZaakDetails and voegZaakdocumentToe messages ([#8](https://github.com/wearefrank/openforms2xxllnc/issues/8)) ([03a9882](https://github.com/wearefrank/openforms2xxllnc/commit/03a98824b8b7e42239e3d067d60e6b76caeb2277))
+
+### 🤖 Build System
+
+* **dependencies:** bump wearefrank/ci-cd-templates ([775608b](https://github.com/wearefrank/openforms2xxllnc/commit/775608bcbaf65a989dc22a8b8006a1e608cbbdc0))
+
 ## [1.0.2](https://github.com/wearefrank/openforms2xxllnc/compare/v1.0.1...v1.0.2) (2024-09-09)
 
 ### 🤖 Build System
