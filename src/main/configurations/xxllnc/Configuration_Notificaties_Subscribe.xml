@@ -20,6 +20,7 @@
 			<XsltPipe
 				name="CreateSubscriptionCreateRequest"
 				styleSheetName="Zgw/Notificaties/Model/CreateSubscription.xsl"
+				storeResultInSessionKey="SubscriptionCreateRequest"
 				>
 				<Param name="callbackURL" value="${openforms2xxllnc.connections.notificaties-api.subscription.callback}" />
 				<Param name="authorization" pattern="{password}" authAlias="${openforms2xxllnc.connections.notificaties-api.subscription.auth-alias}" hidden="true" />
@@ -42,6 +43,7 @@
 
 			<SenderPipe
 				name="SubscriptionCreateSender"
+				getInputFromFixedValue="SubscriptionCreateRequest"
 				>
 				<Json2XmlInputValidator
 					name="ValidatePostBody"
