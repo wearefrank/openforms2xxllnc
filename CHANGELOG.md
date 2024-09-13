@@ -1,5 +1,11 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.1.1](https://github.com/wearefrank/openforms2xxllnc/compare/v1.1.0...v1.1.1) (2024-09-13)
+
+### 🐛 Bug Fixes
+
+* notificatie-api subscribe request not used as input for subscribe post call ([64f21a9](https://github.com/wearefrank/openforms2xxllnc/commit/64f21a95878051546e572a15a561c20e5914ce6d))
+
 ## [1.1.0](https://github.com/wearefrank/openforms2xxllnc/compare/v1.0.2...v1.1.0) (2024-09-13)
 
 ### 🍕 Features
