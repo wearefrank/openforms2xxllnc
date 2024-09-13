@@ -7,4 +7,4 @@ services:
       openforms2xxllnc.workflows.on-error-actions.on-subject-not-equals-case-subject.send-mail: true
       openforms2xxllnc.workflows.on-error-actions.on-subject-not-equals-case-subject.template-name: unable-to-add-document-to-case-default
       openforms2xxllnc.workflows.on-error-actions.on-case-closed.send-mail: true
-      openforms2xxllnc.workflows.on-error-actions.on-case-closed.template-name: unable-to-add-document-to-closed-case
+      openforms2xxllnc.workflows.on-error-actions.on-case-closed.template-name: unable-to-add-document-to-case-default

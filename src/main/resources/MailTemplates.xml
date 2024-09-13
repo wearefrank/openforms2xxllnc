@@ -19,21 +19,4 @@
             ]]>
         </message>
     </mailTemplates>
-    <mailTemplates>
-        <name>unable-to-add-document-to-closed-case</name>
-        <subject>Document toevoegen aan zaak niet gelukt</subject>
-        <messageType>text/html</messageType>
-        <message>
-            <![CDATA[
-            Beste,<br>
-            <br>
-            U heeft geprobeerd om documenten toe te voegen aan zaaknummer: ${vars.case-reference}.<br>
-            Helaas is dat niet gelukt omdat de gemeente uw aanvraag inmiddels heeft afgesloten.<br>
-            Bij vragen neem contact op met de Gemeente, contact informatie vind u op https://www.utrecht.nl.<br>
-            <br>
-            Met vriendelijke groet,<br>
-            ${vars.signature-from-name}<br>
-            ]]>
-        </message>
-    </mailTemplates>
 </root>
