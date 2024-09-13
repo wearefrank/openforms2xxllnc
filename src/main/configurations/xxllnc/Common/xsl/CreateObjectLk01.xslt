@@ -7,7 +7,7 @@
     <xsl:param name="CaseTypeCode"/>
 
     <xsl:template match="/">
-        <object StUF:entiteittype="EDC">
+        <object StUF:entiteittype="EDC" StUF:verwerkingssoort="T">
             <xsl:choose>
                 <xsl:when test="ZgwEnkelvoudigInformatieObject/identificatie != ''" >
                     <identificatie><xsl:value-of select="ZgwEnkelvoudigInformatieObject/identificatie"/></identificatie>
