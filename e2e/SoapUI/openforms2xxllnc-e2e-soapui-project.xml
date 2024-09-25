@@ -2994,6 +2994,54 @@ should be used. If `height` is nested inside `dimensions` attribute, query shoul
       </con:method>
     </con:resource>
   </con:interface>
+  <con:interface xsi:type="con:WsdlInterface" id="55ea4845-5567-4556-8074-3fafff71e1d3" wsaVersion="NONE" name="SOAPBeantwoordVraag" type="wsdl" bindingName="{http://www.egem.nl/StUF/sector/zkn/0310}SOAPBeantwoordVraag" soapVersion="1_1" anonymous="optional" definition="../../src/main/configurations/xxllnc/Common/xsd/Zaak_DocumentServices_1_1_02/zkn0310/zs-dms/zkn0310_beantwoordVraag_zs-dms.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <con:settings/>
+    <con:endpoints>
+      <con:endpoint>http://example.com/BeantwoordVraag</con:endpoint>
+    </con:endpoints>
+    <con:operation id="cfcbcbd8-35fa-4d50-8676-30ffb58af086" isOneWay="false" action="http://www.egem.nl/StUF/sector/zkn/0310/geefLijstZaakdocumenten_Lv01" name="geefLijstZaakdocumenten_Lv01" bindingOperationName="geefLijstZaakdocumenten_Lv01" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false">
+      <con:settings/>
+    </con:operation>
+    <con:operation id="894ad954-b859-4282-a507-ee0694288499" isOneWay="false" action="http://www.egem.nl/StUF/sector/zkn/0310/geefZaakdetails_Lv01" name="geefZaakdetails_Lv01" bindingOperationName="geefZaakdetails_Lv01" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false">
+      <con:settings/>
+    </con:operation>
+    <con:operation id="a9128f3f-e4df-45c8-baad-2c3088d9df28" isOneWay="false" action="http://www.egem.nl/StUF/sector/zkn/0310/geefZaakdocumentLezen_Lv01" name="geefZaakdocumentLezen_Lv01" bindingOperationName="geefZaakdocumentLezen_Lv01" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false">
+      <con:settings/>
+    </con:operation>
+    <con:operation id="cf005a20-ecdd-4183-886c-5ee545fe5aaa" isOneWay="false" action="http://www.egem.nl/StUF/sector/zkn/0310/geefZaakstatus_Lv01" name="geefZaakstatus_Lv01" bindingOperationName="geefZaakstatus_Lv01" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false">
+      <con:settings/>
+    </con:operation>
+  </con:interface>
+  <con:interface xsi:type="con:WsdlInterface" id="0f6286c9-16d4-4497-9d0f-9a62be4ab3ff" wsaVersion="NONE" name="SOAPOntvangAsynchroon" type="wsdl" bindingName="{http://www.egem.nl/StUF/sector/zkn/0310}SOAPOntvangAsynchroon" soapVersion="1_1" anonymous="optional" definition="../../src/main/configurations/xxllnc/Common/xsd/Zaak_DocumentServices_1_1_02/zkn0310/zs-dms/zkn0310_ontvangAsynchroon_mutatie_zs-dms.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <con:settings/>
+    <con:endpoints>
+      <con:endpoint>http://example.com/OntvangAsynchroon</con:endpoint>
+    </con:endpoints>
+    <con:operation id="0d876390-d65b-4db0-9001-95aff8866be0" isOneWay="false" action="http://www.egem.nl/StUF/sector/zkn/0310/actualiseerZaakstatus_Lk01" name="actualiseerZaakstatus_Lk01" bindingOperationName="actualiseerZaakstatus_Lk01" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false">
+      <con:settings/>
+    </con:operation>
+    <con:operation id="16adc951-6929-46c1-b55a-400de077226f" isOneWay="false" action="http://www.egem.nl/StUF/StUF0301/Bv03" name="Bv03" bindingOperationName="Bv03" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false">
+      <con:settings/>
+    </con:operation>
+    <con:operation id="0b546fbe-83ca-49d4-a132-2d39ab4b8a61" isOneWay="false" action="http://www.egem.nl/StUF/sector/zkn/0310/creeerZaak_Lk01" name="creeerZaak_Lk01" bindingOperationName="creeerZaak_Lk01" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false">
+      <con:settings/>
+    </con:operation>
+    <con:operation id="c4a10ab7-5376-4e55-9310-55e0088fb30b" isOneWay="false" action="http://www.egem.nl/StUF/StUF0301/Fo01" name="Fo01" bindingOperationName="Fo01" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false">
+      <con:settings/>
+    </con:operation>
+    <con:operation id="98feea39-bb4e-43f9-8dad-dce4c7568f2e" isOneWay="false" action="http://www.egem.nl/StUF/StUF0301/Fo03" name="Fo03" bindingOperationName="Fo03" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false">
+      <con:settings/>
+    </con:operation>
+    <con:operation id="e02858bf-5ea7-4ef5-9fed-dc659f019b16" isOneWay="false" action="http://www.egem.nl/StUF/sector/zkn/0310/maakZaakdocument_Lk01" name="maakZaakdocument_Lk01" bindingOperationName="maakZaakdocument_Lk01" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false">
+      <con:settings/>
+    </con:operation>
+    <con:operation id="71196bd9-af65-4c1a-b666-380c04687204" isOneWay="false" action="http://www.egem.nl/StUF/sector/zkn/0310/updateZaak_Lk01" name="updateZaak_Lk01" bindingOperationName="updateZaak_Lk01" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false">
+      <con:settings/>
+    </con:operation>
+    <con:operation id="3e8e5df7-224a-412a-98ca-a5ce13f7e5bc" isOneWay="false" action="http://www.egem.nl/StUF/sector/zkn/0310/voegZaakdocumentToe_Lk01" name="voegZaakdocumentToe_Lk01" bindingOperationName="voegZaakdocumentToe_Lk01" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false">
+      <con:settings/>
+    </con:operation>
+  </con:interface>
   <con:testSuite id="51faa60a-6964-478d-8f14-899c806b2805" name="e2e">
     <con:settings/>
     <con:runType>SEQUENTIAL</con:runType>
@@ -3335,7 +3383,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://host.docker.internal:9000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
             <con:request>{\r
    "type" : "dummy",\r
    "record" : {\r
@@ -4792,6 +4840,178 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
     </con:testCase>
     <con:properties/>
   </con:testSuite>
+  <con:mockService id="4274d763-b275-4920-8005-4918f85d4a5f" port="8080" path="/" host="LAPTOP-R4K3GHC" name="ZDS SOAP-MockService">
+    <con:settings>
+      <con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting>
+    </con:settings>
+    <con:properties/>
+    <con:mockOperation name="geefZaakdetails_Lv01" id="c8e62eba-e0f1-4d27-a9cb-383db2eb1712" interface="SOAPBeantwoordVraag" operation="geefZaakdetails_Lv01">
+      <con:settings/>
+      <con:defaultResponse>Response 1</con:defaultResponse>
+      <con:dispatchStyle>SEQUENCE</con:dispatchStyle>
+      <con:response name="Response 1" id="8dcc62b8-9683-4b89-b6f1-2454c3f90afe" httpResponseStatus="200" encoding="UTF-8">
+        <con:settings/>
+        <con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ZKN:zakLa01 xmlns:BG="http://www.egem.nl/StUF/sector/bg/0310" xmlns:StUF="http://www.egem.nl/StUF/StUF0301" xmlns:ZKN="http://www.egem.nl/StUF/sector/zkn/0310">
+<ZKN:stuurgegevens>
+<StUF:berichtcode>La01</StUF:berichtcode>
+<StUF:zender>
+<StUF:organisatie>1900</StUF:organisatie>
+<StUF:applicatie>zs-dms</StUF:applicatie>
+</StUF:zender>
+<StUF:ontvanger>
+<StUF:organisatie>1900</StUF:organisatie>
+<StUF:applicatie>Openforms2xxllnc</StUF:applicatie>
+<StUF:gebruiker></StUF:gebruiker>
+</StUF:ontvanger>
+<StUF:referentienummer>synthetic-message-id-ac150004-2e916481_19222d0f2bf_-7fff</StUF:referentienummer>
+<StUF:tijdstipBericht>20240924090036</StUF:tijdstipBericht>
+<StUF:crossRefnummer>synthetic-message-id-ac150004-2e916481_19222d0f2bf_-7fff</StUF:crossRefnummer>
+<StUF:entiteittype>ZAK</StUF:entiteittype>
+</ZKN:stuurgegevens>
+<ZKN:parameters>
+<StUF:indicatorVervolgvraag>false</StUF:indicatorVervolgvraag>
+</ZKN:parameters>
+<ZKN:antwoord>
+<ZKN:object StUF:entiteittype="ZAK">
+<ZKN:identificatie>ZK2024-00001</ZKN:identificatie>
+<ZKN:omschrijving>Aanvraag minimaregelingen (Z)</ZKN:omschrijving>
+<ZKN:kenmerk>
+<ZKN:kenmerk>273846</ZKN:kenmerk>
+<ZKN:bron>GWS4all</ZKN:bron>
+</ZKN:kenmerk>
+<ZKN:startdatum>20240924</ZKN:startdatum>
+<ZKN:registratiedatum>20240924</ZKN:registratiedatum>
+<ZKN:einddatumGepland>20210101</ZKN:einddatumGepland>
+<ZKN:opschorting>
+<ZKN:indicatie>N</ZKN:indicatie>
+<ZKN:reden></ZKN:reden>
+</ZKN:opschorting>
+<ZKN:verlenging>
+<ZKN:duur>99</ZKN:duur>
+<ZKN:reden>Overig</ZKN:reden>
+</ZKN:verlenging>
+<ZKN:betalingsIndicatie>(Nog) niet</ZKN:betalingsIndicatie>
+<ZKN:archiefnominatie>J</ZKN:archiefnominatie>
+<ZKN:isVan StUF:entiteittype="ZAKZKT">
+<ZKN:gerelateerde StUF:entiteittype="ZKT">
+<ZKN:omschrijving>Minimaregeling aanvraag</ZKN:omschrijving>
+<ZKN:code>B1026</ZKN:code>
+</ZKN:gerelateerde>
+</ZKN:isVan>
+<ZKN:heeftBetrekkingOp StUF:entiteittype="ZAKOBJ">
+<ZKN:gerelateerde>
+<ZKN:natuurlijkPersoon StUF:entiteittype="NPS">
+<BG:inp.bsn>111111110</BG:inp.bsn>
+<BG:authentiek StUF:metagegeven="true">N</BG:authentiek>
+<BG:geslachtsnaam>Precies</BG:geslachtsnaam>
+<BG:voorletters>P</BG:voorletters>
+<BG:voornamen>Pietje</BG:voornamen>
+<BG:geslachtsaanduiding>M</BG:geslachtsaanduiding>
+<BG:geboortedatum>19010101</BG:geboortedatum>
+</ZKN:natuurlijkPersoon>
+</ZKN:gerelateerde>
+</ZKN:heeftBetrekkingOp>
+<ZKN:heeftAlsBelanghebbende StUF:entiteittype="ZAKBTRBLH">
+<ZKN:gerelateerde>
+<ZKN:natuurlijkPersoon StUF:entiteittype="NPS">
+<BG:inp.bsn>111111110</BG:inp.bsn>
+<BG:authentiek StUF:metagegeven="true">N</BG:authentiek>
+<BG:geslachtsnaam>Precies</BG:geslachtsnaam>
+<BG:voorletters>P</BG:voorletters>
+<BG:voornamen>Pietje</BG:voornamen>
+<BG:geslachtsaanduiding>M</BG:geslachtsaanduiding>
+<BG:geboortedatum>19010101</BG:geboortedatum>
+</ZKN:natuurlijkPersoon>
+</ZKN:gerelateerde>
+</ZKN:heeftAlsBelanghebbende>
+<ZKN:heeftAlsInitiator StUF:entiteittype="ZAKBTRINI">
+<ZKN:gerelateerde>
+<ZKN:natuurlijkPersoon StUF:entiteittype="NPS">
+<BG:inp.bsn>111111110</BG:inp.bsn>
+<BG:authentiek StUF:metagegeven="true">N</BG:authentiek>
+<BG:geslachtsnaam>Precies</BG:geslachtsnaam>
+<BG:voorletters>P</BG:voorletters>
+<BG:voornamen>Pietje</BG:voornamen>
+<BG:geslachtsaanduiding>M</BG:geslachtsaanduiding>
+<BG:geboortedatum>19010101</BG:geboortedatum>
+</ZKN:natuurlijkPersoon>
+</ZKN:gerelateerde>
+</ZKN:heeftAlsInitiator>
+<ZKN:heeftAlsUitvoerende StUF:entiteittype="ZAKBTRUTV">
+<ZKN:gerelateerde>
+<ZKN:medewerker StUF:entiteittype="MDW">
+<ZKN:identificatie>012345678901234567890123</ZKN:identificatie>
+<ZKN:achternaam>G. Bruiker</ZKN:achternaam>
+</ZKN:medewerker>
+</ZKN:gerelateerde>
+</ZKN:heeftAlsUitvoerende>
+<ZKN:heeftAlsVerantwoordelijke StUF:entiteittype="ZAKBTRVRA">
+<ZKN:gerelateerde>
+<ZKN:medewerker StUF:entiteittype="MDW">
+<ZKN:identificatie>012345678901234567890123</ZKN:identificatie>
+<ZKN:achternaam>G. Bruiker</ZKN:achternaam>
+</ZKN:medewerker>
+</ZKN:gerelateerde>
+</ZKN:heeftAlsVerantwoordelijke>
+<ZKN:heeft StUF:entiteittype="ZAKSTT">
+<ZKN:gerelateerde StUF:entiteittype="STT">
+<ZKN:zkt.code>B1026</ZKN:zkt.code>
+<ZKN:zkt.omschrijving>Minimaregeling aanvraag</ZKN:zkt.omschrijving>
+<ZKN:omschrijving>Ontvangen</ZKN:omschrijving>
+</ZKN:gerelateerde>
+<ZKN:datumStatusGezet>20240924065910</ZKN:datumStatusGezet>
+<ZKN:indicatieLaatsteStatus>N</ZKN:indicatieLaatsteStatus>
+</ZKN:heeft>
+</ZKN:object>
+</ZKN:antwoord>
+</ZKN:zakLa01>
+</soapenv:Body></soapenv:Envelope>]]></con:responseContent>
+        <con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.egem.nl/StUF/sector/zkn/0310/geefZaakdetails_Lv01"/>
+      </con:response>
+      <con:dispatchConfig/>
+    </con:mockOperation>
+    <con:mockOperation name="voegZaakdocumentToe_Lk01" id="d2dbcb5a-3533-46ea-8fe7-1d51a5bdd9b7" interface="SOAPOntvangAsynchroon" operation="voegZaakdocumentToe_Lk01">
+      <con:settings/>
+      <con:defaultResponse>Response 1</con:defaultResponse>
+      <con:dispatchStyle>SEQUENCE</con:dispatchStyle>
+      <con:response name="Response 1" id="c0099f98-0436-4647-8ec4-79fabfa3ce1e" httpResponseStatus="200" encoding="UTF-8">
+        <con:settings/>
+        <con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:stuf="http://www.egem.nl/StUF/StUF0301">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <stuf:Bv03Bericht>
+         <stuf:stuurgegevens>
+            <stuf:berichtcode>Bv03</stuf:berichtcode>
+            <stuf:zender>
+               <!--Optional:-->
+               <stuf:organisatie>?</stuf:organisatie>
+               <stuf:applicatie>?</stuf:applicatie>
+               <!--Optional:-->
+               <stuf:administratie>?</stuf:administratie>
+               <!--Optional:-->
+               <stuf:gebruiker>?</stuf:gebruiker>
+            </stuf:zender>
+            <stuf:ontvanger>
+               <!--Optional:-->
+               <stuf:organisatie>?</stuf:organisatie>
+               <stuf:applicatie>?</stuf:applicatie>
+               <!--Optional:-->
+               <stuf:administratie>?</stuf:administratie>
+               <!--Optional:-->
+               <stuf:gebruiker>?</stuf:gebruiker>
+            </stuf:ontvanger>
+            <stuf:referentienummer>?</stuf:referentienummer>
+            <stuf:tijdstipBericht>?</stuf:tijdstipBericht>
+            <stuf:crossRefnummer>?</stuf:crossRefnummer>
+         </stuf:stuurgegevens>
+      </stuf:Bv03Bericht>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent>
+        <con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.egem.nl/StUF/sector/zkn/0310/voegZaakdocumentToe_Lk01"/>
+      </con:response>
+      <con:dispatchConfig/>
+    </con:mockOperation>
+  </con:mockService>
   <con:restMockService id="d63c7861-f9bf-4330-8cab-d5b197f52c85" port="8700" path="/mock/documenten/api/v1" host="LAPTOP-UKAI1A6" name="Documenten API Mock" docroot="">
     <con:settings/>
     <con:properties/>
