@@ -93,7 +93,6 @@
                     name="GeefZaakDetailsWebServiceSender"
                     soap="false"
                     soapAction="http://www.egem.nl/StUF/sector/zkn/0310/geefZaakdetails_Lv01"
-                    contentType="text/xml"
                     timeout="${openforms2xxllnc.connections.beantwoord-vraag.timeout}"
                     throwApplicationFaults="false"
                     >

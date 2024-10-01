@@ -5,7 +5,7 @@
     <xsl:param name="ZenderApplicatie"/>
     <xsl:param name="OntvangerOrganisatie"/>
     <xsl:param name="OntvangerApplicatie"/>
-    <xsl:param name="CorrelationId"/>
+    <xsl:param name="Referentienummer"/>
     <xsl:param name="EntiteitType"/>
    
 	<xsl:template match="/">
@@ -19,7 +19,7 @@
                 <StUF:organisatie><xsl:value-of select="$OntvangerOrganisatie"/></StUF:organisatie>
                 <StUF:applicatie><xsl:value-of select="$OntvangerApplicatie"/></StUF:applicatie>
             </StUF:ontvanger>
-            <StUF:referentienummer><xsl:value-of select="$CorrelationId"/></StUF:referentienummer>
+            <StUF:referentienummer><xsl:value-of select="$Referentienummer"/></StUF:referentienummer>
             <StUF:tijdstipBericht><xsl:value-of select="format-dateTime(current-dateTime(), '[Y0001][M01][D01][H01][m01][s01]')"/></StUF:tijdstipBericht>
             <StUF:entiteittype><xsl:value-of select="$EntiteitType"/></StUF:entiteittype>
         </ZKN:stuurgegevens>

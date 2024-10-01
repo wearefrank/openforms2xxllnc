@@ -4,7 +4,7 @@
    
 	<xsl:template match="/">
         <ZKN:gelijk StUF:entiteittype="ZAK">
-            <identificatie><xsl:value-of select="$CaseReferenceNumber"/></identificatie>
+            <ZKN:identificatie><xsl:value-of select="$CaseReferenceNumber"/></ZKN:identificatie>
         </ZKN:gelijk>
 	</xsl:template>
 </xsl:stylesheet>
