@@ -1,4 +1,4 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:StUF="http://www.egem.nl/StUF/StUF0301" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:StUF="http://www.egem.nl/StUF/StUF0301" xmlns:ZKN="http://www.egem.nl/StUF/sector/zkn/0310" version="2.0">
 	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
     <xsl:param name="BerichtCode"/>
     <xsl:param name="ZenderOrganisatie"/>
@@ -9,7 +9,7 @@
     <xsl:param name="EntiteitType"/>
    
 	<xsl:template match="/">
-        <stuurgegevens>
+        <ZKN:stuurgegevens>
             <StUF:berichtcode><xsl:value-of select="$BerichtCode"/></StUF:berichtcode>
             <StUF:zender>
                 <StUF:organisatie><xsl:value-of select="$ZenderOrganisatie"/></StUF:organisatie>
@@ -22,6 +22,6 @@
             <StUF:referentienummer><xsl:value-of select="$CorrelationId"/></StUF:referentienummer>
             <StUF:tijdstipBericht><xsl:value-of select="format-dateTime(current-dateTime(), '[Y0001][M01][D01][H01][m01][s01]')"/></StUF:tijdstipBericht>
             <StUF:entiteittype><xsl:value-of select="$EntiteitType"/></StUF:entiteittype>
-        </stuurgegevens>
+        </ZKN:stuurgegevens>
 	</xsl:template>
 </xsl:stylesheet>
