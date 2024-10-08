@@ -214,7 +214,7 @@
                 xpathExpression="boolean($NoReplySmtpEnabled) and boolean($SendMail)"
                 >
                 <Param name="NoReplySmtpEnabled" value="${openforms2xxllnc.connections.noreply-smtp.enabled}" />
-                <Param name="SendMail" value="${openforms2xxllnc.workflows.on-subject-not-equals-case-subject.send-mail}" />
+                <Param name="SendMail" value="${openforms2xxllnc.workflows.on-error-actions.on-subject-not-equals-case-subject.send-mail}" />
                 <Forward name="then" path="SubjectNotEqualsCaseSubject_StoreMailTemplateName" />
                 <Forward name="else" path="SubjectNotEqualsCaseSubject_Exception" />
             </XmlIfPipe>
