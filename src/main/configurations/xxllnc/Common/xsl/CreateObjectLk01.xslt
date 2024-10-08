@@ -1,4 +1,4 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:StUF="http://www.egem.nl/StUF/StUF0301" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:StUF="http://www.egem.nl/StUF/StUF0301" xmlns:ZKN="http://www.egem.nl/StUF/sector/zkn/0310" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" version="2.0">
     <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
     <xsl:param name="Base64Inhoud"/>
     <xsl:param name="CaseReferenceNumber"/>
@@ -7,54 +7,54 @@
     <xsl:param name="CaseTypeCode"/>
 
     <xsl:template match="/">
-        <object StUF:entiteittype="EDC" StUF:verwerkingssoort="T">
+        <ZKN:object StUF:entiteittype="EDC" StUF:verwerkingssoort="T">
             <xsl:choose>
                 <xsl:when test="ZgwEnkelvoudigInformatieObject/identificatie != ''" >
-                    <identificatie><xsl:value-of select="ZgwEnkelvoudigInformatieObject/identificatie"/></identificatie>
+                    <ZKN:identificatie><xsl:value-of select="ZgwEnkelvoudigInformatieObject/identificatie"/></ZKN:identificatie>
                 </xsl:when>
             </xsl:choose>
-            <!-- <dct.omschrijving>Brief</dct.omschrijving> --> <!-- Test purposes-->
-            <creatiedatum><xsl:value-of select="format-date(ZgwEnkelvoudigInformatieObject/creatiedatum, '[Y0001][M01][D01]')"/></creatiedatum>
+            <ZKN:dct.omschrijving>Brief</ZKN:dct.omschrijving> <!-- Test purposes-->
+            <ZKN:creatiedatum><xsl:value-of select="format-date(ZgwEnkelvoudigInformatieObject/creatiedatum, '[Y0001][M01][D01]')"/></ZKN:creatiedatum>
             <xsl:choose>
                 <xsl:when test="ZgwEnkelvoudigInformatieObject/ontvangstdatum != ''" >
-                    <ontvangstdatum><xsl:value-of select="format-date(ZgwEnkelvoudigInformatieObject/ontvangstdatum, '[Y0001][M01][D01]')"/></ontvangstdatum>
+                    <ZKN:ontvangstdatum><xsl:value-of select="format-date(ZgwEnkelvoudigInformatieObject/ontvangstdatum, '[Y0001][M01][D01]')"/></ZKN:ontvangstdatum>
                 </xsl:when>
             </xsl:choose>
-            <titel><xsl:value-of select="ZgwEnkelvoudigInformatieObject/titel"/></titel>
+            <ZKN:titel><xsl:value-of select="ZgwEnkelvoudigInformatieObject/titel"/></ZKN:titel>
             <xsl:choose>
                 <xsl:when test="ZgwEnkelvoudigInformatieObject/beschrijving != ''">
-                    <beschrijving><xsl:value-of select="ZgwEnkelvoudigInformatieObject/beschrijving"/></beschrijving>
+                    <ZKN:beschrijving><xsl:value-of select="ZgwEnkelvoudigInformatieObject/beschrijving"/></ZKN:beschrijving>
                 </xsl:when>
             </xsl:choose>
             <xsl:choose>
                 <xsl:when test="ZgwEnkelvoudigInformatieObject/formaat != ''">
-                    <formaat><xsl:value-of select="ZgwEnkelvoudigInformatieObject/formaat"/></formaat>
+                    <ZKN:formaat><xsl:value-of select="ZgwEnkelvoudigInformatieObject/formaat"/></ZKN:formaat>
                 </xsl:when>
             </xsl:choose>
-            <taal><xsl:value-of select="ZgwEnkelvoudigInformatieObject/taal"/></taal>
-            <versie><xsl:value-of select="ZgwEnkelvoudigInformatieObject/versie"/></versie>
+            <ZKN:taal><xsl:value-of select="ZgwEnkelvoudigInformatieObject/taal"/></ZKN:taal>
+            <ZKN:versie><xsl:value-of select="ZgwEnkelvoudigInformatieObject/versie"/></ZKN:versie>
             <xsl:choose>
                 <xsl:when test="ZgwEnkelvoudigInformatieObject/status != ''">
-                    <status><xsl:value-of select="$statusMap(ZgwEnkelvoudigInformatieObject/status)"/></status>
+                    <ZKN:status><xsl:value-of select="$statusMap(ZgwEnkelvoudigInformatieObject/status)"/></ZKN:status>
                 </xsl:when>
             </xsl:choose>
             <xsl:choose>
                 <xsl:when test="ZgwEnkelvoudigInformatieObject/verzenddatum != ''" >
-                    <verzenddatum><xsl:value-of select="format-date(ZgwEnkelvoudigInformatieObject/verzenddatum, '[Y0001][M01][D01]')"/></verzenddatum>
+                    <ZKN:verzenddatum><xsl:value-of select="format-date(ZgwEnkelvoudigInformatieObject/verzenddatum, '[Y0001][M01][D01]')"/></ZKN:verzenddatum>
                 </xsl:when>
             </xsl:choose>
             <xsl:choose>
                 <xsl:when test="ZgwEnkelvoudigInformatieObject/vertrouwelijkheidaanduiding != ''">
-                    <vertrouwelijkAanduiding><xsl:value-of select="ZgwEnkelvoudigInformatieObject/vertrouwelijkheidaanduiding"/></vertrouwelijkAanduiding>
+                    <ZKN:vertrouwelijkAanduiding><xsl:value-of select="ZgwEnkelvoudigInformatieObject/vertrouwelijkheidaanduiding"/></ZKN:vertrouwelijkAanduiding>
                 </xsl:when>
             </xsl:choose>
-            <auteur><xsl:value-of select="ZgwEnkelvoudigInformatieObject/auteur"/></auteur>
+            <ZKN:auteur><xsl:value-of select="ZgwEnkelvoudigInformatieObject/auteur"/></ZKN:auteur>
             <xsl:choose>
                 <xsl:when test="ZgwEnkelvoudigInformatieObject/link != ''">
-                    <link><xsl:value-of select="ZgwEnkelvoudigInformatieObject/link"/></link>
+                    <ZKN:link><xsl:value-of select="ZgwEnkelvoudigInformatieObject/link"/></ZKN:link>
                 </xsl:when>
             </xsl:choose>
-            <inhoud>
+            <ZKN:inhoud>
                 <xsl:choose>
                     <xsl:when test="ZgwEnkelvoudigInformatieObject/bestandsnaam != ''">
                         <xsl:attribute name="StUF:bestandsnaam"><xsl:value-of select="ZgwEnkelvoudigInformatieObject/bestandsnaam"/></xsl:attribute>
@@ -67,20 +67,20 @@
                     <xsl:attribute name="xmime:contentType"><xsl:value-of select="ZgwEnkelvoudigInformatieObject/formaat"/></xsl:attribute>
                 </xsl:if>
                 <xsl:value-of select="$Base64Inhoud"/>
-            </inhoud>
-            <isRelevantVoor StUF:entiteittype="EDCZAK" StUF:verwerkingssoort="T">
-                <gerelateerde StUF:entiteittype="ZAK" StUF:verwerkingssoort="I">
-                    <identificatie><xsl:value-of select="$CaseReferenceNumber"/></identificatie>
-                    <omschrijving><xsl:value-of select="$CaseDescription"/></omschrijving>
-                    <isVan StUF:entiteittype="ZAKZKT">
-                        <gerelateerde StUF:entiteittype="ZKT">
-                            <omschrijving><xsl:value-of select="$CaseTypeDescription"/></omschrijving>
-                            <code><xsl:value-of select="$CaseTypeCode"/></code>
-                        </gerelateerde>
-                    </isVan>
-                </gerelateerde>
-            </isRelevantVoor>
-          </object>
+            </ZKN:inhoud>
+            <ZKN:isRelevantVoor StUF:entiteittype="EDCZAK" StUF:verwerkingssoort="T">
+                <ZKN:gerelateerde StUF:entiteittype="ZAK" StUF:verwerkingssoort="I">
+                    <ZKN:identificatie><xsl:value-of select="$CaseReferenceNumber"/></ZKN:identificatie>
+                    <ZKN:omschrijving><xsl:value-of select="$CaseDescription"/></ZKN:omschrijving>
+                    <ZKN:isVan StUF:entiteittype="ZAKZKT">
+                        <ZKN:gerelateerde StUF:entiteittype="ZKT">
+                            <ZKN:omschrijving><xsl:value-of select="$CaseTypeDescription"/></ZKN:omschrijving>
+                            <ZKN:code><xsl:value-of select="$CaseTypeCode"/></ZKN:code>
+                        </ZKN:gerelateerde>
+                    </ZKN:isVan>
+                </ZKN:gerelateerde>
+            </ZKN:isRelevantVoor>
+          </ZKN:object>
     </xsl:template>
 
     <xsl:variable name="statusMap" as="map(*)">

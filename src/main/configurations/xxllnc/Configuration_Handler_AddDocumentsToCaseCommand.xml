@@ -29,7 +29,7 @@
                 name="AddDocumentToCaseCommandForEachChildElement"
                 elementXPathExpression="/*/url"
                 getInputFromSessionKey="originalMessage"
-                parallel="true"
+                parallel="false"
                 collectResults="true"
                 >
                 <IbisLocalSender
