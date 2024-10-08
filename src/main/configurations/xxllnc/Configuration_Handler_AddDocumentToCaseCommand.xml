@@ -125,8 +125,11 @@
                     contentType="text/xml"
                     timeout="${openforms2xxllnc.connections.ontvang-asynchroon.timeout}"
                     throwApplicationFaults="false"
+                    headersParams="x-opentunnel-api-key"
+                    parametersToSkipWhenEmpty="*"
                     >
                     <Param name="url" value="${openforms2xxllnc.connections.ontvang-asynchroon.endpoint}" />
+                    <Param name="x-opentunnel-api-key" pattern="{password}" authAlias="${openforms2xxllnc.connections.ontvang-asynchroon.auth-alias}" hidden="true" />
                 </WebServiceSender>
                 <Forward name="success" path="UnwrapBv03BerichtResponse" />
                 <Forward name="exception" path="SoapFault_Exception" />
