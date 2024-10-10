@@ -1,5 +1,11 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.2.1](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.0...v1.2.1) (2024-10-10)
+
+### 🧑‍💻 Code Refactoring
+
+* include api-key header with dms-zs communication ([#18](https://github.com/wearefrank/openforms2xxllnc/issues/18)) ([56715fd](https://github.com/wearefrank/openforms2xxllnc/commit/56715fd743d8c4e51e57618db057222f62a1eb0d))
+
 ## [1.2.0](https://github.com/wearefrank/openforms2xxllnc/compare/v1.1.1...v1.2.0) (2024-09-13)
 
 ### 🍕 Features
