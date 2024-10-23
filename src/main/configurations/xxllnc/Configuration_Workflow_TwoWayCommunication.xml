@@ -93,7 +93,6 @@
                     name="GeefZaakDetailsWebServiceSender"
                     soap="false"
                     soapAction="http://www.egem.nl/StUF/sector/zkn/0310/geefZaakdetails_Lv01"
-                    contentType="text/xml"
                     timeout="${openforms2xxllnc.connections.beantwoord-vraag.timeout}"
                     throwApplicationFaults="false"
                     headersParams="x-opentunnel-api-key"
@@ -218,7 +217,7 @@
                 xpathExpression="boolean($NoReplySmtpEnabled) and boolean($SendMail)"
                 >
                 <Param name="NoReplySmtpEnabled" value="${openforms2xxllnc.connections.noreply-smtp.enabled}" />
-                <Param name="SendMail" value="${openforms2xxllnc.workflows.on-subject-not-equals-case-subject.send-mail}" />
+                <Param name="SendMail" value="${openforms2xxllnc.workflows.on-error-actions.on-subject-not-equals-case-subject.send-mail}" />
                 <Forward name="then" path="SubjectNotEqualsCaseSubject_StoreMailTemplateName" />
                 <Forward name="else" path="SubjectNotEqualsCaseSubject_Exception" />
             </XmlIfPipe>
