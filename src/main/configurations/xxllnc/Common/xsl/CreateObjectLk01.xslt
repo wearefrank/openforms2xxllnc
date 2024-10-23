@@ -14,7 +14,7 @@
                     <ZKN:identificatie><xsl:value-of select="$DocumentIdentificatie"/></ZKN:identificatie>
                 </xsl:when>
             </xsl:choose>
-            <ZKN:dct.omschrijving>Brief</ZKN:dct.omschrijving> <!-- Test purposes-->
+            <!-- <ZKN:dct.omschrijving>Brief</ZKN:dct.omschrijving> Test purposes -->
             <ZKN:creatiedatum><xsl:value-of select="format-date(ZgwEnkelvoudigInformatieObject/creatiedatum, '[Y0001][M01][D01]')"/></ZKN:creatiedatum>
             <xsl:choose>
                 <xsl:when test="ZgwEnkelvoudigInformatieObject/ontvangstdatum != ''" >
