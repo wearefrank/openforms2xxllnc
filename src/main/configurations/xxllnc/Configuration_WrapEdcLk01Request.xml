@@ -51,6 +51,7 @@
                 storeResultInSessionKey="Object"
                 >
                 <Param name="DocumentIdentificatie" sessionKey="DocumentIdentificatie" />
+                <Param name="DctOmschrijving" value="${openforms2xxllnc.workflows.object.dct.omschrijving}" />
                 <Param name="Base64Inhoud" sessionKey="Base64Inhoud" />
                 <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />
                 <Param name="CaseDescription" sessionKey="CaseDescription" />

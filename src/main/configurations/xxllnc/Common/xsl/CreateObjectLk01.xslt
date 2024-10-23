@@ -1,6 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:StUF="http://www.egem.nl/StUF/StUF0301" xmlns:ZKN="http://www.egem.nl/StUF/sector/zkn/0310" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" version="2.0">
     <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
     <xsl:param name="DocumentIdentificatie"/>
+    <xsl:param name="DctOmschrijving"/>
     <xsl:param name="Base64Inhoud"/>
     <xsl:param name="CaseReferenceNumber"/>
     <xsl:param name="CaseDescription"/>
@@ -14,7 +15,7 @@
                     <ZKN:identificatie><xsl:value-of select="$DocumentIdentificatie"/></ZKN:identificatie>
                 </xsl:when>
             </xsl:choose>
-            <!-- <ZKN:dct.omschrijving>Brief</ZKN:dct.omschrijving> Test purposes -->
+            <ZKN:dct.omschrijving><xsl:value-of select="$DctOmschrijving"/></ZKN:dct.omschrijving>
             <ZKN:creatiedatum><xsl:value-of select="format-date(ZgwEnkelvoudigInformatieObject/creatiedatum, '[Y0001][M01][D01]')"/></ZKN:creatiedatum>
             <xsl:choose>
                 <xsl:when test="ZgwEnkelvoudigInformatieObject/ontvangstdatum != ''" >
