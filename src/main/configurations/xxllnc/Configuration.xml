@@ -13,6 +13,7 @@
     <!ENTITY WorkflowSelector SYSTEM "./Configuration_WorkflowSelector.xml">
     <!ENTITY WrapEdcLk01Request SYSTEM "./Configuration_WrapEdcLk01Request.xml">
     <!ENTITY WrapZakLv01Request SYSTEM "./Configuration_WrapZakLv01Request.xml">
+    <!ENTITY WrapDi02Request SYSTEM "./Configuration_WrapGenereerDocumentIdentificatie_Di02Request.xml">
     ]>
 
 <configuration name="xxllnc">
@@ -30,4 +31,5 @@
     &WorkflowSelector;
     &WrapEdcLk01Request;
     &WrapZakLv01Request;
+    &WrapDi02Request;
 </configuration>

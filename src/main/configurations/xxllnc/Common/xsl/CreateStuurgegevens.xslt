@@ -7,6 +7,7 @@
     <xsl:param name="OntvangerApplicatie"/>
     <xsl:param name="Referentienummer"/>
     <xsl:param name="EntiteitType"/>
+    <xsl:param name="Functie"/>
    
 	<xsl:template match="/">
         <ZKN:stuurgegevens>
@@ -21,7 +22,14 @@
             </StUF:ontvanger>
             <StUF:referentienummer><xsl:value-of select="$Referentienummer"/></StUF:referentienummer>
             <StUF:tijdstipBericht><xsl:value-of select="format-dateTime(current-dateTime(), '[Y0001][M01][D01][H01][m01][s01]')"/></StUF:tijdstipBericht>
-            <StUF:entiteittype><xsl:value-of select="$EntiteitType"/></StUF:entiteittype>
+            <xsl:choose>
+                <xsl:when test="$EntiteitType != ''">
+                    <StUF:entiteittype><xsl:value-of select="$EntiteitType"/></StUF:entiteittype>
+                </xsl:when>
+                <xsl:otherwise>
+                    <StUF:functie><xsl:value-of select="$Functie"/></StUF:functie>
+                </xsl:otherwise>
+            </xsl:choose>
         </ZKN:stuurgegevens>
 	</xsl:template>
 </xsl:stylesheet>

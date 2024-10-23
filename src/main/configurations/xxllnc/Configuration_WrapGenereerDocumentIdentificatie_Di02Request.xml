@@ -1,0 +1,49 @@
+<Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../FrankConfig.xsd">
+    <Adapter name="WrapGenereerDocumentIdentificatie_Di02Request"
+        active="${WrapGenereerDocumentIdentificatie_Di02Request.Active}"
+        description="">
+
+        <Receiver name="WrapGenereerDocumentIdentificatie_Di02Request">
+            <JavaListener name="WrapGenereerDocumentIdentificatie_Di02Request" returnedSessionKeys="Error" />
+        </Receiver>
+
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+
+            <UUIDGeneratorPipe 
+                name="GenerateReferentienummer"
+                preserveInput="true"
+                storeResultInSessionKey="Referentienummer"
+                >
+                <Forward name="success" path="CreateStuurgegevens" />
+            </UUIDGeneratorPipe>
+
+            <XsltPipe 
+                name="CreateStuurgegevens"
+                styleSheetName="Common/xsl/CreateStuurgegevens.xslt"
+                storeResultInSessionKey="Stuurgegevens"
+                >
+                <Param name="BerichtCode" value="Di02" />
+                <Param name="ZenderOrganisatie" value="${openforms2xxllnc.workflows.stuurgegevens.zender.organisatie}" />
+                <Param name="ZenderApplicatie" value="${openforms2xxllnc.workflows.stuurgegevens.zender.applicatie}" />
+                <Param name="OntvangerOrganisatie" value="${openforms2xxllnc.workflows.stuurgegevens.ontvanger.organisatie}" />
+                <Param name="OntvangerApplicatie" value="${openforms2xxllnc.workflows.stuurgegevens.ontvanger.applicatie}" />
+                <Param name="Referentienummer" sessionKey="Referentienummer" />
+                <Param name="Functie" value="genereerDocumentidentificatie" />
+                <Forward name="success" path="WrapGenereerDocumentIdentificatie_Di02Request" />
+            </XsltPipe>
+
+            <SoapWrapperPipe 
+                name="WrapGenereerDocumentIdentificatie_Di02Request"
+                getInputFromFixedValue="&lt;EmptyInput/&gt;"
+                soapBodyStyleSheet="Common/xsl/CreateGenereerDocumentIdentificatie_Di02Request.xslt"
+                >
+                <Param name="Stuurgegevens" sessionKey="Stuurgegevens" type="DOMDOC" />
+                <Forward name="success" path="EXIT" />
+            </SoapWrapperPipe>
+        </Pipeline>
+    </Adapter>
+</Module>
