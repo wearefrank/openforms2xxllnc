@@ -1,5 +1,11 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.2.2](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.1...v1.2.2) (2024-10-23)
+
+### ✅ Tests
+
+* additional e2e tests for two-way communication workflow ([#17](https://github.com/wearefrank/openforms2xxllnc/issues/17)) ([db6efaf](https://github.com/wearefrank/openforms2xxllnc/commit/db6efafb6b076955e658cd7a6f425deb205d92b3))
+
 ## [1.2.1](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.0...v1.2.1) (2024-10-10)
 
 ### 🧑‍💻 Code Refactoring
