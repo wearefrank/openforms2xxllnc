@@ -95,8 +95,11 @@
                     soapAction="http://www.egem.nl/StUF/sector/zkn/0310/geefZaakdetails_Lv01"
                     timeout="${openforms2xxllnc.connections.beantwoord-vraag.timeout}"
                     throwApplicationFaults="false"
+                    headersParams="x-opentunnel-api-key"
+                    parametersToSkipWhenEmpty="*"
                     >
                     <Param name="url" value="${openforms2xxllnc.connections.beantwoord-vraag.endpoint}" />
+                    <Param name="x-opentunnel-api-key" pattern="{password}" authAlias="${openforms2xxllnc.connections.beantwoord-vraag.auth-alias}" hidden="true" />
                 </WebServiceSender>
                 <Forward name="success" path="UnwrapZakLa01Response" />
                 <Forward name="exception" path="SoapFault_Exception" />
