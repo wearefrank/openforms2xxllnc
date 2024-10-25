@@ -1,5 +1,11 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.2.3](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.2...v1.2.3) (2024-10-25)
+
+### 🐛 Bug Fixes
+
+* use identificatie from genereerDocumentIdentificatie in voegZaakdocumentToe request & add dct.omschrijving to voegZaakdocumentToe request with value from property ([#23](https://github.com/wearefrank/openforms2xxllnc/issues/23)) ([b9273e9](https://github.com/wearefrank/openforms2xxllnc/commit/b9273e96d66a39edcc4a95fd64883d52785c6fd8))
+
 ## [1.2.2](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.1...v1.2.2) (2024-10-23)
 
 ### ✅ Tests
