@@ -90,8 +90,60 @@
                 lineLength="0"
                 storeResultInSessionKey="ZgwEnkelvoudigInformatieObjectInhoud"
                 >
-                <Forward name="success" path="CallWrapEdcLk01Request" />
+                <Forward name="success" path="CallWrapGenereerDocumentIdentificatie_Di02Request" />
             </Base64Pipe>
+
+            <!-- Create genereerDocumentIdentificatie message -->
+            <SenderPipe 
+                name="CallWrapGenereerDocumentIdentificatie_Di02Request"
+                getInputFromFixedValue="&lt;EmptyInput/&gt;"
+                storeResultInSessionKey="GenereerDocumentIdentificatie_Di02RequestMessage"
+                >
+                <IbisLocalSender
+                    name="CallWrapGenereerDocumentIdentificatie_Di02RequestSender"
+                    javaListener="WrapGenereerDocumentIdentificatie_Di02Request"
+                    returnedSessionKeys="Error"
+                    >
+                </IbisLocalSender>
+                <Forward name="success" path="GenereerDocumentIdentificatieSender" />
+            </SenderPipe>
+
+            <SenderPipe
+                name="GenereerDocumentIdentificatieSender"
+                getInputFromSessionKey="GenereerDocumentIdentificatie_Di02RequestMessage"
+                >
+                <WebServiceSender
+                    name="GenereerDocumentIdentificatieWebServiceSender"
+                    soap="false"
+                    soapAction="http://www.egem.nl/StUF/sector/zkn/0310/genereerDocumentIdentificatie_Di02"
+                    contentType="text/xml"
+                    timeout="${openforms2xxllnc.connections.vrije-berichten.timeout}"
+                    throwApplicationFaults="false"
+                    headersParams="x-opentunnel-api-key"
+                    parametersToSkipWhenEmpty="*"
+                    >
+                    <Param name="url" value="${openforms2xxllnc.connections.vrije-berichten.endpoint}" />
+                    <Param name="x-opentunnel-api-key" pattern="{password}" authAlias="${openforms2xxllnc.connections.vrije-berichten.auth-alias}" hidden="true" />
+                </WebServiceSender>
+                <Forward name="success" path="UnwrapGenereerDocumentIdentificatie_Du02Response" />
+                <Forward name="exception" path="SoapFault_Exception" />
+            </SenderPipe>
+
+            <SoapWrapperPipe 
+                name="UnwrapGenereerDocumentIdentificatie_Du02Response"
+                storeResultInSessionKey="UnwrappedGenereerDocumentIdentificatie_Du02Response"
+                direction="UNWRAP"
+                removeOutputNamespaces="true"
+                >
+                <Forward name="success" path="StoreDocumentIdentificatie" />
+            </SoapWrapperPipe>
+
+            <PutInSessionPipe
+                name="StoreDocumentIdentificatie"
+                >
+                <Param name="DocumentIdentificatie" xpathExpression="//document/identificatie" />
+                <Forward name="success" path="CallWrapEdcLk01Request" />
+            </PutInSessionPipe>
 
             <!-- Create VoegZaakdocumentToe message -->
             <SenderPipe 
@@ -105,6 +157,7 @@
                     returnedSessionKeys="Error"
                     >
                     <Param name="ZgwEnkelvoudigInformatieObject" sessionKey="ZgwEnkelvoudigInformatieObject" />
+                    <Param name="DocumentIdentificatie" sessionKey="DocumentIdentificatie" />
                     <Param name="Base64Inhoud" sessionKey="ZgwEnkelvoudigInformatieObjectInhoud" />
                     <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />
                     <Param name="CaseDescription" sessionKey="CaseDescription" />
