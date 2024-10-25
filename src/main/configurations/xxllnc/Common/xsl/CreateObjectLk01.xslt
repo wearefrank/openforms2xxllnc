@@ -10,11 +10,7 @@
 
     <xsl:template match="/">
         <ZKN:object StUF:entiteittype="EDC" StUF:verwerkingssoort="T">
-            <xsl:choose>
-                <xsl:when test="ZgwEnkelvoudigInformatieObject/identificatie != ''" >
-                    <ZKN:identificatie><xsl:value-of select="$DocumentIdentificatie"/></ZKN:identificatie>
-                </xsl:when>
-            </xsl:choose>
+            <ZKN:identificatie><xsl:value-of select="$DocumentIdentificatie"/></ZKN:identificatie>
             <ZKN:dct.omschrijving><xsl:value-of select="$DctOmschrijving"/></ZKN:dct.omschrijving>
             <ZKN:creatiedatum><xsl:value-of select="format-date(ZgwEnkelvoudigInformatieObject/creatiedatum, '[Y0001][M01][D01]')"/></ZKN:creatiedatum>
             <xsl:choose>
