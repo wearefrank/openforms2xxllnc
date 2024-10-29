@@ -14,9 +14,9 @@
             <kanalen>
                 <xsl:if test="$producttype">
                     <filters>
-                        <object_type>
+                        <objectType>
                             <xsl:value-of select="$producttype" />
-                        </object_type>
+                        </objectType>
                     </filters>
                 </xsl:if>
                 <naam>objecten</naam>
