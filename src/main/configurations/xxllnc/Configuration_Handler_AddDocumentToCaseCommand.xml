@@ -119,11 +119,11 @@
                     contentType="text/xml"
                     timeout="${openforms2xxllnc.connections.vrije-berichten.timeout}"
                     throwApplicationFaults="false"
-                    headersParams="x-opentunnel-api-key"
+                    headersParams="${openforms2xxllnc.connections.vrije-berichten.auth-header-name}"
                     parametersToSkipWhenEmpty="*"
                     >
                     <Param name="url" value="${openforms2xxllnc.connections.vrije-berichten.endpoint}" />
-                    <Param name="x-opentunnel-api-key" pattern="{password}" authAlias="${openforms2xxllnc.connections.vrije-berichten.auth-alias}" hidden="true" />
+                    <Param name="${openforms2xxllnc.connections.vrije-berichten.auth-header-name}" pattern="{password}" authAlias="${openforms2xxllnc.connections.vrije-berichten.auth-alias}" hidden="true" />
                 </WebServiceSender>
                 <Forward name="success" path="UnwrapGenereerDocumentIdentificatie_Du02Response" />
                 <Forward name="exception" path="SoapFault_Exception" />
@@ -178,11 +178,11 @@
                     contentType="text/xml"
                     timeout="${openforms2xxllnc.connections.ontvang-asynchroon.timeout}"
                     throwApplicationFaults="false"
-                    headersParams="x-opentunnel-api-key"
+                    headersParams="${openforms2xxllnc.connections.ontvang-asynchroon.auth-header-name}"
                     parametersToSkipWhenEmpty="*"
                     >
                     <Param name="url" value="${openforms2xxllnc.connections.ontvang-asynchroon.endpoint}" />
-                    <Param name="x-opentunnel-api-key" pattern="{password}" authAlias="${openforms2xxllnc.connections.ontvang-asynchroon.auth-alias}" hidden="true" />
+                    <Param name="${openforms2xxllnc.connections.ontvang-asynchroon.auth-header-name}" pattern="{password}" authAlias="${openforms2xxllnc.connections.ontvang-asynchroon.auth-alias}" hidden="true" />
                 </WebServiceSender>
                 <Forward name="success" path="UnwrapBv03BerichtResponse" />
                 <Forward name="exception" path="SoapFault_Exception" />
