@@ -43,7 +43,7 @@
 
 			<SenderPipe
 				name="SubscriptionCreateSender"
-				getInputFromFixedValue="SubscriptionCreateRequest"
+				getInputFromSessionKey="SubscriptionCreateRequest"
 				>
 				<Json2XmlInputValidator
 					name="ValidatePostBody"
