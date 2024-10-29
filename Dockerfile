@@ -1,6 +1,6 @@
-ARG FF_VERSION=8.3.0-20240730.042429
+ARG FF_VERSION=9.0.0-20241026.042336
 
-FROM frankframework/frankframework:${FF_VERSION} as ff-base
+FROM frankframework/frankframework:${FF_VERSION} AS ff-base
 
 ## Uncomment this section if the Frank! contains custom classes.
 # # Copy dependencies

@@ -20,7 +20,7 @@ services:
     build:
       context: .
       args:
-        FF_VERSION: ${FF_VERSION:-8.3.0-20240730.042429}
+        FF_VERSION: ${FF_VERSION:-9.0.0-20241026.042336}
     image: wearefrank/openforms2xxllnc:${VERSION:-latest}
     environment:
       configurations.notificaties-api-server.classLoaderType: ScanningDirectoryClassLoader
