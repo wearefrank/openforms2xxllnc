@@ -15,7 +15,7 @@
             Bedankt voor uw medewerking.<br>
             <br>
             Met vriendelijke groet,<br>
-            ${vars.signature-from-name}<br>
+            ?{vars.signature-from-name}<br>
             ]]>
         </message>
     </mailTemplates>
