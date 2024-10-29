@@ -1,5 +1,11 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.2.5](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.4...v1.2.5) (2024-10-29)
+
+### 🤖 Build System
+
+* **dependencies:** revert f!f version to v8.3.0-20240730.042429 ([5027bdd](https://github.com/wearefrank/openforms2xxllnc/commit/5027bdd476919b779fe2564f3efd8ee1c75dc255))
+
 ## [1.2.4](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.3...v1.2.4) (2024-10-29)
 
 ### 🐛 Bug Fixes
