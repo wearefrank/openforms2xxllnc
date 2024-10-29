@@ -1,5 +1,25 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.2.4](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.3...v1.2.4) (2024-10-29)
+
+### 🐛 Bug Fixes
+
+* notificaties api subscribe adapter not sending the correct message body ([ddbe5ea](https://github.com/wearefrank/openforms2xxllnc/commit/ddbe5eae7d16af8ff7e5a86a1b1a75d6fef4a695))
+* notificaties api subscribe message body using wrong object_type as filter instead of objectType ([6e3a844](https://github.com/wearefrank/openforms2xxllnc/commit/6e3a8445a94106538ff2e0a2ba3ac99bfaa49b00))
+
+### 🧑‍💻 Code Refactoring
+
+* replace static opentunnel authentication header with configurable headername with 'Authorization` as default name ([e01c069](https://github.com/wearefrank/openforms2xxllnc/commit/e01c069996fcf9109e67d745c45440e24773ce88))
+
+### ✅ Tests
+
+* replace deprecated ${} variable substitution syntax with the correct ?{} syntax in test mailtemplates ([a92206a](https://github.com/wearefrank/openforms2xxllnc/commit/a92206a05509da75984c66f3a702ab93919994df))
+
+### 🤖 Build System
+
+* **dependencies:** bump f!f version to 9.0.0-20241026.042336 ([d8eb624](https://github.com/wearefrank/openforms2xxllnc/commit/d8eb6245b21f68950ca150b49e7528909011f2f3))
+* **dependencies:** bump the github-actions group with 1 update ([e20a8c4](https://github.com/wearefrank/openforms2xxllnc/commit/e20a8c47619eeee6aa1815a359bb3b9c214fa5ab))
+
 ## [1.2.3](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.2...v1.2.3) (2024-10-25)
 
 ### 🐛 Bug Fixes
