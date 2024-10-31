@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="c7451bda-6915-4166-8379-a3921e2cca1f" activeEnvironment="Default" name="openforms2xxllnc" resourceRoot="" soapui-version="5.7.2" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config">
+<con:soapui-project id="c7451bda-6915-4166-8379-a3921e2cca1f" activeEnvironment="Default" name="openforms2xxllnc" resourceRoot="${projectDir}" soapui-version="5.7.2" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config">
   <con:settings/>
   <con:interface xsi:type="con:RestService" id="c3c11aff-2fde-4150-8256-6a0648a631fd" wadlVersion="http://wadl.dev.java.net/2009/02" name="Documenten API" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:description>Een API om een documentregistratiecomponent (DRC) te benaderen.
@@ -2535,6 +2535,12 @@ should be used. If `height` is nested inside `dimensions` attribute, query shoul
           <con:params/>
           <con:element>data</con:element>
         </con:representation>
+        <con:representation type="RESPONSE">
+          <con:mediaType xsi:nil="true"/>
+          <con:status>0</con:status>
+          <con:params/>
+          <con:element>data</con:element>
+        </con:representation>
         <con:request name="Request 1" id="82aa8045-70bf-466b-926f-b8a9da1d6345" mediaType="application/json">
           <con:settings/>
           <con:request/>
@@ -3082,7 +3088,7 @@ should be used. If `height` is nested inside `dimensions` attribute, query shoul
       </con:method>
     </con:resource>
   </con:interface>
-  <con:interface xsi:type="con:WsdlInterface" id="651a2850-0c67-45de-ad80-584e469b7524" wsaVersion="NONE" name="SOAPBeantwoordVraag" type="wsdl" bindingName="{http://www.egem.nl/StUF/sector/zkn/0310}SOAPBeantwoordVraag" soapVersion="1_1" anonymous="optional" definition="file:/C:/Users/Meric/Workspace/openforms2xxllnc/src/main/configurations/xxllnc/Common/xsd/Zaak_DocumentServices_1_1_02/zkn0310/zs-dms/zkn0310_beantwoordVraag_zs-dms.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <con:interface xsi:type="con:WsdlInterface" id="651a2850-0c67-45de-ad80-584e469b7524" wsaVersion="NONE" name="SOAPBeantwoordVraag" type="wsdl" bindingName="{http://www.egem.nl/StUF/sector/zkn/0310}SOAPBeantwoordVraag" soapVersion="1_1" anonymous="optional" definition="../../src/main/configurations/xxllnc/Common/xsd/Zaak_DocumentServices_1_1_02/zkn0310/zs-dms/zkn0310_beantwoordVraag_zs-dms.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:settings/>
     <con:endpoints>
       <con:endpoint>http://example.com/BeantwoordVraag</con:endpoint>
@@ -3100,7 +3106,7 @@ should be used. If `height` is nested inside `dimensions` attribute, query shoul
       <con:settings/>
     </con:operation>
   </con:interface>
-  <con:interface xsi:type="con:WsdlInterface" id="be75c972-c1fd-4e22-8eff-043b272a467b" wsaVersion="NONE" name="SOAPOntvangAsynchroon" type="wsdl" bindingName="{http://www.egem.nl/StUF/sector/zkn/0310}SOAPOntvangAsynchroon" soapVersion="1_1" anonymous="optional" definition="file:/C:/Users/Meric/Workspace/openforms2xxllnc/src/main/configurations/xxllnc/Common/xsd/Zaak_DocumentServices_1_1_02/zkn0310/zs-dms/zkn0310_ontvangAsynchroon_mutatie_zs-dms.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <con:interface xsi:type="con:WsdlInterface" id="be75c972-c1fd-4e22-8eff-043b272a467b" wsaVersion="NONE" name="SOAPOntvangAsynchroon" type="wsdl" bindingName="{http://www.egem.nl/StUF/sector/zkn/0310}SOAPOntvangAsynchroon" soapVersion="1_1" anonymous="optional" definition="../../src/main/configurations/xxllnc/Common/xsd/Zaak_DocumentServices_1_1_02/zkn0310/zs-dms/zkn0310_ontvangAsynchroon_mutatie_zs-dms.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:settings/>
     <con:endpoints>
       <con:endpoint>http://example.com/OntvangAsynchroon</con:endpoint>
@@ -3130,7 +3136,7 @@ should be used. If `height` is nested inside `dimensions` attribute, query shoul
       <con:settings/>
     </con:operation>
   </con:interface>
-  <con:interface xsi:type="con:WsdlInterface" id="cdd682d8-83ae-42f9-b158-1a18812889ff" wsaVersion="NONE" name="SOAPVrijeBerichten" type="wsdl" bindingName="{http://www.egem.nl/StUF/sector/zkn/0310}SOAPVrijeBerichten" soapVersion="1_1" anonymous="optional" definition="file:/C:/Users/Meric/Workspace/openforms2xxllnc/src/main/configurations/xxllnc/Common/xsd/Zaak_DocumentServices_1_1_02/zkn0310/zs-dms/zkn0310_vrijeBerichten_zs-dms.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <con:interface xsi:type="con:WsdlInterface" id="cdd682d8-83ae-42f9-b158-1a18812889ff" wsaVersion="NONE" name="SOAPVrijeBerichten" type="wsdl" bindingName="{http://www.egem.nl/StUF/sector/zkn/0310}SOAPVrijeBerichten" soapVersion="1_1" anonymous="optional" definition="../../src/main/configurations/xxllnc/Common/xsd/Zaak_DocumentServices_1_1_02/zkn0310/zs-dms/zkn0310_vrijeBerichten_zs-dms.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:settings/>
     <con:endpoints>
       <con:endpoint>http://example.com/VrijeBerichten</con:endpoint>
@@ -3484,7 +3490,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:9000/objects/api/v2</con:endpoint>
             <con:request>{\r
    "type" : "dummy",\r
    "record" : {\r
@@ -8148,7 +8154,7 @@ if( requestBody.contains("some data") )
   <con:properties>
     <con:property>
       <con:name>caseReferenceNumber</con:name>
-      <con:value>OF-NZRHNH</con:value>
+      <con:value>OF-UEWIAJ</con:value>
     </con:property>
     <con:property>
       <con:name>initiatingSubjectCitizenNumber</con:name>
