@@ -1,5 +1,15 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.2.6](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.5...v1.2.6) (2024-10-31)
+
+### ⏩ Reverts
+
+* "refactor: replace static opentunnel authentication header with configurable headername with 'Authorization` as default name" ([125c1a2](https://github.com/wearefrank/openforms2xxllnc/commit/125c1a216fbb71279393bb5cb08e842561446258))
+
+### ✅ Tests
+
+* use relative paths to load zds schema's and wsdl's from project dir ([5b8639a](https://github.com/wearefrank/openforms2xxllnc/commit/5b8639a35c6f82fb545cda324ccb6ae501ec3855))
+
 ## [1.2.5](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.4...v1.2.5) (2024-10-29)
 
 ### 🤖 Build System
