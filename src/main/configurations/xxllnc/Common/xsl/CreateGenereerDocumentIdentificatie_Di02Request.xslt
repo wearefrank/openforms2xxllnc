@@ -4,7 +4,7 @@
    
 	<xsl:template match="/">
         <ZKN:genereerDocumentIdentificatie_Di02>
-            <xsl:copy-of select="$Stuurgegevens/ZKN:stuurgegevens" />
+            <xsl:copy-of select="$Stuurgegevens/*:stuurgegevens" />
         </ZKN:genereerDocumentIdentificatie_Di02>
 	</xsl:template>
 </xsl:stylesheet>
