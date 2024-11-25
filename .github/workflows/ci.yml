@@ -15,7 +15,7 @@ jobs:
       version-next: ${{ steps.reference.outputs.next-reference }}
       version-next-strict: ${{ steps.reference.outputs.next-reference }}
     steps:
-      - uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+      - uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
         with:
           disable-sudo: true
           egress-policy: block
@@ -23,14 +23,14 @@ jobs:
             github.com:443
 
       - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 #4.1.7
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #4.2.2
 
       - name: Next Reference
         id: reference
-        uses: wearefrank/ci-cd-templates/next-reference@df1db1b1a73abf2e733f3a5e77b87db7693980c0 #1.0.8
+        uses: wearefrank/ci-cd-templates/next-reference@b9f96c7bb6abc6e4c1e1bece97435c71485e1aac #1.0.11
 
   ci:
-    uses: wearefrank/ci-cd-templates/.github/workflows/ci-generic.yml@df1db1b1a73abf2e733f3a5e77b87db7693980c0 #1.0.8
+    uses: wearefrank/ci-cd-templates/.github/workflows/ci-generic.yml@b9f96c7bb6abc6e4c1e1bece97435c71485e1aac #1.0.11
     needs:
       - version-next
     secrets:
