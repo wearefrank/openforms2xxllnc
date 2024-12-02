@@ -6,9 +6,9 @@
    
 	<xsl:template match="/">
         <ZKN:edcLk01>
-            <xsl:copy-of select="$Stuurgegevens/ZKN:stuurgegevens" />
-            <xsl:copy-of select="$Parameters/ZKN:parameters" />
-            <xsl:copy-of select="$Object/ZKN:object" />
+            <xsl:copy-of select="$Stuurgegevens/*:stuurgegevens" />
+            <xsl:copy-of select="$Parameters/*:parameters" />
+            <xsl:copy-of select="$Object/*:object" />
         </ZKN:edcLk01>
 	</xsl:template>
 </xsl:stylesheet>

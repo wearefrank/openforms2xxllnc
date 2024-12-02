@@ -49,8 +49,15 @@
 			<JsonPipe
 				name="JsonToXml"
 				>
-				<Forward name="success" path="HandleTestChannelMessage" />
+				<Forward name="success" path="StoreObjectUuid" />
 			</JsonPipe>
+
+            <PutInSessionPipe
+				name="StoreObjectUuid"
+				>
+				<Param name="ObjectUuid" xpathExpression="tokenize(//resourceUrl, '/')[last()]" />
+				<Forward name="success" path="HandleTestChannelMessage" />
+			</PutInSessionPipe>
 
 			<XmlIfPipe
 				name="HandleTestChannelMessage"
@@ -93,11 +100,13 @@
 
 			<SenderPipe
 				name="ObjectCreateSender"
+                correlationIDSessionKey="ObjectUuid"
 				>
 				<IbisLocalSender
 					name="ObjectCreateSenderLocalSender"
 					javaListener="objects_object_create"
 					>
+                    <Param name="cid" sessionKey="ObjectUuid" />
 				</IbisLocalSender>
 				<Forward name="success" path="Created" />
 				<Forward name="exception" path="InternalServerError" />
