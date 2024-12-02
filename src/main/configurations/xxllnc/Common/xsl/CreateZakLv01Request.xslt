@@ -7,10 +7,10 @@
    
 	<xsl:template match="/">
         <ZKN:zakLv01>
-            <xsl:copy-of select="$Stuurgegevens/ZKN:stuurgegevens" />
-            <xsl:copy-of select="$Parameters/ZKN:parameters" />
-            <xsl:copy-of select="$Gelijk/ZKN:gelijk" />
-            <xsl:copy-of select="$Scope/ZKN:scope" />
+            <xsl:copy-of select="$Stuurgegevens/*:stuurgegevens" />
+            <xsl:copy-of select="$Parameters/*:parameters" />
+            <xsl:copy-of select="$Gelijk/*:gelijk" />
+            <xsl:copy-of select="$Scope/*:scope" />
         </ZKN:zakLv01>
 	</xsl:template>
 </xsl:stylesheet>
