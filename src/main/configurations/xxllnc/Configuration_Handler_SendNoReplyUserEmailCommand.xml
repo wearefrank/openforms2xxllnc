@@ -7,7 +7,7 @@
 
         <Receiver
             name="Handler_SendNoReplyUserEmailCommand"
-            transactionAttribute="RequiresNew"
+            transactionAttribute="Required"
             pollInterval="5"
             maxRetries="0"
             >
@@ -15,7 +15,6 @@
                 name="Handler_SendNoReplyUserEmailCommand"
 				slotId="${instance.name}/SendNoReplyUserEmailCommand"
                 peekUntransacted="true"
-                statusValueInProcess="I"
                 sessionKeys="TemplateName,CaseReferenceNumber"
 				/>
         </Receiver>

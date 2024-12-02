@@ -28,7 +28,6 @@
                 name="WorkflowSelector"
 				slotId="${instance.name}/WorkflowSelector"
                 peekUntransacted="true"
-                statusValueInProcess="I"
 				/>
         </Receiver>
 

@@ -9,7 +9,7 @@
         </Receiver>
         <!-- <Receiver
             name="Handler_AddDocumentToCaseCommand"
-            transactionAttribute="RequiresNew"
+            transactionAttribute="Required"
             pollInterval="5"
             maxRetries="0"
             >
@@ -17,7 +17,6 @@
                 name="Handler_AddDocumentToCaseCommand"
 				slotId="${instance.name}/AddDocumentToCaseCommand"
                 peekUntransacted="true"
-                statusValueInProcess="I"
 				/>
         </Receiver> -->
 

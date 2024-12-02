@@ -13,7 +13,7 @@
         </Receiver>
         <!-- <Receiver
             name="Workflow_TwoWayCommunicationHandler"
-            transactionAttribute="RequiresNew"
+            transactionAttribute="Required"
             pollInterval="5"
             maxRetries="0"
             >
@@ -21,7 +21,6 @@
                 name="Workflow_TwoWayCommunicationHandler"
 				slotId="${instance.name}/Workflow_TwoWayCommunication"
                 peekUntransacted="true"
-                statusValueInProcess="I"
 				/>
         </Receiver> -->
 
