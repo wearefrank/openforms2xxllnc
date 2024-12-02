@@ -1,5 +1,11 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.2.8](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.7...v1.2.8) (2024-12-02)
+
+### 🧑‍💻 Code Refactoring
+
+* transactionattribute 'RequireNew' to 'Required' and remove statusValueInProcess="I" on MessageStoreListeners ([0434e85](https://github.com/wearefrank/openforms2xxllnc/commit/0434e8503e3c09fea5f8f31d04890cde45177b4d))
+
 ## [1.2.7](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.6...v1.2.7) (2024-12-02)
 
 ### 🧑‍💻 Code Refactoring
