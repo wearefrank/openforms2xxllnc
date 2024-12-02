@@ -1,5 +1,16 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.2.7](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.6...v1.2.7) (2024-12-02)
+
+### 🧑‍💻 Code Refactoring
+
+* use * instead of static namespaces in xpath expression and use objectUuid for cid ([#26](https://github.com/wearefrank/openforms2xxllnc/issues/26)) ([77cbbe6](https://github.com/wearefrank/openforms2xxllnc/commit/77cbbe6b0e9ba2d55e231a4d4940bcfa910d4762))
+
+### 🤖 Build System
+
+* **dependencies:** bump the docusaurus group across 1 directory with 7 updates ([#33](https://github.com/wearefrank/openforms2xxllnc/issues/33)) ([904ea18](https://github.com/wearefrank/openforms2xxllnc/commit/904ea18b8dfda900c7aed98f92391b8a19cad57b))
+* **dependencies:** bump the github-actions group across 1 directory with 4 updates ([#32](https://github.com/wearefrank/openforms2xxllnc/issues/32)) ([e227be7](https://github.com/wearefrank/openforms2xxllnc/commit/e227be79b13acb4687f51337c0156d250c561bf3))
+
 ## [1.2.6](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.5...v1.2.6) (2024-10-31)
 
 ### ⏩ Reverts
