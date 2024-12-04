@@ -3,10 +3,17 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const organizationName: String = 'WeAreFrank';
+<<<<<<< HEAD
 const projectName: String = 'openforms2xxllnc';
 
 const config: Config = {
   title: 'Openforms2xxllnc',
+=======
+const projectName: String = '{{ cookiecutter.instance_name_lc }}';
+
+const config: Config = {
+  title: '{{ cookiecutter.instance_name }}',
+>>>>>>> upstream/main
   tagline: '',
   favicon: 'img/waf-logo-favicon-16x16.png',
 
@@ -32,6 +39,14 @@ const config: Config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+<<<<<<< HEAD
+=======
+  
+  markdown: {
+    mermaid: true,
+  },
+  themes: ['@docusaurus/theme-mermaid'],
+>>>>>>> upstream/main
 
   presets: [
     [
@@ -55,7 +70,11 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/waf-logo-192x192.png',
     navbar: {
+<<<<<<< HEAD
       title: 'Openforms2xxllnc',
+=======
+      title: '{{ cookiecutter.instance_name }}',
+>>>>>>> upstream/main
       logo: {
         alt: 'WeAreFrank',
         src: 'img/waf-logo-192x192.png',

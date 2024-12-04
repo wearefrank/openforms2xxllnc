@@ -6,6 +6,7 @@
     >
 
     <import resource="springIbisTestTool.xml"/>
+<<<<<<< HEAD
 
     <bean name="metadataExtractor" class="nl.nn.testtool.MetadataExtractor">
         <property name="extraMetadataFieldExtractors">
@@ -35,4 +36,6 @@
             </list>
         </constructor-arg>
     </bean>
+=======
+>>>>>>> upstream/main
 </beans>

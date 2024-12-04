@@ -1,7 +1,12 @@
 publiccodeYmlVersion: "0.2"
 # Instructies: https://github.com/OpenCatalogi/OpenCatalogiBundle/blob/main/docs/Publiccode.md
+<<<<<<< HEAD
 name: Openforms2xxllnc
 url: "https://github.com/wearefrank/Openforms2xxllnc.git"
+=======
+name: {{ cookiecutter.instance_name }}
+url: "https://github.com/wearefrank/{{ cookiecutter.instance_name }}.git"
+>>>>>>> upstream/main
 softwareVersion: "6.7.5"    # Optional
 releaseDate: 2023-08-14
 applicationSuite: frankframework
@@ -20,10 +25,17 @@ softwareType: "standalone/other"
 description:
   en:
     shortDescription: >
+<<<<<<< HEAD
       The Openforms2xxllnc component is an integration component.
           
     longDescription: >
       The Openforms2xxllnc component is an integration component.
+=======
+      The {{ cookiecutter.instance_name }} component is an integration component.
+          
+    longDescription: >
+      The {{ cookiecutter.instance_name }} component is an integration component.
+>>>>>>> upstream/main
 
     features:
        - Statelessness

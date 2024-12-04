@@ -2,11 +2,49 @@
 
 This project builds the following artifacts:
 * A docker image that can be used to run this application stand-alone.
+<<<<<<< HEAD
 * A .jar file with only the Frank configuration of this project. The .jar file can be uploaded in het-integratie-platform, see https://github.com/wearefrank/het-integratie-platform. 
 
 # CI/CD
 
 We use conventional commits, see https://www.conventionalcommits.org/en/v1.0.0/. Releases are created automatically by GitHub Actions, see [.github/workflows/ci.yaml](.github/workflows/ci.yaml) and [.github/workflows/release.yaml](.github/workflows/release.yaml).
+=======
+
+# Development
+## Local Development Docusaurus
+1. Navigate to "docusaurus" subfolder.
+    ```
+    cd ./docusaurus
+    ```
+
+2. Install dependencies.
+    ```
+    npm install
+    ```
+
+3. Serve Docusaurus webserver locally.
+    ```
+    ./node_modules/.bin/docusaurus.cmd start
+    ```
+    By default it is served at `http://localhost:3000/`.
+
+4. Basic guide on how to use Docusaurus and a styleguide can be found at `./docusaurus/docs/_README.md`.
+
+# Dependencies
+## Update Docusaurus dependencies
+1. Navigate to the 'docusaurus' subfolder:
+    ```
+    cd ./docusaurus
+    ```
+2. Update dependencies:
+    ```
+    npm i @docusaurus/core@latest @docusaurus/preset-classic@latest @docusaurus/theme-mermaid@latest @docusaurus/module-type-aliases@latest @docusaurus/tsconfig@latest @docusaurus/types@latest
+    ```
+
+# CI/CD
+
+We use conventional commits, see https://www.conventionalcommits.org/en/v1.0.0/. Releases are created automatically by GitHub Actions, see [.github/workflows/ci.yml](.github/workflows/ci.yml) and [.github/workflows/release.yml](.github/workflows/release.yml).
+>>>>>>> upstream/main
 
 Please take care to write meaningful commit messages that result in meaningful entries in [CHANGELOG.md](CHANGELOG.md). Here is an example of the commit message for a breaking change:
 
@@ -33,11 +71,16 @@ Here is a checklist for testing the CI/CD.
 * Do a commit on main that has a commit message starting with `fix:`. The following should happen:
   * The pipeline succeeds - this checks all authorizations are in place.
   * A commit with a message starting with `chore:` has been added automatically.
+<<<<<<< HEAD
   * The extra commit updates files `src/main/resources/BuildInfo.properties`, `configurations/xxllnc/BuildInfo.properties`, `publiccode.yaml` and `CHANGELOG.md`.
+=======
+  * The extra commit updates files `src/main/resources/BuildInfo.properties`, `configurations/{{ cookiecutter.configuration_name }}/BuildInfo.properties`, `publiccode.yaml` and `CHANGELOG.md`.
+>>>>>>> upstream/main
   * These files should have trustworthy contents - speaks for itself.
   * On GitHub, there is a tag for the new version that starts with `v`. For example if the new release is `3.2.1` then the tag should be `v3.2.1`. You can get this tag using `git fetch origin` on the command line.
   * The docker image for the release has been created on http://www.dockerhub.com. The `latest` tag should have been updated - creation time should be the current time. Depending on the type of release, the `3.2.1`, the `3.2` or the `3` tags should be the current date.
   * Check on dockerhub that tags that should not have been updated do not have the current time as creation time.
+<<<<<<< HEAD
   * Run the docker image using `docker run -p 8080:8080 wearefrank/xxllnc:3.2.1`. Check the name of the docker container you started using `docker ps -a`. Login to the docker container using `docker exec -it <container name> bash`. Check that `/opt/frank/resources/BuildInfo.properties` and `/opt/frank/configurations/xxllnc/BuildInfo.properties` contain the right version and the right date.
 * Check a breaking change like above. This should update the major version.
 * Do a commit with \[skip ci\] in the commit message. It should not make a release and it should not push a docker image.
@@ -171,3 +214,9 @@ TODO: Automate configuration
 ```
 12. Repeat step 8 - 11 for each application you want to monitor.
 
+=======
+  * Run the docker image using `docker run -p 8080:8080 wearefrank/{{ cookiecutter.configuration_name }}:3.2.1`. Check the name of the docker container you started using `docker ps -a`. Login to the docker container using `docker exec -it <container name> bash`. Check that `/opt/frank/resources/BuildInfo.properties` and `/opt/frank/configurations/{{ cookiecutter.configuration_name }}/BuildInfo.properties` contain the right version and the right date.
+* Check a breaking change like above. This should update the major version.
+* Do a commit with \[skip ci\] in the commit message. It should not make a release and it should not push a docker image.
+* Make a pull request. Check that no release is made and that no docker image is pushed.
+>>>>>>> upstream/main
