@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="c7451bda-6915-4166-8379-a3921e2cca1f" activeEnvironment="Default" name="openforms2xxllnc" resourceRoot="${projectDir}" soapui-version="5.7.2" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config">
+<con:soapui-project id="c7451bda-6915-4166-8379-a3921e2cca1f" activeEnvironment="Default" name="openforms2xxllnc" resourceRoot="${projectDir}" soapui-version="5.8.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config">
   <con:settings/>
   <con:interface xsi:type="con:RestService" id="c3c11aff-2fde-4150-8256-6a0648a631fd" wadlVersion="http://wadl.dev.java.net/2009/02" name="Documenten API" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:description>Een API om een documentregistratiecomponent (DRC) te benaderen.
@@ -7222,12 +7222,14 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
          <ZKN:heeftAlsInitiator StUF:entiteittype="ZAKBTRINI">
 	  		<ZKN:gerelateerde>
 		       	<ZKN:nietNatuurlijkPersoon StUF:entiteittype="NNP">
-					<BG:inn.nnpId>${#Project#initiatingSubjectKvkNumber}</BG:inn.nnpId>
 					<BG:authentiek StUF:metagegeven="true">N</BG:authentiek>
 					<BG:statutaireNaam>Gemeente Súdwest-Fryslân</BG:statutaireNaam>
 					<BG:inn.rechtsvorm>overig_privaatrechtelijke_rechtspersoon</BG:inn.rechtsvorm>
 				</ZKN:nietNatuurlijkPersoon>
 		   	</ZKN:gerelateerde>
+		   	<StUF:extraElementen>
+				<StUF:extraElement naam="kvkNummer">${#Project#initiatingSubjectKvkNumber}</StUF:extraElement>
+			</StUF:extraElementen>
          </ZKN:heeftAlsInitiator>
       </ZKN:object>
    </ZKN:antwoord>
@@ -7357,12 +7359,14 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
          <ZKN:heeftAlsInitiator StUF:entiteittype="ZAKBTRINI">
 	  		<ZKN:gerelateerde>
 		       	<ZKN:nietNatuurlijkPersoon StUF:entiteittype="NNP">
-					<BG:inn.nnpId>${#Project#initiatingSubjectKvkNumber}</BG:inn.nnpId>
 					<BG:authentiek StUF:metagegeven="true">N</BG:authentiek>
 					<BG:statutaireNaam>Gemeente Súdwest-Fryslân</BG:statutaireNaam>
 					<BG:inn.rechtsvorm>overig_privaatrechtelijke_rechtspersoon</BG:inn.rechtsvorm>
 				</ZKN:nietNatuurlijkPersoon>
 		   	</ZKN:gerelateerde>
+		   	<StUF:extraElementen>
+				<StUF:extraElement naam="kvkNummer">${#Project#initiatingSubjectKvkNumber}</StUF:extraElement>
+			</StUF:extraElementen>
          </ZKN:heeftAlsInitiator>
       </ZKN:object>
    </ZKN:antwoord>
