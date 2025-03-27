@@ -3773,7 +3773,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:9000/objects/api/v2</con:endpoint>
             <con:request>{
    "type" : "dummy",
    "record" : {
@@ -4048,7 +4048,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:9000/objects/api/v2</con:endpoint>
             <con:request>{\r
    "type" : "dummy",\r
    "record" : {\r
@@ -4243,7 +4243,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:9000/objects/api/v2</con:endpoint>
             <con:request>{
    "type" : "dummy",
    "record" : {
@@ -4347,7 +4347,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:9000/objects/api/v2</con:endpoint>
             <con:request>{
    "type" : "dummy",
    "record" : {
@@ -4563,7 +4563,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:9000/objects/api/v2</con:endpoint>
             <con:request>{
    "type" : "dummy",
    "record" : {
@@ -4785,7 +4785,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:9000/objects/api/v2</con:endpoint>
             <con:request>{
    "type" : "dummy",
    "record" : {
@@ -5074,7 +5074,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:9000/objects/api/v2</con:endpoint>
             <con:request>{
    "type" : "dummy",
    "record" : {
@@ -5352,7 +5352,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", '123456789')
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:9000/objects/api/v2</con:endpoint>
             <con:request>{
    "type" : "dummy",
    "record" : {
@@ -5640,7 +5640,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", '123456789')
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:9000/objects/api/v2</con:endpoint>
             <con:request>{
    "type" : "dummy",
    "record" : {
@@ -5920,7 +5920,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", '123456789')
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:9000/objects/api/v2</con:endpoint>
             <con:request>{
    "type" : "dummy",
    "record" : {
@@ -6203,7 +6203,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", '123456789')
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:9000/objects/api/v2</con:endpoint>
             <con:request>{
    "type" : "dummy",
    "record" : {
@@ -6489,7 +6489,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:9000/objects/api/v2</con:endpoint>
             <con:request>{
    "type" : "dummy",
    "record" : {
@@ -6778,7 +6778,7 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
             <con:encoding>UTF-8</con:encoding>
-            <con:endpoint>http://localhost:6000/objects/api/v2</con:endpoint>
+            <con:endpoint>http://localhost:9000/objects/api/v2</con:endpoint>
             <con:request>{
    "type" : "dummy",
    "record" : {
