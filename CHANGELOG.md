@@ -1,5 +1,17 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.2.9](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.8...v1.2.9) (2025-04-01)
+
+### 🐛 Bug Fixes
+
+* get kvkNummer from ExtraElement instead of inn.nnpId ([#60](https://github.com/wearefrank/openforms2xxllnc/issues/60)) ([8a6c525](https://github.com/wearefrank/openforms2xxllnc/commit/8a6c525f29c2f954f5591d3301320c92a7de8dd9))
+
+### 🤖 Build System
+
+* **dependencies:** bump f!f version to 9.1.0-20250328.042332 ([459a327](https://github.com/wearefrank/openforms2xxllnc/commit/459a3275e590fa5117bf2270eae79cc57a6d699f))
+* **dependencies:** bump the docusaurus group across 1 directory with 9 updates ([#47](https://github.com/wearefrank/openforms2xxllnc/issues/47)) ([ec27ce8](https://github.com/wearefrank/openforms2xxllnc/commit/ec27ce8df2f0b4dc1bc9594114b247e5f44cda2b))
+* **dependencies:** bump the github-actions group across 1 directory with 3 updates ([#54](https://github.com/wearefrank/openforms2xxllnc/issues/54)) ([5a5a673](https://github.com/wearefrank/openforms2xxllnc/commit/5a5a673186441dc81deef9d920924291affdcda7))
+
 ## [1.2.8](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.7...v1.2.8) (2024-12-02)
 
 ### 🧑‍💻 Code Refactoring
