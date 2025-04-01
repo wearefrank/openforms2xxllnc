@@ -197,7 +197,7 @@
                 name="StoreOrganizationIdentifiers"
                 >
                 <Param name="UwGegevensSubject" sessionKey="UwGegevens" xpathExpression="//*[starts-with(name(), 'uw-gegevens')]//*[starts-with(name(), 'gegevensBedrijfOrganisatie')]/*[starts-with(name(), 'kvKNummer')]" />
-                <Param name="CaseInitiatingSubject" sessionKey="UnwrappedZakLa01Response" xpathExpression="/zakLa01/antwoord/object/heeftAlsInitiator/gerelateerde/nietNatuurlijkPersoon/inn.nnpId" />
+                <Param name="CaseInitiatingSubject" sessionKey="UnwrappedZakLa01Response" xpathExpression="/zakLa01/antwoord/object/heeftAlsInitiator/extraElementen/extraElement[@naam='kvkNummer']" />
                 <Forward name="success" path="CheckForUwGegevensSubjectMatchingCaseInitiatingSubject" />
             </PutInSessionPipe>
 
