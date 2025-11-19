@@ -38,13 +38,13 @@
             </PutInSessionPipe>
 
             <!-- UwGegevensMissing - Start -->
-            <XmlIfPipe
+            <IfPipe
                 name="UwGegevensMissing_Condition"
                 xpathExpression="string-length(//*[starts-with(name(), 'uw-gegevens')]) = 0"
                 >
                 <Forward name="then" path="UwGegevensMissing_Exception" />
                 <Forward name="else" path="FilterUwGegevensSection" />
-            </XmlIfPipe>
+            </IfPipe>
             
             <ExceptionPipe name="UwGegevensMissing_Exception" />
             <!-- UwGegevensMissing - End-->
@@ -58,13 +58,13 @@
             </XsltPipe>
 
             <!-- UwGegevensSubjectUnauthenticated - Start -->
-            <XmlIfPipe
+            <IfPipe
                 name="UwGegevensSubjectUnauthenticated_Condition"
                 xpathExpression="not(//*[starts-with(name(), 'uw-gegevens')]/*/*[ends-with(name(), 'MD')] or //*[starts-with(name(), 'uw-gegevens')]/*/*[ends-with(name(), 'MEH')])"
                 >
                 <Forward name="then" path="UwGegevensSubjectUnauthenticated_Exception" />
                 <Forward name="else" path="CallWrapZakLv01Request" />
-            </XmlIfPipe>
+            </IfPipe>
 
             <ExceptionPipe name="UwGegevensSubjectUnauthenticated_Exception" />
             <!-- UwGegevensSubjectUnauthenticated - End -->
@@ -116,15 +116,15 @@
             </SoapWrapperPipe>
 
             <!-- CaseNotFound - Start -->
-            <XmlIfPipe
+            <IfPipe
                 name="CaseNotFound_Condition"
                 xpathExpression="count(/zakLa01/antwoord/object/*) gt 0"
                 >
                 <Forward name="then" path="CheckForUwGegevensIsPerson" />
                 <Forward name="else" path="CaseNotFound_MailCondition" />
-            </XmlIfPipe>
+            </IfPipe>
 
-            <XmlIfPipe
+            <IfPipe
                 name="CaseNotFound_MailCondition"
                 xpathExpression="boolean($NoReplySmtpEnabled) and boolean($SendMail)"
                 >
@@ -132,7 +132,7 @@
                 <Param name="SendMail" value="${openforms2xxllnc.workflows.on-error-actions.on-case-not-found.send-mail}" />
                 <Forward name="then" path="CaseNotFound_StoreMailTemplateName" />
                 <Forward name="else" path="CaseNotFound_Exception" />
-            </XmlIfPipe>
+            </IfPipe>
 
             <PutInSessionPipe
                 name="CaseNotFound_StoreMailTemplateName"
@@ -165,14 +165,14 @@
             <!-- CaseNotFound - End -->
 
             <!-- SubjectNotEqualsCaseSubject - Start -->
-            <XmlIfPipe
+            <IfPipe
                 name="CheckForUwGegevensIsPerson"
                 getInputFromSessionKey="UwGegevens"
                 xpathExpression="//*[starts-with(name(), 'uw-gegevens')]/*[ends-with(name(), 'DigiD')]"
                 >
                 <Forward name="then" path="StorePersonIdentifiers" />
                 <Forward name="else" path="CheckForUwGegevensIsOrganization" />
-            </XmlIfPipe>
+            </IfPipe>
 
             <PutInSessionPipe
                 name="StorePersonIdentifiers"
@@ -182,14 +182,14 @@
                 <Forward name="success" path="CheckForUwGegevensSubjectMatchingCaseInitiatingSubject" />
             </PutInSessionPipe>
 
-            <XmlIfPipe
+            <IfPipe
                 name="CheckForUwGegevensIsOrganization"
                 getInputFromSessionKey="UwGegevens"
                 xpathExpression="//*[starts-with(name(), 'uw-gegevens')]/*[starts-with(name(), 'fieldSetBedrijf')]"
                 >
                 <Forward name="then" path="StoreOrganizationIdentifiers" />
                 <Forward name="else" path="UwGegevensSubjectFallthrough_Exception" />
-            </XmlIfPipe>
+            </IfPipe>
 
             <ExceptionPipe name="UwGegevensSubjectFallthrough_Exception" />
 
@@ -201,7 +201,7 @@
                 <Forward name="success" path="CheckForUwGegevensSubjectMatchingCaseInitiatingSubject" />
             </PutInSessionPipe>
 
-            <XmlIfPipe
+            <IfPipe
                 name="CheckForUwGegevensSubjectMatchingCaseInitiatingSubject"
                 xpathExpression="$UwGegevensSubject = $CaseInitiatingSubject and string-length($UwGegevensSubject) gt 0 and string-length($CaseInitiatingSubject) gt 0"
                 >
@@ -209,9 +209,9 @@
                 <Param name="CaseInitiatingSubject" sessionKey="CaseInitiatingSubject" />
                 <Forward name="then" path="CaseClosed_Condition" />
                 <Forward name="else" path="SubjectNotEqualsCaseSubject_MailCondition" />
-            </XmlIfPipe>
+            </IfPipe>
 
-            <XmlIfPipe
+            <IfPipe
                 name="SubjectNotEqualsCaseSubject_MailCondition"
                 xpathExpression="boolean($NoReplySmtpEnabled) and boolean($SendMail)"
                 >
@@ -219,7 +219,7 @@
                 <Param name="SendMail" value="${openforms2xxllnc.workflows.on-error-actions.on-subject-not-equals-case-subject.send-mail}" />
                 <Forward name="then" path="SubjectNotEqualsCaseSubject_StoreMailTemplateName" />
                 <Forward name="else" path="SubjectNotEqualsCaseSubject_Exception" />
-            </XmlIfPipe>
+            </IfPipe>
 
             <PutInSessionPipe
                 name="SubjectNotEqualsCaseSubject_StoreMailTemplateName"
@@ -252,16 +252,16 @@
             <!-- SubjectNotEqualsCaseSubject - End -->
 
             <!-- CaseClosed - Start -->
-            <XmlIfPipe
+            <IfPipe
                 name="CaseClosed_Condition"
                 getInputFromSessionKey="UnwrappedZakLa01Response"
                 xpathExpression="/zakLa01/antwoord/object/einddatum != ''"
                 >
                 <Forward name="then" path="CaseClosed_MailCondition" />
                 <Forward name="else" path="CreateAddDocumentsToCaseCommand" />
-            </XmlIfPipe>
+            </IfPipe>
 
-            <XmlIfPipe
+            <IfPipe
                 name="CaseClosed_MailCondition"
                 xpathExpression="boolean($NoReplySmtpEnabled) and boolean($SendMail)"
                 >
@@ -269,7 +269,7 @@
                 <Param name="SendMail" value="${openforms2xxllnc.workflows.on-error-actions.on-case-closed.send-mail}" />
                 <Forward name="then" path="CaseClosed_StoreMailTemplateName" />
                 <Forward name="else" path="CaseClosed_Exception" />
-            </XmlIfPipe>
+            </IfPipe>
 
             <PutInSessionPipe
                 name="CaseClosed_StoreMailTemplateName"
@@ -313,13 +313,13 @@
                 <Forward name="success" path="CheckForDocumentsToAddToCase" />
             </XsltPipe>
 
-            <XmlIfPipe
+            <IfPipe
                 name="CheckForDocumentsToAddToCase"
                 xpathExpression="count(/*/url) gt 0"
                 >
                 <Forward name="then" path="AddDocumentsToCaseCommandSender" />
                 <Forward name="else" path="EXIT" />
-            </XmlIfPipe>
+            </IfPipe>
             
             <SenderPipe
             name="AddDocumentsToCaseCommandSender"
