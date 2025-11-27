@@ -1,5 +1,16 @@
 [![conventional commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![semantic versioning](https://img.shields.io/badge/semantic%20versioning-2.0.0-green.svg)](https://semver.org)
 
+## [1.2.10](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.9...v1.2.10) (2025-11-27)
+
+### 🤖 Build System
+
+* **dependencies:** bump f!f version to 9.1.1-20251108.110041 ([f8189e0](https://github.com/wearefrank/openforms2xxllnc/commit/f8189e0c7c4ce0efd873a053cc24ccbbb4a050f1))
+* **dependencies:** update node-version in workflow to v24 ([fec3ec2](https://github.com/wearefrank/openforms2xxllnc/commit/fec3ec26e5e15656d5d6d9a3d11720e10e313976))
+
+### 🔁 Continuous Integration
+
+* workflow for cleaning up run artifact after workflow completion ([7f762cd](https://github.com/wearefrank/openforms2xxllnc/commit/7f762cd21f6bc2caafdef92606b2b4d3bc0f5291))
+
 ## [1.2.9](https://github.com/wearefrank/openforms2xxllnc/compare/v1.2.8...v1.2.9) (2025-04-01)
 
 ### 🐛 Bug Fixes
