@@ -73,14 +73,14 @@
                 <Forward name="success" path="CheckForWorkflow_TwoWayCommunication" />
             </XsltPipe>
 
-            <XmlIfPipe
+            <IfPipe
                 name="CheckForWorkflow_TwoWayCommunication"
                 getInputFromSessionKey="UnwrappedMessage"
                 xpathExpression="string-length(//gegevenstweewegcommunicatie) gt 0"
                 >
                 <Forward name="then" path="Workflow_TwoWayCommunicationSender" />
                 <Forward name="else" path="NotImplemented_Exception" />
-            </XmlIfPipe>
+            </IfPipe>
 
             <SenderPipe
                 name="Workflow_TwoWayCommunicationSender"
