@@ -38,6 +38,30 @@ Ensure that Docker is installed on your computer and proceed as follows:
 
 # Local Development
 
+## Source Cleanup
+
+After every document has received a StUF `Bv03` acknowledgement, the integration queues a separate `CleanupSubmissionCommand`. It deletes the source Objects API object first, if present, then each distinct attachment/result-PDF resource in the Documenten API. Direct Objects API submissions have no external source object and only their documents are deleted. Valid submissions without documents still queue cleanup. Rejected submissions and failed uploads do not queue cleanup. Notifications other than `create` are ignored, including notifications caused by cleanup.
+
+The configured Objects API and Documenten API credentials need DELETE permissions. Cleanup accepts HTTP 200/204 and treats 404/410 as already deleted. Other statuses, including authentication failures, leave the cleanup command in `Handler_CleanupSubmissionCommand` error storage. Retry that command, not the original submission or upload command: external deletions cannot be rolled back, and retrying an upload can duplicate case documents.
+
+Automatic cleanup retries follow the existing `openforms2xxllnc.workflows.auto-retries` defaults (disabled by default). Override these properties to configure cleanup independently:
+
+```properties
+openforms2xxllnc.workflows.auto-retries.cleanup-submission.enabled=true
+openforms2xxllnc.workflows.auto-retries.cleanup-submission.cron-expression=0 0/30 * * * ?
+openforms2xxllnc.workflows.auto-retries.cleanup-submission.max-retries=5
+```
+
+### Manual Cleanup Tests
+
+Use the `notificaties HappyFlowPersoon` case in `e2e/SoapUI/openforms2xxllnc-e2e-soapui-project.xml`, with all five mock services running and the local SoapUI global property `notificationAuthorization` configured. Run cases sequentially because the mocks share project properties.
+
+- Happy flow: the test verifies the object fetch, two StUF uploads, and object/document DELETE calls. Inspect `Handler_CleanupSubmissionCommand` in Ladybug for the individual HTTP results.
+- Cleanup failure: set the test-case property `cleanupDocumentStatus` to `500` and run the case. Its final assertion should fail. Restore the **project** property `cleanupDocumentStatus` to `204`, manually retry only the cleanup error-store message, then rerun only the final verification step. The upload count must remain two. The equivalent `cleanupObjectStatus` property simulates an object DELETE failure.
+- Already deleted: set both test-case status properties to `404` and run the case. Cleanup should still succeed. Restore both to `204` afterwards.
+- Upload failure: temporarily make the StUF upload mock return an error acknowledgement instead of `Bv03`. No source DELETE calls should occur; restore the mock afterwards.
+- Duplicate URLs: temporarily use the same URL for the fixture's attachment and result PDF. Both existing upload calls can occur, but cleanup must DELETE that source document only once; inspect the mock log rather than using the two-distinct-documents assertion.
+
 ## Local Development Docusaurus
 1. Navigate to "docusaurus" subfolder with `cd ./docusaurus`.
 2. Install dependencies with `npm install`.

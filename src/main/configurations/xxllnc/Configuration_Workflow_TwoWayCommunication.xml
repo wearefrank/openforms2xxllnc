@@ -311,17 +311,9 @@
                 <Param name="SourceObjectUrl" sessionKey="SourceObjectUrl" />
                 <Param name="CommaSeperatedUrls" xpathExpression="string-join((//attachments/text(), //pdf_url/text()), ',')" />
                 <Param name="ZdsZaak" sessionKey="UnwrappedZakLa01Response" type="DOMDOC"/>
-                <Forward name="success" path="CheckForDocumentsToAddToCase" />
+                <Forward name="success" path="AddDocumentsToCaseCommandSender" />
             </XsltPipe>
 
-            <IfPipe
-                name="CheckForDocumentsToAddToCase"
-                xpathExpression="count(/*/url) gt 0"
-                >
-                <Forward name="then" path="AddDocumentsToCaseCommandSender" />
-                <Forward name="else" path="EXIT" />
-            </IfPipe>
-            
             <SenderPipe
             name="AddDocumentsToCaseCommandSender"
             transactionAttribute="Required"

@@ -1,0 +1,118 @@
+<Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../FrankConfig.xsd">
+    <Adapter name="Handler_CleanupSubmissionCommand">
+        <Receiver
+            name="Handler_CleanupSubmissionCommand"
+            transactionAttribute="Required"
+            pollInterval="5"
+            maxRetries="0"
+            >
+            <MessageStoreListener
+                name="Handler_CleanupSubmissionCommand"
+                slotId="${instance.name}/CleanupSubmissionCommand"
+                peekUntransacted="true"
+                />
+        </Receiver>
+
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+
+            <IfPipe
+                name="HasSourceObject"
+                xpathExpression="normalize-space(/*/SourceObjectUrl) != ''"
+                >
+                <Forward name="then" path="GetObjectsAuthorization" />
+                <Forward name="else" path="DeleteSourceDocuments" />
+            </IfPipe>
+
+            <SenderPipe name="GetObjectsAuthorization" getInputFromFixedValue="&lt;dummy/&gt;">
+                <IbisLocalSender javaListener="GenerateAuthorizationHeaderForObjectsApi" returnedSessionKeys="Authorization" />
+                <Forward name="success" path="DeleteSourceObject" />
+            </SenderPipe>
+
+            <SenderPipe name="DeleteSourceObject" getInputFromFixedValue="">
+                <HttpSender
+                    name="DeleteSourceObjectHttpSender"
+                    methodType="DELETE"
+                    headersParams="Authorization"
+                    resultStatusCodeSessionKey="DeleteStatusCode"
+                    timeout="${openforms2xxllnc.connections.objects-api.timeout}"
+                    >
+                    <Param name="url" sessionKey="originalMessage" xpathExpression="/*/SourceObjectUrl" />
+                    <Param name="Authorization" sessionKey="Authorization" hidden="true" />
+                </HttpSender>
+                <Forward name="success" path="CheckObjectDeletion" />
+            </SenderPipe>
+
+            <IfPipe
+                name="CheckObjectDeletion"
+                getInputFromFixedValue="&lt;dummy/&gt;"
+                xpathExpression="$Status = ('200', '204', '404', '410')"
+                >
+                <Param name="Status" sessionKey="DeleteStatusCode" />
+                <Forward name="then" path="DeleteSourceDocuments" />
+                <Forward name="else" path="CleanupFailed" />
+            </IfPipe>
+
+            <ForEachChildElementPipe
+                name="DeleteSourceDocuments"
+                getInputFromSessionKey="originalMessage"
+                elementXPathExpression="/*/url[normalize-space(.) != '' and not(. = preceding-sibling::url)]"
+                parallel="false"
+                >
+                <IbisLocalSender javaListener="DeleteSourceDocument">
+                    <Param name="SourceDocumentUrl" xpathExpression="/url" />
+                </IbisLocalSender>
+                <Forward name="success" path="EXIT" />
+            </ForEachChildElementPipe>
+
+            <ExceptionPipe name="CleanupFailed" />
+        </Pipeline>
+    </Adapter>
+
+    <Adapter name="DeleteSourceDocument">
+        <Receiver name="DeleteSourceDocument">
+            <JavaListener name="DeleteSourceDocument" />
+        </Receiver>
+
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+
+            <SenderPipe name="GetDocumentenAuthorization" getInputFromFixedValue="&lt;dummy/&gt;">
+                <IbisLocalSender javaListener="GenerateAuthorizationHeaderForDocumentenApi" returnedSessionKeys="Authorization" />
+                <Forward name="success" path="DeleteDocument" />
+            </SenderPipe>
+
+            <SenderPipe name="DeleteDocument" getInputFromFixedValue="">
+                <HttpSender
+                    name="DeleteDocumentHttpSender"
+                    methodType="DELETE"
+                    headersParams="Authorization"
+                    resultStatusCodeSessionKey="DeleteStatusCode"
+                    timeout="${openforms2xxllnc.connections.documenten-api.timeout}"
+                    >
+                    <Param name="url" sessionKey="SourceDocumentUrl" />
+                    <Param name="Authorization" sessionKey="Authorization" hidden="true" />
+                </HttpSender>
+                <Forward name="success" path="CheckDocumentDeletion" />
+            </SenderPipe>
+
+            <IfPipe
+                name="CheckDocumentDeletion"
+                getInputFromFixedValue="&lt;dummy/&gt;"
+                xpathExpression="$Status = ('200', '204', '404', '410')"
+                >
+                <Param name="Status" sessionKey="DeleteStatusCode" />
+                <Forward name="then" path="EXIT" />
+                <Forward name="else" path="CleanupFailed" />
+            </IfPipe>
+
+            <ExceptionPipe name="CleanupFailed" />
+        </Pipeline>
+    </Adapter>
+</Module>

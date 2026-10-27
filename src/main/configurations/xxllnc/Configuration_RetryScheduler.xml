@@ -124,7 +124,38 @@
         </Pipeline>
     </Adapter>
 
+    <Adapter
+        name="AutoRetry_CleanupSubmission"
+        active="${openforms2xxllnc.workflows.auto-retries.cleanup-submission.enabled}"
+        >
+        <Receiver name="AutoRetry_CleanupSubmission">
+            <JavaListener name="AutoRetry_CleanupSubmission" />
+        </Receiver>
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+            <SenderPipe name="RetryCleanupMessages">
+                <FixedQuerySender
+                    name="RetryCleanupMessagesFixedQuerySender"
+                    query="UPDATE IBISSTORE SET TYPE = 'M', LABEL = CASE WHEN LABEL IS NULL THEN '0' ELSE CAST(LABEL AS NUMERIC) + 1 END WHERE TYPE = 'E' AND SLOTID = ?{slotId} AND (CAST(LABEL AS NUMERIC) &lt; ?{maxRetries} OR LABEL IS NULL)"
+                    />
+                <Param name="slotId" value="${instance.name}/CleanupSubmissionCommand" />
+                <Param name="maxRetries" value="${openforms2xxllnc.workflows.auto-retries.cleanup-submission.max-retries}" type="INTEGER" />
+            </SenderPipe>
+        </Pipeline>
+    </Adapter>
+
     <Scheduler>
+		<SendMessageJob
+            name="AutoRetry_CleanupSubmission_Job"
+            active="${openforms2xxllnc.workflows.auto-retries.cleanup-submission.enabled}"
+            javaListener="AutoRetry_CleanupSubmission"
+            cronExpression="${openforms2xxllnc.workflows.auto-retries.cleanup-submission.cron-expression}"
+            >
+            <Locker objectId="AutoRetry_CleanupSubmission-Lock" retention="1" />
+        </SendMessageJob>
 		<SendMessageJob
             name="AutoRetry_WorkflowSelector_Job"
 			active="${openforms2xxllnc.workflows.auto-retries.workflow-selector.enabled}"
