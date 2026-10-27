@@ -308,6 +308,7 @@
                 storeResultInSessionKey="CreateAddDocumentsToCaseCommand"
                 >
                 <Param name="CaseReferenceNumber" sessionKey="CaseReferenceNumber" />
+                <Param name="SourceObjectUrl" sessionKey="SourceObjectUrl" />
                 <Param name="CommaSeperatedUrls" xpathExpression="string-join((//attachments/text(), //pdf_url/text()), ',')" />
                 <Param name="ZdsZaak" sessionKey="UnwrappedZakLa01Response" type="DOMDOC"/>
                 <Forward name="success" path="CheckForDocumentsToAddToCase" />
