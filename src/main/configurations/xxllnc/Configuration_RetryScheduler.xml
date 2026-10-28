@@ -139,9 +139,10 @@
             <SenderPipe name="RetryCleanupMessages">
                 <FixedQuerySender
                     name="RetryCleanupMessagesFixedQuerySender"
-                    query="UPDATE IBISSTORE SET TYPE = 'M', LABEL = COALESCE(CAST(LABEL AS NUMERIC), 0) + 1 WHERE TYPE = 'E' AND SLOTID = ?{slotId} AND COALESCE(CAST(LABEL AS NUMERIC), 0) &lt; ?{maxRetries}"
+                    query="UPDATE IBISSTORE SET TYPE = 'M', LABEL = COALESCE(CAST(LABEL AS NUMERIC), 0) + 1 WHERE TYPE = 'E' AND SLOTID IN (?{slotId}, ?{verifiedSlotId}) AND COALESCE(CAST(LABEL AS NUMERIC), 0) &lt; ?{maxRetries}"
                     />
                 <Param name="slotId" value="${instance.name}/CleanupSubmissionCommand" />
+                <Param name="verifiedSlotId" value="${instance.name}/VerifiedCleanupSubmissionCommand" />
                 <Param name="maxRetries" value="${openforms2xxllnc.workflows.auto-retries.cleanup-submission.max-retries}" type="INTEGER" />
             </SenderPipe>
         </Pipeline>

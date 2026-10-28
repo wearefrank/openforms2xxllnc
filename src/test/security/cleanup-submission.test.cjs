@@ -72,7 +72,7 @@ test('lookup failures cannot authorize deletion', () => {
     assert.equal(evaluate('CheckAssociationResponse', '<dummy/>', { Status: '200' }), true);
 });
 
-test('only absent documents can complete cleanup without an association', () => {
+test('verified cleanup can complete when a document was already deleted', () => {
     for (const status of ['404', '410']) {
         assert.equal(evaluate('CheckDocumentAbsent', '<dummy/>', { Status: status }), true);
     }
@@ -95,13 +95,106 @@ test('association lookup binds both exact URLs on the trusted API', () => {
     assert.equal(url.searchParams.get('informatieobject'), document);
 });
 
-test('cleanup validates targets first and retains the source object until documents finish', () => {
+const forwardPath = (name, outcome) => Array.from(pipe(name).getElementsByTagName('Forward'))
+    .find(forward => forward.getAttribute('name') === outcome).getAttribute('path');
+
+test('ownership verification is read-only and commits evidence to a separate queue', () => {
     const adapter = configuration.getElementsByTagName('Adapter')[0];
     const pipeline = adapter.getElementsByTagName('Pipeline')[0];
     const firstPipe = Array.from(pipeline.childNodes).find(node => node.nodeType === 1 && node.tagName !== 'Exits');
     assert.equal(firstPipe.getAttribute('name'), 'ValidateCleanupTargets');
-    assert.equal(pipe('DeleteSourceDocuments').getElementsByTagName('Forward')[0].getAttribute('path'), 'GetObjectsAuthorization');
-    const associationForwards = Array.from(pipe('CheckDocumentAssociation').getElementsByTagName('Forward'));
-    assert.equal(associationForwards.find(forward => forward.getAttribute('name') === 'then').getAttribute('path'), 'DeleteDocument');
-    assert.equal(associationForwards.find(forward => forward.getAttribute('name') === 'else').getAttribute('path'), 'CheckDocumentAlreadyDeleted');
+    assert.equal(forwardPath('ValidateCleanupTargets', 'then'), 'VerifySourceDocuments');
+    assert.equal(forwardPath('CheckDocumentAssociation', 'then'), 'EXIT');
+    assert.equal(forwardPath('CheckDocumentAssociation', 'else'), 'CleanupFailed');
+    assert.equal(forwardPath('VerifySourceDocuments', 'success'), 'QueueVerifiedCleanup');
+    assert.equal(pipe('VerifySourceDocuments').getAttribute('collectResults'), 'true');
+    assert.equal(pipe('VerifySourceDocuments').getAttribute('storeResultInSessionKey'), 'VerifiedOwnership');
+    assert.equal(pipe('QueueVerifiedCleanup').getAttribute('getInputFromSessionKey'), 'originalMessage');
+    const sender = pipe('VerifiedCleanupMessageStoreSender');
+    const receiver = configuration.getElementsByTagName('MessageStoreListener')[1];
+    assert.equal(sender.getAttribute('sessionKeys'), 'VerifiedOwnership');
+    assert.equal(sender.getAttribute('transacted'), 'true');
+    assert.equal(sender.getAttribute('slotId'), receiver.getAttribute('slotId'));
+    assert.equal(sender.getAttribute('sessionKeys'), receiver.getAttribute('sessionKeys'));
+    const verifier = Array.from(configuration.getElementsByTagName('Adapter'))
+        .find(element => element.getAttribute('name') === 'VerifySourceDocument');
+    for (const sender of Array.from(verifier.getElementsByTagName('HttpSender'))) {
+        assert.equal(sender.getAttribute('methodType'), 'GET');
+    }
+    assert.equal(adapter.getElementsByTagName('HttpSender').length, 0);
+});
+
+test('persisted evidence must prove ownership of every target before source removal', () => {
+    const verifiedVariables = { ...roots, SourceObjectUrl: source, Evidence: parse(relation()) };
+    assert.equal(evaluate('ValidateVerifiedOwnership', message(), verifiedVariables), true);
+    assert.equal(evaluate('ValidateVerifiedOwnership', message(), { ...verifiedVariables, Evidence: parse('<root/>') }), false);
+    assert.equal(evaluate('ValidateVerifiedOwnership', message(), { ...verifiedVariables, Evidence: parse(relation(document, source + '0')) }), false);
+    assert.equal(evaluate('ValidateVerifiedOwnership', message(source, document + '0'), verifiedVariables), false);
+    assert.equal(evaluate('ValidateVerifiedOwnership', message(), { ...verifiedVariables, DocumentsRoot: 'https://other.example/' }), false);
+    assert.equal(pipe('ValidateVerifiedOwnership').getElementsByTagName('Param')[3].getAttribute('sessionKey'), 'VerifiedOwnership');
+});
+
+test('owning backend removes the source before checking document blockers', () => {
+    assert.equal(forwardPath('ValidateVerifiedOwnership', 'then'), 'GetObjectsAuthorization');
+    assert.equal(forwardPath('GetObjectsAuthorization', 'success'), 'DeleteSourceObject');
+    assert.equal(forwardPath('CheckObjectDeletion', 'then'), 'DeleteSourceDocuments');
+    assert.equal(forwardPath('CheckObjectDeletion', 'else'), 'CleanupFailed');
+    assert.equal(forwardPath('DeleteSourceDocuments', 'success'), 'EXIT');
+    assert.equal(forwardPath('CheckDocumentAbsent', 'else'), 'CheckDocumentReadable');
+    assert.equal(forwardPath('CheckDocumentReadable', 'then'), 'GetBlockingRelations');
+    assert.equal(forwardPath('CheckNoBlockingRelations', 'then'), 'DeleteDocument');
+    assert.equal(forwardPath('CheckNoBlockingRelations', 'else'), 'CleanupFailed');
+    for (const status of ['204', '404', '410']) {
+        assert.equal(evaluate('CheckObjectDeletion', '<dummy/>', { Status: status }), true);
+    }
+    for (const sender of Array.from(configuration.getElementsByTagName('HttpSender'))) {
+        if (sender.getAttribute('name').includes('Relations') || sender.getAttribute('name').includes('Association')) {
+            assert.equal(sender.getAttribute('methodType'), 'GET');
+        }
+    }
+});
+
+test('blocking lookup includes relations from all objects, not just the source', () => {
+    const urlParameter = pipe('GetBlockingRelationsHttpSender').getElementsByTagName('Param')[0];
+    const url = new URL(evaluateXPathToString(urlParameter.getAttribute('xpathExpression'),
+        parse('<dummy/>'), null, { ...roots, ...variables }));
+    assert.equal(url.origin, 'https://documents.example');
+    assert.equal(url.searchParams.get('informatieobject'), document);
+    assert.equal(url.searchParams.has('object'), false);
+});
+
+test('only an explicitly empty complete relation list permits deletion', () => {
+    const empty = '<root><count>0</count><next/><results/></root>';
+    assert.equal(evaluate('CheckNoBlockingRelations', empty, { Response: '{"count":0,"results":[]}' }), true);
+    assert.equal(evaluate('CheckNoBlockingRelations', '<root/>', { Response: '[ \n ]' }), true);
+    assert.equal(evaluate('CheckNoBlockingRelations', '<root/>', { Response: '{}' }), false);
+    assert.equal(evaluate('CheckNoBlockingRelations', '<root/>', { Response: '[]garbage' }), false);
+    assert.equal(evaluate('CheckNoBlockingRelations', '<root><count>1</count><results/></root>', { Response: '{}' }), false);
+    assert.equal(evaluate('CheckNoBlockingRelations', relation(document, 'other'), { Response: '{}' }), false);
+    assert.equal(evaluate('CheckNoBlockingRelations', '<root><count>0</count><next>https://documents.example/page2</next></root>', { Response: '{}' }), false);
+    assert.equal(evaluate('CheckNoBlockingRelations', '<root><count>0</count><results><informatieobject>other</informatieobject></results></root>', { Response: '{}' }), false);
+});
+
+test('blocking lookup failures fail closed', () => {
+    assert.equal(pipe('CheckBlockingRelationsResponse').getAttribute('getInputFromFixedValue'), '<dummy/>');
+    assert.equal(pipe('GetBlockingRelations').getAttribute('storeResultInSessionKey'), 'BlockingRelationsResponse');
+    assert.equal(pipe('BlockingRelationsJsonToXml').getAttribute('getInputFromSessionKey'), 'BlockingRelationsResponse');
+    for (const status of ['301', '403', '404', '500']) {
+        assert.equal(evaluate('CheckBlockingRelationsResponse', '<dummy/>', { Status: status }), false);
+    }
+});
+
+test('both cleanup stages are covered by the existing retry scheduler', () => {
+    const scheduler = parse(fs.readFileSync(path.join(__dirname,
+        '../../main/configurations/xxllnc/Configuration_RetryScheduler.xml'), 'utf8'));
+    const sender = Array.from(scheduler.getElementsByTagName('FixedQuerySender'))
+        .find(element => element.getAttribute('name') === 'RetryCleanupMessagesFixedQuerySender');
+    const parameters = Array.from(sender.parentNode.getElementsByTagName('Param'));
+    const slots = parameters.filter(parameter => parameter.getAttribute('name') !== 'maxRetries')
+        .map(parameter => parameter.getAttribute('value'));
+    for (const listener of Array.from(configuration.getElementsByTagName('MessageStoreListener'))) {
+        assert.ok(slots.includes(listener.getAttribute('slotId')));
+    }
+    assert.ok(sender.getAttribute('query').includes('SLOTID IN (?{slotId}, ?{verifiedSlotId})'));
+    assert.ok(sender.getAttribute('query').includes('COALESCE(CAST(LABEL AS NUMERIC), 0) < ?{maxRetries}'));
 });
