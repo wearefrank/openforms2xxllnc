@@ -27,6 +27,7 @@
             <MessageStoreListener
                 name="WorkflowSelector"
 				slotId="${instance.name}/WorkflowSelector"
+                sessionKeys="SourceObjectUrl"
                 peekUntransacted="true"
 				/>
         </Receiver>
