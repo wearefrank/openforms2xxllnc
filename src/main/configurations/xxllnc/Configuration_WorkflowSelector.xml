@@ -27,6 +27,7 @@
             <MessageStoreListener
                 name="WorkflowSelector"
 				slotId="${instance.name}/WorkflowSelector"
+                sessionKeys="SourceObjectUrl"
                 peekUntransacted="true"
 				/>
         </Receiver>
@@ -92,6 +93,7 @@
                     javaListener="Workflow_TwoWayCommunication"
                     >
                     <Param name="Formdata" sessionKey="Formdata" type="DOMDOC" />
+                    <Param name="SourceObjectUrl" sessionKey="SourceObjectUrl" />
                 </IbisLocalSender>
                 <!-- <MessageStoreSender
 					name="Workflow_TwoWayCommunicationMessageStoreSender"

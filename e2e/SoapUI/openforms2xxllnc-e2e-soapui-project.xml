@@ -7018,6 +7018,106 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
       </con:testStep>
       <con:properties/>
     </con:testCase>
+    <con:testCase id="61743951-d25c-43b2-8d74-4d9987c109ac" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="notificaties HappyFlowPersoon" searchProperties="true">
+      <con:description>Run all five mock services and set the local SoapUI global property notificationAuthorization to the callback authorization value. Configure the cleanup API roots to match the mock URLs. Asserts notification acceptance, object retrieval, two StUF uploads, ownership lookups, and deletion of the object followed by both documents. Run sequentially. Set cleanupObjectStatus or cleanupDocumentStatus to 500 to simulate cleanup failure, restore 204, then manually retry only Handler_VerifiedCleanupSubmissionCommand from error storage with its stored context; no new uploads should occur.</con:description>
+      <con:settings/>
+      <con:testStep type="groovy" name="prepare notification" id="d1bcb414-f674-4bdb-b4de-0674c6de584c">
+        <con:settings/>
+        <con:config>
+          <script><![CDATA[def project = testRunner.testCase.testSuite.project
+assert context.expand('${#Global#notificationAuthorization}').trim() : 'Set the local SoapUI global property notificationAuthorization to the callback authorization value'
+
+['ZDS-BeantwoordVraag-Mock', 'ZDS-VrijeBerichten-Mock', 'ZDS-OntvangAsynchroon-Mock'].each { mockName ->
+    def runner = project.getMockServiceByName(mockName)?.getMockRunner()
+    assert runner != null && runner.isRunning() : "Start mock service: ${mockName}"
+}
+['Objects API Mock', 'Documenten API Mock'].each { mockName ->
+  def runner = project.getRestMockServiceByName(mockName)?.getMockRunner()
+  assert runner != null && runner.isRunning() : "Start mock service: ${mockName}"
+}
+
+def objectUuid = UUID.randomUUID().toString()
+def documentRoot = 'http://host.docker.internal:8700/mock/documenten/api/v1/enkelvoudiginformatieobjecten/'
+def documentUrls = [documentRoot + UUID.randomUUID().toString(), documentRoot + UUID.randomUUID().toString()]
+project.setPropertyValue('caseReferenceNumber', 'OF-' + org.apache.commons.lang.RandomStringUtils.randomAlphabetic(6).toUpperCase())
+project.setPropertyValue('notificationObjectUuid', objectUuid)
+project.setPropertyValue('notificationSourceObjectUrl', 'http://host.docker.internal:8089/mock/objects/api/v2/objects/' + objectUuid)
+project.setPropertyValue('notificationDocumentUrls', groovy.json.JsonOutput.toJson(documentUrls))
+project.setPropertyValue('notificationOwnershipLookups', '[]')
+project.setPropertyValue('notificationBlockingLookups', '[]')
+project.setPropertyValue('notificationObjectFetchedPath', '')
+project.setPropertyValue('notificationUploadCount', '0')
+project.setPropertyValue('notificationObjectDeletedPath', '')
+project.setPropertyValue('notificationDeletedDocumentPaths', '[]')
+project.setPropertyValue('notificationCleanupActive', 'true')
+project.setPropertyValue('cleanupObjectStatus', context.expand('${#TestCase#cleanupObjectStatus}'))
+project.setPropertyValue('cleanupDocumentStatus', context.expand('${#TestCase#cleanupDocumentStatus}'))]]></script>
+        </con:config>
+      </con:testStep>
+      <con:testStep type="httprequest" name="notificaties_notificaties_create" id="1cb98ed6-4f20-4b63-89fd-7b6dc273a32b">
+        <con:settings/>
+        <con:config method="POST" xsi:type="con:HttpRequest" id="bdebc579-806c-49cc-9484-8e685a25a48d" name="notificaties_notificaties_create" postQueryString="false" mediaType="application/json" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="Authorization" value="${#Global#notificationAuthorization}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+          </con:settings>
+          <con:endpoint>http://localhost:9000/notificaties/api/v1/notificaties</con:endpoint>
+          <con:request>{
+  "kanaal": "objecten",
+  "hoofdObject": "${#Project#notificationSourceObjectUrl}",
+  "resource": "object",
+  "resourceUrl": "${#Project#notificationSourceObjectUrl}",
+  "actie": "create",
+  "aanmaakdatum": "${=java.time.Instant.now().toString()}",
+  "kenmerken": {}
+}</con:request>
+          <con:assertion type="Valid HTTP Status Codes" id="7390fdc4-c291-4f70-a7fe-21d37b5f292f" name="Notification accepted">
+            <con:configuration>
+              <codes>201</codes>
+            </con:configuration>
+          </con:assertion>
+          <con:credentials>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:config>
+      </con:testStep>
+      <con:testStep type="delay" name="wait for queued document processing" id="38183b66-1702-42f3-a41b-55cd6cc58985">
+        <con:settings/>
+        <con:config>
+          <delay>20000</delay>
+        </con:config>
+      </con:testStep>
+      <con:testStep type="groovy" name="verify notified object fetched" id="7439160c-3569-4ad0-bae0-81ab770098d2">
+        <con:settings/>
+        <con:config>
+          <script><![CDATA[def project = testRunner.testCase.testSuite.project
+def expectedPath = '/mock/objects/api/v2/objects/' + project.getPropertyValue('notificationObjectUuid')
+assert project.getPropertyValue('notificationObjectFetchedPath') == expectedPath : 'The notification did not fetch the expected Objects API mock resource'
+assert project.getPropertyValue('notificationUploadCount') == '2' : 'Expected two StUF document uploads'
+assert project.getPropertyValue('notificationObjectDeletedPath') == expectedPath : 'Source object cleanup did not succeed; inspect Handler_CleanupSubmissionCommand error storage'
+def documentUrls = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationDocumentUrls'))
+def ownershipLookups = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationOwnershipLookups'))
+def blockingLookups = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationBlockingLookups'))
+assert ownershipLookups.sort() == documentUrls.sort() : 'Expected exact ownership lookup for both documents'
+assert blockingLookups.sort() == documentUrls.sort() : 'Expected blocker lookup for both documents after source removal'
+def deletedDocuments = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationDeletedDocumentPaths'))
+assert deletedDocuments.sort() == documentUrls.collect { new URI(it).path }.sort() : 'Expected both source documents to be deleted exactly once'
+project.setPropertyValue('notificationCleanupActive', 'false')]]></script>
+        </con:config>
+      </con:testStep>
+      <con:properties>
+        <con:property>
+          <con:name>cleanupObjectStatus</con:name>
+          <con:value>204</con:value>
+        </con:property>
+        <con:property>
+          <con:name>cleanupDocumentStatus</con:name>
+          <con:value>204</con:value>
+        </con:property>
+      </con:properties>
+    </con:testCase>
     <con:properties/>
   </con:testSuite>
   <con:mockService id="f7f19963-499b-43b7-8c8f-07218bd184be" port="8099" path="/mock/services/translate/generic/zds/OntvangAsynchroon" host="LAPTOP-R4K3GHC" name="ZDS-OntvangAsynchroon-Mock" bindToHostOnly="false" docroot="">
@@ -7031,6 +7131,10 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
       <con:dispatchStyle>SEQUENCE</con:dispatchStyle>
       <con:response name="Response 1" id="5ee489b8-f111-4a9f-a9db-5720f0d128d5" httpResponseStatus="200" encoding="UTF-8">
         <con:settings/>
+        <con:script><![CDATA[def project = mockResponse.mockOperation.mockService.project
+if (project.getPropertyValue('notificationCleanupActive') == 'true' && mockRequest.requestContent.contains(project.getPropertyValue('caseReferenceNumber'))) {
+    project.setPropertyValue('notificationUploadCount', ((project.getPropertyValue('notificationUploadCount') ?: '0') as int) + 1 as String)
+}]]></con:script>
         <con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><StUF:Bv03Bericht xmlns:StUF="http://www.egem.nl/StUF/StUF0301" xmlns:ZKN="http://www.egem.nl/StUF/sector/zkn/0310">
    <StUF:stuurgegevens>
       <StUF:berichtcode>Bv03</StUF:berichtcode>
@@ -7439,6 +7543,62 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
   <con:restMockService id="d63c7861-f9bf-4330-8cab-d5b197f52c85" port="8700" path="/mock/documenten/api/v1" host="LAPTOP-UKAI1A6" name="Documenten API Mock" docroot="">
     <con:settings/>
     <con:properties/>
+    <con:restMockAction name="/objectinformatieobjecten" method="GET" resourcePath="/objectinformatieobjecten" id="e08c578b-ea26-48c7-8abc-49d4bbeb9bc1">
+      <con:settings/>
+      <con:defaultResponse>Associations</con:defaultResponse>
+      <con:dispatchStyle>SEQUENCE</con:dispatchStyle>
+      <con:response name="Associations" id="998f2e93-f731-4cee-8b5a-d6628f73bd23" httpResponseStatus="200" mediaType="application/json">
+        <con:settings/>
+        <con:script><![CDATA[def project = mockResponse.mockOperation.mockService.project
+assert mockRequest.requestHeaders.get('Authorization') : 'Association lookup must be authenticated'
+def request = mockRequest.getRequest()
+def requestedObject = request.getParameter('object')
+def requestedDocument = request.getParameter('informatieobject')
+def source = project.getPropertyValue('notificationSourceObjectUrl')
+def documents = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationDocumentUrls') ?: '[]')
+def sourceDeleted = project.getPropertyValue('notificationObjectDeletedPath')
+def matches = project.getPropertyValue('notificationCleanupActive') == 'true' && !sourceDeleted &&
+    documents.contains(requestedDocument) && (!requestedObject || requestedObject == source)
+def results = matches ? [[object: source, informatieobject: requestedDocument, objectType: 'overige']] : []
+if (matches && requestedObject == source) {
+  def lookups = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationOwnershipLookups') ?: '[]')
+  lookups.add(requestedDocument)
+  project.setPropertyValue('notificationOwnershipLookups', groovy.json.JsonOutput.toJson(lookups))
+} else if (sourceDeleted && !requestedObject && documents.contains(requestedDocument)) {
+  def lookups = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationBlockingLookups') ?: '[]')
+  if (!lookups.contains(requestedDocument)) lookups.add(requestedDocument)
+  project.setPropertyValue('notificationBlockingLookups', groovy.json.JsonOutput.toJson(lookups))
+}
+mockResponse.responseContent = groovy.json.JsonOutput.toJson([count: results.size(), next: null, previous: null, results: results])]]></con:script>
+        <con:responseContent>{"count":0,"next":null,"previous":null,"results":[]}</con:responseContent>
+      </con:response>
+    </con:restMockAction>
+    <con:restMockAction name="/enkelvoudiginformatieobjecten/" method="DELETE" resourcePath="/enkelvoudiginformatieobjecten/" id="0884364d-6d3e-4e16-aa91-44bb8240b25b">
+      <con:settings/>
+      <con:defaultResponse>Deleted</con:defaultResponse>
+      <con:dispatchStyle>SEQUENCE</con:dispatchStyle>
+      <con:response name="Deleted" id="9d27db51-919c-49df-a523-7fc08ae1839e" httpResponseStatus="204">
+        <con:settings/>
+        <con:script><![CDATA[def project = mockResponse.mockOperation.mockService.project
+assert mockRequest.requestHeaders.get('Authorization') : 'Document deletion must be authenticated'
+def status = 204
+if (project.getPropertyValue('notificationCleanupActive') == 'true') {
+    assert project.getPropertyValue('notificationUploadCount') == '2' : 'Documents deleted before both uploads'
+    assert project.getPropertyValue('notificationObjectDeletedPath') : 'Documents deleted before source object'
+  def documents = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationDocumentUrls'))
+  assert documents.collect { new URI(it).path }.contains(mockRequest.getPath()) : 'Unexpected document deletion target'
+  def blockerLookups = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationBlockingLookups') ?: '[]')
+  assert blockerLookups.any { new URI(it).path == mockRequest.getPath() } : 'Document deleted without a blocker lookup'
+    status = (project.getPropertyValue('cleanupDocumentStatus') ?: '204') as int
+    if (status in [200, 204, 404, 410]) {
+        def deletedPaths = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationDeletedDocumentPaths') ?: '[]')
+        deletedPaths.add(mockRequest.getPath())
+        project.setPropertyValue('notificationDeletedDocumentPaths', groovy.json.JsonOutput.toJson(deletedPaths))
+    }
+}
+mockResponse.responseHttpStatus = status]]></con:script>
+      </con:response>
+    </con:restMockAction>
     <con:restMockAction name="/enkelvoudiginformatieobjecten/" method="GET" resourcePath="/enkelvoudiginformatieobjecten/" id="873803bc-3266-4151-a811-ed5e794ef299">
       <con:settings/>
       <con:defaultResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uuid-resultpdf</con:defaultResponse>
@@ -7449,6 +7609,13 @@ casesServiceMock.setPropertyValue("initiatingSubjectCitizenNumber", initiatingSu
 // Match based on path
 def requestPath = mockRequest.getPath()
 log.info "Path: "+ requestPath
+
+def project = mockOperation.mockService.project
+if (project.getPropertyValue('notificationCleanupActive') == 'true') {
+  def documents = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationDocumentUrls') ?: '[]')
+  if (documents.size() == 2 &amp;&amp; requestPath == new URI(documents[0]).path) return "uuid-attachmentpdf"
+  if (documents.size() == 2 &amp;&amp; requestPath == new URI(documents[1]).path) return "uuid-resultpdf"
+}
 
 if( requestPath.contains("uuid-resultpdf") )
 {
@@ -7464,6 +7631,11 @@ else if( requestPath.contains("alpha3bLanguage") )
 }</con:dispatchPath>
       <con:response name="uuid-resultpdf" id="971efaca-7d2c-4b1d-b825-cd67317fc60b" httpResponseStatus="200" mediaType="application/json">
         <con:settings/>
+        <con:script><![CDATA[def project = mockResponse.mockOperation.mockService.project
+      def metadata = new groovy.json.JsonSlurper().parseText(mockResponse.responseContent)
+      def documents = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationDocumentUrls') ?: '[]')
+      metadata.url = project.getPropertyValue('notificationCleanupActive') == 'true' && documents.size() == 2 && mockRequest.getPath() == new URI(documents[1]).path ? documents[1] : 'http://host.docker.internal:8700/mock/documenten/api/v1/enkelvoudiginformatieobjecten/uuid-resultpdf'
+      mockResponse.responseContent = groovy.json.JsonOutput.toJson(metadata)]]></con:script>
         <con:responseContent>{
 	"url": "http://host.docker.internal:8700/mock/documenten/api/v1/enkelvoudiginformatieobjecten/uuid-resultpdf",
 	"identificatie": "DOCUMENT-2023-0000000236",
@@ -7538,6 +7710,11 @@ else if( requestPath.contains("alpha3bLanguage") )
       </con:response>
       <con:response name="uuid-attachmentpdf" id="453ea0c9-4b22-49b2-87b1-e51eca633099" httpResponseStatus="200">
         <con:settings/>
+        <con:script><![CDATA[def project = mockResponse.mockOperation.mockService.project
+      def metadata = new groovy.json.JsonSlurper().parseText(mockResponse.responseContent)
+      def documents = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationDocumentUrls') ?: '[]')
+      metadata.url = project.getPropertyValue('notificationCleanupActive') == 'true' && documents.size() == 2 && mockRequest.getPath() == new URI(documents[0]).path ? documents[0] : 'http://host.docker.internal:8700/mock/documenten/api/v1/enkelvoudiginformatieobjecten/uuid-attachmentpdf'
+      mockResponse.responseContent = groovy.json.JsonOutput.toJson(metadata)]]></con:script>
         <con:responseContent>{
 	"url": "http://host.docker.internal:8700/mock/documenten/api/v1/enkelvoudiginformatieobjecten/uuid-attachmentpdf",
 	"identificatie": "DOCUMENT-2023-0000000237",
@@ -7775,10 +7952,31 @@ def requestPath = mockRequest.getPath()
 log.info "Path: "+ requestPath
  
 
+def notificationObjectUuid = mockOperation.mockService.project.getPropertyValue('notificationObjectUuid')
+if(notificationObjectUuid &amp;&amp; requestPath.endsWith('/' + notificationObjectUuid))
+{
+    return "NotificationHappyFlowPersoon"
+}
+
 if(requestPath.contains("P9_2_KLB"))
 {
     return "P9_2_KLB"
 }</con:dispatchPath>
+      <con:response name="NotificationHappyFlowPersoon" id="9619b4c7-08fb-494c-bf47-5d4cb156c27b" httpResponseStatus="200" mediaType="application/json">
+        <con:settings/>
+        <con:script><![CDATA[def project = mockResponse.mockOperation.mockService.project
+def templateRequest = project.testSuites['e2e'].testCases['tweewegcommunicatie HappyFlowPersoon'].testSteps['objects_object_create'].testRequest
+def formObject = new groovy.json.JsonSlurper().parseText(context.expand(templateRequest.requestContent.replace('\\r', '')))
+formObject.url = project.getPropertyValue('notificationSourceObjectUrl')
+formObject.uuid = project.getPropertyValue('notificationObjectUuid')
+formObject.record.data.public_reference = 'OF-NOTIFICATION-' + formObject.uuid
+def documents = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationDocumentUrls'))
+formObject.record.data.attachments = [documents[0]]
+formObject.record.data.pdf_url = documents[1]
+mockResponse.responseContent = groovy.json.JsonOutput.toJson(formObject)
+project.setPropertyValue('notificationObjectFetchedPath', mockRequest.getPath())]]></con:script>
+        <con:responseContent>{}</con:responseContent>
+      </con:response>
       <con:response name="P9_2_KLB" id="02997fa7-39d6-4a74-88f4-e312c32b19c7" httpResponseStatus="200" mediaType="application/json">
         <con:settings/>
         <con:script>import groovy.json.*;
@@ -7965,8 +8163,17 @@ if( requestBody.contains("some data") )
     return "Response N"
 }
 */</con:dispatchPath>
-      <con:response name="Response 1" id="7dd0673e-b1a4-4937-86d4-d25b0b18ad12" httpResponseStatus="200">
+      <con:response name="Response 1" id="7dd0673e-b1a4-4937-86d4-d25b0b18ad12" httpResponseStatus="204">
         <con:settings/>
+        <con:script><![CDATA[def project = mockResponse.mockOperation.mockService.project
+assert mockRequest.requestHeaders.get('Authorization') : 'Object deletion must be authenticated'
+assert mockRequest.getPath() == '/mock/objects/api/v2/objects/' + project.getPropertyValue('notificationObjectUuid') : 'Unexpected object deletion target'
+assert project.getPropertyValue('notificationUploadCount') == '2' : 'Object deleted before both uploads'
+def status = (project.getPropertyValue('cleanupObjectStatus') ?: '204') as int
+mockResponse.responseHttpStatus = status
+if (status in [200, 204, 404, 410]) {
+    project.setPropertyValue('notificationObjectDeletedPath', mockRequest.getPath())
+}]]></con:script>
       </con:response>
     </con:restMockAction>
     <con:restMockAction name="/objects/" method="PATCH" resourcePath="/objects/" id="6b8b45c1-5678-4fd9-9753-f53650bd4bfa">

@@ -195,8 +195,16 @@
                 direction="UNWRAP"
                 removeOutputNamespaces="true"
                 >
-                <Forward name="success" path="EXIT" />
+                <Forward name="success" path="CheckDocumentAcknowledgement" />
             </SoapWrapperPipe>
+
+            <IfPipe
+                name="CheckDocumentAcknowledgement"
+                xpathExpression="local-name(/*) = 'Bv03Bericht' and /*/stuurgegevens/berichtcode = 'Bv03'"
+                >
+                <Forward name="then" path="EXIT" />
+                <Forward name="else" path="SoapFault_Exception" />
+            </IfPipe>
 
         </Pipeline>
     </Adapter>
