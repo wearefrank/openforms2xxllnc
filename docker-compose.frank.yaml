@@ -3,11 +3,11 @@ services:
     build:
       context: .
       args:
-        FF_VERSION: ${FF_VERSION:-8.3.0-20240730.042429}
+        FF_VERSION: ${FF_VERSION:-10.0.3}
     image: wearefrank/frank:${VERSION:-latest}
     environment:
       application.server.type.custom: ${TRANSACTION_MANAGER:-NARAYANA}
-      credentialFactory.class: nl.nn.credentialprovider.PropertyFileCredentialFactory
+      credentialFactory.class: org.frankframework.credentialprovider.PropertyFileCredentialFactory
       credentialFactory.map.properties: /opt/frank/secrets/credentials.properties
       TZ: ${TIME_ZONE:-Europe/Amsterdam}
     env_file:

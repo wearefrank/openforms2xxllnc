@@ -1,4 +1,4 @@
-ARG FF_VERSION=9.1.1-20251108.110041
+ARG FF_VERSION=10.0.3
 
 FROM frankframework/frankframework:${FF_VERSION} AS ff-base
 
@@ -8,7 +8,7 @@ FROM frankframework/frankframework:${FF_VERSION} AS ff-base
 # COPY --chown=tomcat lib/webapp/ /usr/local/tomcat/webapps/ROOT/WEB-INF/lib/
 
 # # Compile custom class
-# FROM eclipse-temurin:17-jdk-jammy AS custom-code-builder
+# FROM eclipse-temurin:21-jdk-jammy AS custom-code-builder
 
 # # Copy dependencies
 # COPY --from=ff-base /usr/local/tomcat/lib/ /usr/local/tomcat/lib/
@@ -40,7 +40,7 @@ COPY --chown=tomcat src/main/secrets/ /opt/frank/secrets/
 # COPY --chown=tomcat entrypoint.sh /scripts/entrypoint.sh
 
 ENV application.server.type.custom=NARAYANA
-ENV credentialFactory.class=nl.nn.credentialprovider.PropertyFileCredentialFactory
+ENV credentialFactory.class=org.frankframework.credentialprovider.PropertyFileCredentialFactory
 ENV credentialFactory.map.properties=/opt/frank/secrets/credentials.properties
 ENV TZ=Europe/Amsterdam
 
