@@ -47,6 +47,7 @@
 				<MessageStoreSender
 					name="WorkflowSelectorMessageStoreSender"
 					slotId="${instance.name}/WorkflowSelector"
+                    sessionKeys="SourceObjectUrl"
                     onlyStoreWhenMessageIdUnique="true"
 					transacted="true"
                     >

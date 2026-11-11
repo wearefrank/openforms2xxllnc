@@ -9,6 +9,7 @@
     <xsl:mode on-no-match="deep-skip" on-multiple-match="fail"/>
 
     <xsl:param name="CaseReferenceNumber" select="''" as="xs:string" />
+    <xsl:param name="SourceObjectUrl" select="''" as="xs:string" />
     <xsl:param name="Provider" as="node()?" />
     <xsl:param name="CommaSeperatedUrls" select="''" as="xs:string" />
     <xsl:param name="ZdsZaak" as="node()?" />
@@ -22,6 +23,9 @@
     <xsl:template match="/">
         <AddDocumentsToCaseCommand>
             <CaseReferenceNumber><xsl:value-of select="$CaseReferenceNumber"/></CaseReferenceNumber>
+            <xsl:if test="$SourceObjectUrl != ''">
+                <SourceObjectUrl><xsl:value-of select="$SourceObjectUrl"/></SourceObjectUrl>
+            </xsl:if>
             <CaseDescription><xsl:value-of select="$ZdsZaak/zakLa01/antwoord/object/omschrijving"/></CaseDescription>
             <CaseTypeDescription><xsl:value-of select="$ZdsZaak/zakLa01/antwoord/object/isVan/gerelateerde/omschrijving"/></CaseTypeDescription>
             <CaseTypeCode><xsl:value-of select="$ZdsZaak/zakLa01/antwoord/object/isVan/gerelateerde/code"/></CaseTypeCode>

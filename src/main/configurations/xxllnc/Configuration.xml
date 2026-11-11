@@ -4,6 +4,7 @@
     <!ENTITY GenerateAuthorizationHeaderForNotificatiesApi SYSTEM "./Configuration_GenerateAuthorizationHeaderForNotificatiesApi.xml">
     <!ENTITY Handler_AddDocumentsToCaseCommand SYSTEM "./Configuration_Handler_AddDocumentsToCaseCommand.xml">
     <!ENTITY Handler_AddDocumentToCaseCommand SYSTEM "./Configuration_Handler_AddDocumentToCaseCommand.xml">
+    <!ENTITY Handler_CleanupSubmissionCommand SYSTEM "./Configuration_Handler_CleanupSubmissionCommand.xml">
     <!ENTITY Handler_SendNoReplyUserEmailCommand SYSTEM "./Configuration_Handler_SendNoReplyUserEmailCommand.xml">
     <!ENTITY ImportFromLocalFS SYSTEM "./Configuration_ImportFromLocalFS.xml">
     <!ENTITY Notificaties_Subscribe SYSTEM "./Configuration_Notificaties_Subscribe.xml">
@@ -22,6 +23,7 @@
     &GenerateAuthorizationHeaderForNotificatiesApi;
     &Handler_AddDocumentsToCaseCommand;
     &Handler_AddDocumentToCaseCommand;
+    &Handler_CleanupSubmissionCommand;
     &Handler_SendNoReplyUserEmailCommand;
     &ImportFromLocalFS;
     &RetryScheduler;

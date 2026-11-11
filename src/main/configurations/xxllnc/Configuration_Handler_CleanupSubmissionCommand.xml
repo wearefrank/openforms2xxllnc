@@ -1,0 +1,303 @@
+<Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../FrankConfig.xsd">
+    <Adapter name="Handler_CleanupSubmissionCommand">
+        <Receiver
+            name="Handler_CleanupSubmissionCommand"
+            transactionAttribute="Required"
+            pollInterval="5"
+            maxRetries="0"
+            >
+            <MessageStoreListener
+                name="Handler_CleanupSubmissionCommand"
+                slotId="${instance.name}/CleanupSubmissionCommand"
+                peekUntransacted="true"
+                />
+        </Receiver>
+
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+
+            <IfPipe
+                name="ValidateCleanupTargets"
+                xpathExpression="$ObjectsRoot != '' and $DocumentsRoot != '' and starts-with(/*/SourceObjectUrl, concat($ObjectsRoot, 'objects/')) and matches(substring-after(/*/SourceObjectUrl, concat($ObjectsRoot, 'objects/')), '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$') and (every $url in /*/url satisfies (starts-with($url, concat($DocumentsRoot, 'enkelvoudiginformatieobjecten/')) and matches(substring-after($url, concat($DocumentsRoot, 'enkelvoudiginformatieobjecten/')), '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')))"
+                >
+                <Param name="ObjectsRoot" value="${openforms2xxllnc.connections.objects-api.root-url}" />
+                <Param name="DocumentsRoot" value="${openforms2xxllnc.connections.documenten-api.root-url}" />
+                <Forward name="then" path="VerifySourceDocuments" />
+                <Forward name="else" path="CleanupFailed" />
+            </IfPipe>
+
+            <ForEachChildElementPipe
+                name="VerifySourceDocuments"
+                getInputFromSessionKey="originalMessage"
+                elementXPathExpression="/*/url[normalize-space(.) != '' and not(. = preceding-sibling::url)]"
+                parallel="false"
+                collectResults="true"
+                storeResultInSessionKey="VerifiedOwnership"
+                >
+                <IbisLocalSender javaListener="VerifySourceDocument">
+                    <Param name="SourceDocumentUrl" xpathExpression="/url" />
+                    <Param name="SourceObjectUrl" sessionKey="originalMessage" xpathExpression="/*/SourceObjectUrl" />
+                </IbisLocalSender>
+                <Forward name="success" path="QueueVerifiedCleanup" />
+            </ForEachChildElementPipe>
+
+            <SenderPipe name="QueueVerifiedCleanup" getInputFromSessionKey="originalMessage" transactionAttribute="Required">
+                <MessageStoreSender
+                    name="VerifiedCleanupMessageStoreSender"
+                    slotId="${instance.name}/VerifiedCleanupSubmissionCommand"
+                    sessionKeys="VerifiedOwnership"
+                    transacted="true"
+                    />
+                <Forward name="success" path="EXIT" />
+            </SenderPipe>
+
+            <ExceptionPipe name="CleanupFailed" />
+        </Pipeline>
+    </Adapter>
+
+    <Adapter name="Handler_VerifiedCleanupSubmissionCommand">
+        <Receiver name="Handler_VerifiedCleanupSubmissionCommand" transactionAttribute="Required" pollInterval="5" maxRetries="0">
+            <MessageStoreListener
+                name="Handler_VerifiedCleanupSubmissionCommand"
+                slotId="${instance.name}/VerifiedCleanupSubmissionCommand"
+                sessionKeys="VerifiedOwnership"
+                peekUntransacted="true"
+                />
+        </Receiver>
+
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+
+            <IfPipe
+                name="ValidateVerifiedOwnership"
+                xpathExpression="$ObjectsRoot != '' and $DocumentsRoot != '' and starts-with(/*/SourceObjectUrl, concat($ObjectsRoot, 'objects/')) and matches(substring-after(/*/SourceObjectUrl, concat($ObjectsRoot, 'objects/')), '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$') and (every $url in /*/url satisfies (starts-with($url, concat($DocumentsRoot, 'enkelvoudiginformatieobjecten/')) and matches(substring-after($url, concat($DocumentsRoot, 'enkelvoudiginformatieobjecten/')), '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$') and exists($Evidence//*[informatieobject = $url and object = $SourceObjectUrl and objectType = 'overige'])))"
+                >
+                <Param name="ObjectsRoot" value="${openforms2xxllnc.connections.objects-api.root-url}" />
+                <Param name="DocumentsRoot" value="${openforms2xxllnc.connections.documenten-api.root-url}" />
+                <Param name="SourceObjectUrl" xpathExpression="/*/SourceObjectUrl" />
+                <Param name="Evidence" sessionKey="VerifiedOwnership" type="DOMDOC" />
+                <Forward name="then" path="GetObjectsAuthorization" />
+                <Forward name="else" path="CleanupFailed" />
+            </IfPipe>
+
+            <SenderPipe name="GetObjectsAuthorization" getInputFromFixedValue="&lt;dummy/&gt;">
+                <IbisLocalSender javaListener="GenerateAuthorizationHeaderForObjectsApi" returnedSessionKeys="Authorization" />
+                <Forward name="success" path="DeleteSourceObject" />
+            </SenderPipe>
+
+            <SenderPipe name="DeleteSourceObject" getInputFromFixedValue="">
+                <HttpSender
+                    name="DeleteSourceObjectHttpSender"
+                    methodType="DELETE"
+                    headersParams="Authorization"
+                    resultStatusCodeSessionKey="DeleteStatusCode"
+                    followRedirects="false"
+                    timeout="${openforms2xxllnc.connections.objects-api.timeout}"
+                    >
+                    <Param name="url" sessionKey="originalMessage" xpathExpression="/*/SourceObjectUrl" />
+                    <Param name="Authorization" sessionKey="Authorization" hidden="true" />
+                </HttpSender>
+                <Forward name="success" path="CheckObjectDeletion" />
+            </SenderPipe>
+
+            <IfPipe
+                name="CheckObjectDeletion"
+                getInputFromFixedValue="&lt;dummy/&gt;"
+                xpathExpression="$Status = ('200', '204', '404', '410')"
+                >
+                <Param name="Status" sessionKey="DeleteStatusCode" />
+                <Forward name="then" path="DeleteSourceDocuments" />
+                <Forward name="else" path="CleanupFailed" />
+            </IfPipe>
+
+            <ForEachChildElementPipe
+                name="DeleteSourceDocuments"
+                getInputFromSessionKey="originalMessage"
+                elementXPathExpression="/*/url[normalize-space(.) != '' and not(. = preceding-sibling::url)]"
+                parallel="false"
+                >
+                <IbisLocalSender javaListener="DeleteSourceDocument">
+                    <Param name="SourceDocumentUrl" xpathExpression="/url" />
+                    <Param name="SourceObjectUrl" sessionKey="originalMessage" xpathExpression="/*/SourceObjectUrl" />
+                </IbisLocalSender>
+                <Forward name="success" path="EXIT" />
+            </ForEachChildElementPipe>
+
+            <ExceptionPipe name="CleanupFailed" />
+        </Pipeline>
+    </Adapter>
+
+    <Adapter name="VerifySourceDocument">
+        <Receiver name="VerifySourceDocument">
+            <JavaListener name="VerifySourceDocument" />
+        </Receiver>
+
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+
+            <SenderPipe name="GetDocumentenAuthorization" getInputFromFixedValue="&lt;dummy/&gt;">
+                <IbisLocalSender javaListener="GenerateAuthorizationHeaderForDocumentenApi" returnedSessionKeys="Authorization" />
+                <Forward name="success" path="GetDocumentAssociation" />
+            </SenderPipe>
+
+            <SenderPipe name="GetDocumentAssociation" getInputFromFixedValue="" storeResultInSessionKey="DocumentAssociationResponse">
+                <HttpSender
+                    name="GetDocumentAssociationHttpSender"
+                    methodType="GET"
+                    headersParams="Authorization"
+                    resultStatusCodeSessionKey="AssociationStatusCode"
+                    followRedirects="false"
+                    timeout="${openforms2xxllnc.connections.documenten-api.timeout}"
+                    >
+                    <Param name="url" xpathExpression="concat($DocumentsRoot, 'objectinformatieobjecten?object=', encode-for-uri($SourceObjectUrl), '&amp;informatieobject=', encode-for-uri($SourceDocumentUrl))">
+                        <Param name="DocumentsRoot" value="${openforms2xxllnc.connections.documenten-api.root-url}" />
+                        <Param name="SourceObjectUrl" sessionKey="SourceObjectUrl" />
+                        <Param name="SourceDocumentUrl" sessionKey="SourceDocumentUrl" />
+                    </Param>
+                    <Param name="Authorization" sessionKey="Authorization" hidden="true" />
+                </HttpSender>
+                <Forward name="success" path="CheckAssociationResponse" />
+            </SenderPipe>
+
+            <IfPipe name="CheckAssociationResponse" getInputFromFixedValue="&lt;dummy/&gt;" xpathExpression="$Status = '200'">
+                <Param name="Status" sessionKey="AssociationStatusCode" />
+                <Forward name="then" path="DocumentAssociationJsonToXml" />
+                <Forward name="else" path="CleanupFailed" />
+            </IfPipe>
+
+            <JsonPipe name="DocumentAssociationJsonToXml" getInputFromSessionKey="DocumentAssociationResponse">
+                <Forward name="success" path="CheckDocumentAssociation" />
+            </JsonPipe>
+
+            <IfPipe
+                name="CheckDocumentAssociation"
+                xpathExpression="exists(//*[informatieobject = $SourceDocumentUrl and object = $SourceObjectUrl and objectType = 'overige'])"
+                >
+                <Param name="SourceDocumentUrl" sessionKey="SourceDocumentUrl" />
+                <Param name="SourceObjectUrl" sessionKey="SourceObjectUrl" />
+                <Forward name="then" path="EXIT" />
+                <Forward name="else" path="CleanupFailed" />
+            </IfPipe>
+
+            <ExceptionPipe name="CleanupFailed" />
+        </Pipeline>
+    </Adapter>
+
+    <Adapter name="DeleteSourceDocument">
+        <Receiver name="DeleteSourceDocument">
+            <JavaListener name="DeleteSourceDocument" />
+        </Receiver>
+
+        <Pipeline>
+            <Exits>
+                <Exit name="EXIT" state="SUCCESS" />
+                <Exit name="EXCEPTION" state="ERROR" />
+            </Exits>
+
+            <SenderPipe name="GetDeletionAuthorization" getInputFromFixedValue="&lt;dummy/&gt;">
+                <IbisLocalSender javaListener="GenerateAuthorizationHeaderForDocumentenApi" returnedSessionKeys="Authorization" />
+                <Forward name="success" path="CheckDocumentAlreadyDeleted" />
+            </SenderPipe>
+
+            <SenderPipe name="CheckDocumentAlreadyDeleted" getInputFromFixedValue="">
+                <HttpSender
+                    name="CheckDocumentAlreadyDeletedHttpSender"
+                    methodType="GET"
+                    headersParams="Authorization"
+                    resultStatusCodeSessionKey="DocumentStatusCode"
+                    followRedirects="false"
+                    timeout="${openforms2xxllnc.connections.documenten-api.timeout}"
+                    >
+                    <Param name="url" sessionKey="SourceDocumentUrl" />
+                    <Param name="Authorization" sessionKey="Authorization" hidden="true" />
+                </HttpSender>
+                <Forward name="success" path="CheckDocumentAbsent" />
+            </SenderPipe>
+
+            <IfPipe name="CheckDocumentAbsent" getInputFromFixedValue="&lt;dummy/&gt;" xpathExpression="$Status = ('404', '410')">
+                <Param name="Status" sessionKey="DocumentStatusCode" />
+                <Forward name="then" path="EXIT" />
+                <Forward name="else" path="CheckDocumentReadable" />
+            </IfPipe>
+
+            <IfPipe name="CheckDocumentReadable" getInputFromFixedValue="&lt;dummy/&gt;" xpathExpression="$Status = '200'">
+                <Param name="Status" sessionKey="DocumentStatusCode" />
+                <Forward name="then" path="GetBlockingRelations" />
+                <Forward name="else" path="CleanupFailed" />
+            </IfPipe>
+
+            <SenderPipe name="GetBlockingRelations" getInputFromFixedValue="" storeResultInSessionKey="BlockingRelationsResponse">
+                <HttpSender
+                    name="GetBlockingRelationsHttpSender"
+                    methodType="GET"
+                    headersParams="Authorization"
+                    resultStatusCodeSessionKey="BlockingRelationsStatusCode"
+                    followRedirects="false"
+                    timeout="${openforms2xxllnc.connections.documenten-api.timeout}"
+                    >
+                    <Param name="url" xpathExpression="concat($DocumentsRoot, 'objectinformatieobjecten?informatieobject=', encode-for-uri($SourceDocumentUrl))">
+                        <Param name="DocumentsRoot" value="${openforms2xxllnc.connections.documenten-api.root-url}" />
+                        <Param name="SourceDocumentUrl" sessionKey="SourceDocumentUrl" />
+                    </Param>
+                    <Param name="Authorization" sessionKey="Authorization" hidden="true" />
+                </HttpSender>
+                <Forward name="success" path="CheckBlockingRelationsResponse" />
+            </SenderPipe>
+
+            <IfPipe name="CheckBlockingRelationsResponse" getInputFromFixedValue="&lt;dummy/&gt;" xpathExpression="$Status = '200'">
+                <Param name="Status" sessionKey="BlockingRelationsStatusCode" />
+                <Forward name="then" path="BlockingRelationsJsonToXml" />
+                <Forward name="else" path="CleanupFailed" />
+            </IfPipe>
+
+            <JsonPipe name="BlockingRelationsJsonToXml" getInputFromSessionKey="BlockingRelationsResponse">
+                <Forward name="success" path="CheckNoBlockingRelations" />
+            </JsonPipe>
+
+            <IfPipe
+                name="CheckNoBlockingRelations"
+                xpathExpression="(matches($Response, '^\s*\[\s*\]\s*$') or /*/count = 0) and not(//*[informatieobject or object or objectType]) and not(/*/next[normalize-space(.) != '' and normalize-space(.) != 'null'])"
+                >
+                <Param name="Response" sessionKey="BlockingRelationsResponse" />
+                <Forward name="then" path="DeleteDocument" />
+                <Forward name="else" path="CleanupFailed" />
+            </IfPipe>
+
+            <SenderPipe name="DeleteDocument" getInputFromFixedValue="">
+                <HttpSender
+                    name="DeleteDocumentHttpSender"
+                    methodType="DELETE"
+                    headersParams="Authorization"
+                    resultStatusCodeSessionKey="DeleteStatusCode"
+                    followRedirects="false"
+                    timeout="${openforms2xxllnc.connections.documenten-api.timeout}"
+                    >
+                    <Param name="url" sessionKey="SourceDocumentUrl" />
+                    <Param name="Authorization" sessionKey="Authorization" hidden="true" />
+                </HttpSender>
+                <Forward name="success" path="CheckDocumentDeletion" />
+            </SenderPipe>
+
+            <IfPipe
+                name="CheckDocumentDeletion"
+                getInputFromFixedValue="&lt;dummy/&gt;"
+                xpathExpression="$Status = ('200', '204', '404', '410')"
+                >
+                <Param name="Status" sessionKey="DeleteStatusCode" />
+                <Forward name="then" path="EXIT" />
+                <Forward name="else" path="CleanupFailed" />
+            </IfPipe>
+
+            <ExceptionPipe name="CleanupFailed" />
+        </Pipeline>
+    </Adapter>
+</Module>

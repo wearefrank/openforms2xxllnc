@@ -53,8 +53,21 @@
                     </Param>
                     <Param name="CaseReferenceNumber" sessionKey="originalMessage" xpathExpression="/*/CaseReferenceNumber" />
                 </MessageStoreSender> -->
-                <Forward name="success" path="EXIT" />
+                <Forward name="success" path="QueueCleanupSubmissionCommand" />
             </ForEachChildElementPipe>
+
+            <SenderPipe
+                name="QueueCleanupSubmissionCommand"
+                getInputFromSessionKey="originalMessage"
+                transactionAttribute="Required"
+                >
+                <MessageStoreSender
+                    name="CleanupSubmissionCommandMessageStoreSender"
+                    slotId="${instance.name}/CleanupSubmissionCommand"
+                    transacted="true"
+                    />
+                <Forward name="success" path="EXIT" />
+            </SenderPipe>
         </Pipeline>
     </Adapter>
 </Module>
