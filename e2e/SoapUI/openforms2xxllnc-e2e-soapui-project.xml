@@ -7083,10 +7083,21 @@ project.setPropertyValue('cleanupDocumentStatus', context.expand('${#TestCase#cl
           <con:parameters/>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="wait for queued document processing" id="38183b66-1702-42f3-a41b-55cd6cc58985">
+      <con:testStep type="groovy" name="wait for queued document processing" id="38183b66-1702-42f3-a41b-55cd6cc58985">
         <con:settings/>
         <con:config>
-          <delay>20000</delay>
+          <script><![CDATA[def project = testRunner.testCase.testSuite.project
+ def expectedPath = '/mock/objects/api/v2/objects/' + project.getPropertyValue('notificationObjectUuid')
+ def expectedDocuments = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationDocumentUrls')).collect { new URI(it).path }
+ def cleanupComplete = {
+     def deletedDocuments = new groovy.json.JsonSlurper().parseText(project.getPropertyValue('notificationDeletedDocumentPaths') ?: '[]')
+     project.getPropertyValue('notificationObjectDeletedPath') == expectedPath && deletedDocuments.containsAll(expectedDocuments)
+ }
+ def deadline = System.nanoTime() + 120000000000L
+ while (!cleanupComplete() && System.nanoTime() < deadline) {
+     Thread.sleep(250)
+ }
+ assert cleanupComplete() : 'Cleanup did not complete within 120 seconds; inspect both cleanup adapters and their error storage']]></script>
         </con:config>
       </con:testStep>
       <con:testStep type="groovy" name="verify notified object fetched" id="7439160c-3569-4ad0-bae0-81ab770098d2">
